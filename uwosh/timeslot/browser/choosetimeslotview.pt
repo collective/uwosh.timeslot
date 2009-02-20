@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="uwosh.timeslot">
+<body>
+    <div metal:fill-slot="main">
+        <tal:main-macro metal:define-macro="main">
+
+         <form method="POST" tal:attributes="action string:${here/absolute_url}/${template/id};">
+
+            <h2 tal:content="view/getSignupSheetTitle" />
+
+            <div id="days" tal:repeat="day view/getListOfDays">
+                <h3 tal:content="day" />
+                <table>
+                    <tr tal:repeat="timeSlot python:view.getTimeSlotsForDay(day)">
+                        <td tal:content="timeSlot" />
+                    </tr>
+                </table>
+            </div>
+            
+            <input type="submit" name="form.button.submit" value="Submit" />
+        
+        </form>
+        
+        </tal:main-macro>
+    </div>
+</body>
+</html>

@@ -7,4 +7,14 @@
 
     <!-- -*- extra stuff goes here -*- -->
 
+    <browser:page
+      for="*"
+      name="choosetimeslot_view"
+      class=".choosetimeslotview.ChooseTimeSlotView"
+      template="choosetimeslotview.pt"
+      allowed_interface=".choosetimeslotview.IChooseTimeSlotView"
+      permission="zope.Public"
+    />
+
+
 </configure>
