@@ -21,6 +21,7 @@ DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
 # they work well with the python bridge properties.
 
 DaySchema['title'].storage = atapi.AnnotationStorage()
+DaySchema['title'].widget.label=_(u'Date')
 DaySchema['description'].storage = atapi.AnnotationStorage()
 
 schemata.finalizeATCTSchema(DaySchema, folderish=True, moveDiscussion=False)

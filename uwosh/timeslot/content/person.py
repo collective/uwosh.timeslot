@@ -13,7 +13,11 @@ from uwosh.timeslot.config import PROJECTNAME
 
 PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
-    # -*- Your Archetypes field definitions here ... -*-
+    atapi.StringField('email',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.StringWidget(label=_(u'E-Mail'),
+                                  description=_(u'Your email address'))
+    ),
 
 ))
 
@@ -21,6 +25,7 @@ PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 # they work well with the python bridge properties.
 
 PersonSchema['title'].storage = atapi.AnnotationStorage()
+PersonSchema['title'].widget.label = _(u'Name')
 PersonSchema['description'].storage = atapi.AnnotationStorage()
 
 schemata.finalizeATCTSchema(PersonSchema, moveDiscussion=False)

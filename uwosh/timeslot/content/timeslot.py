@@ -13,7 +13,11 @@ from uwosh.timeslot.config import PROJECTNAME
 
 TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
-    # -*- Your Archetypes field definitions here ... -*-
+    atapi.IntegerField('maxCapacity',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.IntegerWidget(label=_(u'Max Capacity'),
+                                    description=_(u'The max number of people'))
+    ),
 
 ))
 
