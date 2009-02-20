@@ -1,0 +1,59 @@
+Metadata-Version: 1.0
+Name: uwosh.timeslot
+Version: 1.0dev-r0
+Summary: UNKNOWN
+Home-page: http://svn.plone.org/svn/plone/plone.example
+Author: Marshall Scorcio
+Author-email: marshall.scorcio@gmail.com
+License: GPL
+Description: .. contents::
+        
+        .. Note!
+        -----
+        Update the following URLs to point to your:
+        
+        - code repository
+        - bug tracker
+        - questions/comments feedback mail
+        (do not set a real mail, to avoid spams)
+        
+        Or remove it if not used.
+        
+        - Code repository: http://svn.somewhere.com/...
+        - Questions and comments to somemailing_list
+        - Report bugs at http://bug.somewhere.com/..
+        
+        
+        Change history
+        **************
+        
+        Changelog
+        =========
+        
+        1.0 (xxxx-xx-xx)
+        ------------------
+        
+        - Created recipe with ZopeSkel [Marshall Scorcio].
+        
+        Detailed Documentation
+        **********************
+        
+        Introduction
+        ============
+        
+        
+        
+        Contributors
+        ************
+        
+        Marshall Scorcio, Author
+        
+        
+        Download
+        ********
+        
+Platform: UNKNOWN
+Classifier: Framework :: Plone
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
