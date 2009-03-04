@@ -8,13 +8,20 @@
     <!-- -*- extra stuff goes here -*- -->
 
     <browser:page
-      for="*"
-      name="choosetimeslot_view"
-      class=".choosetimeslotview.ChooseTimeSlotView"
-      template="choosetimeslotview.pt"
-      allowed_interface=".choosetimeslotview.IChooseTimeSlotView"
+      for="..interfaces.ISignupSheet"
+      name="choose-timeslot"
+      class=".choosetimeslot.ChooseTimeSlot"
+      template="choosetimeslot.pt"
+      allowed_interface=".choosetimeslot.IChooseTimeSlot"
       permission="zope.Public"
     />
 
+    <browser:page
+      for="..interfaces.ISignupSheet"
+      name="submit-user-selection"
+      class=".choosetimeslot.ChooseTimeSlot"
+      attribute="submitUserSelection"
+      permission="zope2.View"
+      />
 
 </configure>

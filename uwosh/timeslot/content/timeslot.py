@@ -38,5 +38,9 @@ class TimeSlot(folder.ATFolder):
 
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
+    maxCapacity = atapi.ATFieldProperty('maxCapacity')
+
+    def getNumberOfAvailableSpots(self):
+        return self.maxCapacity - len(self.contentItems())
 
 atapi.registerType(TimeSlot, PROJECTNAME)

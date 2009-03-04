@@ -39,5 +39,6 @@ class Person(base.ATCTContent):
 
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
+    email = atapi.ATFieldProperty('email')
 
 atapi.registerType(Person, PROJECTNAME)
