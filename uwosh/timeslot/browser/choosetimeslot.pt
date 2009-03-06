@@ -20,8 +20,9 @@
                         <th>Time</th>
                     </tr>
                     <tr tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
-                        <td>
-                            <input type="radio" name="slotSelection" tal:attributes="value python:view.getSlotLabel(day, timeSlot)" /> 
+                        <td tal:define="userAlreadySignedup python:view.isUserSignedupForThisSlot(day, timeSlot)" >
+                            <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection" tal:attributes="value python:view.getSlotLabel(day, timeSlot)" /> 
+                            <p tal:condition="userAlreadySignedup">Signed-up</p>
                         </td>
                         <td>
                             <span tal:content="python:view.getTimeSlotCurrentCapacity(day, timeSlot)" />

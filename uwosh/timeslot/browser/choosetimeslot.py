@@ -46,13 +46,12 @@ class ChooseTimeSlot(BrowserView):
         return days
         
     def getListOfTimeSlots(self, date):
-        timeSlotItems = self.getTimeSlotsForDay(date)
-        timeSlots = []
-        for timeSlot in timeSlotItems:
-            timeSlotObj = timeSlot[1]
-            title = timeSlotObj.Title()
-            timeSlots.append(title)
-        return timeSlots
+        timeSlots = self.getTimeSlotsForDay(date)
+        timeSlotsList = []
+        for (id, timeSlot) in timeSlots:
+            title = timeSlot.Title()
+            timeSlotsList.append(title)
+        return timeSlotsList
         
     def getDay(self, date):
         dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day', 'Title':date})
@@ -72,37 +71,49 @@ class ChooseTimeSlot(BrowserView):
         
     def getTimeSlot(self, date, timeSlot):
         day = self.getDay(date)
-        timeSlotItems = day.contentItems()
-        timeSlots = []
-        for timeSlotItem in timeSlotItems:
-            timeSlotObj = timeSlotItem[1]
-            title = timeSlotObj.Title()
+        timeSlots = day.contentItems()
+        for (id, obj) in timeSlots:
+            title = obj.Title()
             if title == timeSlot:
-                return timeSlotObj
+                return obj
         raise ValueError, "TimeSlot was not found"
     
     def getSlotLabel(self, day, timeSlot):
         return day + " @ " + timeSlot
         
+    def isUserSignedupForThisSlot(self, date, timeSlot):
+        username = self.getUserName()
+        timeSlotObj = self.getTimeSlot(date, timeSlot)
+        for (id, obj) in timeSlotObj.contentItems():
+            if id == username:
+                return True
+        return False
+    
+    def getUserName(self):
+        membershipTool = getToolByName(self, 'portal_membership')
+        member = membershipTool.getAuthenticatedMember()
+        return member.getUserName()
+    
     def submitUserSelection(self):
         slotNotFound = '__no_slot_to_assign__'
         selectedSlot = self.request.get('slotSelection', slotNotFound)
         if selectedSlot == slotNotFound:
             raise ValueError, "No slot was selected"
         
-        slotParts = selectedSlot.split(' @ ')
-        date = slotParts[0]
-        time = slotParts[1]
+        (date, time) = selectedSlot.split(' @ ')
         timeSlot = self.getTimeSlot(date, time)
         
         membershipTool = getToolByName(self, 'portal_membership')
         member = membershipTool.getAuthenticatedMember()
         username = member.getUserName()
+        fullname = member.getProperty('fullname')
         email = member.getProperty('email')
         
         timeSlot.invokeFactory('Person', username)
         newPerson = timeSlot[username]
         newPerson.setEmail(email)
+        newPerson.setTitle(fullname)
         newPerson.reindexObject()
+        self.request.response.redirect(self.context.absolute_url() + '/signup-results')
 
         
