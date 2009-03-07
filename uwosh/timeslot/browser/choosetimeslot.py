@@ -35,63 +35,33 @@ class ChooseTimeSlot(BrowserView):
 
     def getSignupSheetTitle(self):
         return self.context.Title()
-
+    
     def getListOfDays(self):
-        dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day'})
-        days = []
-        for dayBrain in dayBrains:
-            day = dayBrain.getObject()
-            title = day.Title()
-            days.append(title)
-        return days
+        return self.context.getListOfDays();
         
     def getListOfTimeSlots(self, date):
-        timeSlots = self.getTimeSlotsForDay(date)
-        timeSlotsList = []
-        for (id, timeSlot) in timeSlots:
-            title = timeSlot.Title()
-            timeSlotsList.append(title)
-        return timeSlotsList
+        day = self.context.getDay(date)
+        return day.getListOfTimeSlots()
         
-    def getDay(self, date):
-        dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day', 'Title':date})
-        if len(dayBrains) == 0:
-            raise ValueError, "No days were found"
-        if len(dayBrains) > 1:
-            raise ValueError, "Too many days (%s) were found for date %s" % (len(dayBrains), date)
-        return dayBrains[0].getObject()
-        
-    def getTimeSlotsForDay(self, date):
-        day = self.getDay(date)
-        return day.contentItems()
+    def getTimeSlotCurrentCapacity(self, date, timeSlotTitle):
+        day = self.context.getDay(date)
+        timeSlot = day.getTimeSlot(timeSlotTitle)
+        return timeSlot.getNumberOfAvailableSpots()
     
-    def getTimeSlotCurrentCapacity(self, date, timeSlot):
-        timeSlotObj = self.getTimeSlot(date, timeSlot)
-        return timeSlotObj.getNumberOfAvailableSpots()
-        
-    def getTimeSlot(self, date, timeSlot):
-        day = self.getDay(date)
-        timeSlots = day.contentItems()
-        for (id, obj) in timeSlots:
-            title = obj.Title()
-            if title == timeSlot:
-                return obj
-        raise ValueError, "TimeSlot was not found"
-    
-    def getSlotLabel(self, day, timeSlot):
-        return day + " @ " + timeSlot
-        
-    def isUserSignedupForThisSlot(self, date, timeSlot):
+    def isUserSignedupForThisSlot(self, date, timeSlotTitle):
+        day = self.context.getDay(date)
+        timeSlot = day.getTimeSlot(timeSlotTitle)
         username = self.getUserName()
-        timeSlotObj = self.getTimeSlot(date, timeSlot)
-        for (id, obj) in timeSlotObj.contentItems():
-            if id == username:
-                return True
-        return False
+        return timeSlot.isUserSignedupForThisSlot(username)
+    
+    def getTimeSlotLabel(self, date, timeSlot):
+        day = self.context.getDay(date)
+        timeSlot = day.getTimeSlot(timeSlot)
+        return timeSlot.getLabel()
     
     def getUserName(self):
-        membershipTool = getToolByName(self, 'portal_membership')
-        member = membershipTool.getAuthenticatedMember()
+        portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
         return member.getUserName()
     
     def submitUserSelection(self):
@@ -101,10 +71,11 @@ class ChooseTimeSlot(BrowserView):
             raise ValueError, "No slot was selected"
         
         (date, time) = selectedSlot.split(' @ ')
-        timeSlot = self.getTimeSlot(date, time)
+        day = self.context.getDay(date)
+        timeSlot = day.getTimeSlot(time)
         
-        membershipTool = getToolByName(self, 'portal_membership')
-        member = membershipTool.getAuthenticatedMember()
+        portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
         username = member.getUserName()
         fullname = member.getProperty('fullname')
         email = member.getProperty('email')
@@ -113,7 +84,11 @@ class ChooseTimeSlot(BrowserView):
         newPerson = timeSlot[username]
         newPerson.setEmail(email)
         newPerson.setTitle(fullname)
+        
+        portal_workflow = getToolByName(self, 'portal_workflow')
+        portal_workflow.doActionFor(newPerson, 'signup')
         newPerson.reindexObject()
+
         self.request.response.redirect(self.context.absolute_url() + '/signup-results')
 
         

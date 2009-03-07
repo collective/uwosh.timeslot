@@ -33,5 +33,16 @@ class Summary(BrowserView):
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
 
+    def getListOfDays(self):
+        return self.context.getListOfDays();
+        
+    def getListOfTimeSlots(self, date):
+        day = self.context.getDay(date)
+        return day.getListOfTimeSlots()
+    
+    def getListOfPeople(self, date, timeSlot):
+        day = self.context.getDay(date)
+        timeSlot = day.getTimeSlot(timeSlot)
+        return timeSlot.getListOfPeople()
 
         

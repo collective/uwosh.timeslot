@@ -35,4 +35,19 @@ class SignupSheet(folder.ATFolder):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
 
+    def getListOfDays(self):
+        dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day'})
+        days = []
+        for dayBrain in dayBrains:
+            day = dayBrain.getObject()
+            title = day.Title()
+            days.append(title)
+        return days
+    
+    def getDay(self, date):
+        dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day', 'Title':date})
+        if len(dayBrains) != 1:
+            raise ValueError, "No days were found"
+        return dayBrains[0].getObject()
+
 atapi.registerType(SignupSheet, PROJECTNAME)

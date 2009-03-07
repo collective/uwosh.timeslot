@@ -10,7 +10,6 @@
          <form method="POST" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
 
             <h2 tal:content="view/getSignupSheetTitle" />
-
             <div id="days" tal:repeat="day view/getListOfDays">
                 <h3 tal:content="day" />
                 <table class="plain">
@@ -21,8 +20,8 @@
                     </tr>
                     <tr tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
                         <td tal:define="userAlreadySignedup python:view.isUserSignedupForThisSlot(day, timeSlot)" >
-                            <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection" tal:attributes="value python:view.getSlotLabel(day, timeSlot)" /> 
-                            <p tal:condition="userAlreadySignedup">Signed-up</p>
+                            <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection" tal:attributes="value python:view.getTimeSlotLabel(day, timeSlot)" /> 
+                            <p tal:condition="userAlreadySignedup">You already have</p>
                         </td>
                         <td>
                             <span tal:content="python:view.getTimeSlotCurrentCapacity(day, timeSlot)" />
@@ -37,7 +36,6 @@
             <input type="submit" name="form.button.submit" value="Submit" />
             <input type="hidden" name="form.submitted" value="1" />
             <input tal:attributes="value member" type="hidden" name="memberToAssign" />
-        
         </form>
         
         </tal:main-macro>
