@@ -42,6 +42,14 @@
       permission="zope2.View"
       />
 
+    <browser:page
+      for="..interfaces.ISignupSheet"
+      name="remove-all-people-from-day"
+      class=".summary.Summary"
+      attribute="removeAllPeopleFromDay"
+      permission="zope2.View"
+      />
+
     <browser:menuItem
       for="..interfaces.ISignupSheet"
       menu="plone_displayviews"

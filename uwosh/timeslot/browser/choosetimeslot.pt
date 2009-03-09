@@ -16,15 +16,25 @@
                     <tr>
                         <th>Select</th>
                         <th>Available Spots</th>
+                        <th>Waiting List Available</th>
                         <th>Time</th>
                     </tr>
                     <tr tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
                         <td tal:define="userAlreadySignedup python:view.isUserSignedupForThisSlot(day, timeSlot)" >
-                            <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection" tal:attributes="value python:view.getTimeSlotLabel(day, timeSlot)" /> 
-                            <p tal:condition="userAlreadySignedup">You already have</p>
+                            <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection"
+                                   tal:attributes="value python:view.getTimeSlotLabel(day, timeSlot)" /> 
+                            <p tal:condition="userAlreadySignedup">You're registered</p>
                         </td>
                         <td>
-                            <span tal:content="python:view.getTimeSlotCurrentCapacity(day, timeSlot)" />
+                            <span tal:content="python:view.getTimeSlotNumberOfAvailableSlots(day, timeSlot)" />
+                        </td>
+                        <td>
+                            <span tal:condition="python:view.timeSlotAllowsWaitingList(day, timeSlot)">
+                                True
+                            </span>
+                            <span tal:condition="not:python:view.timeSlotAllowsWaitingList(day, timeSlot)">
+                                False
+                            </span>
                         </td>
                         <td>
                             <span tal:content="timeSlot" />

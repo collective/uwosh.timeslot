@@ -11,9 +11,6 @@ class ISummary(Interface):
     ChooseTimeSlot view interface
     """
 
-    def test():
-        """ test method"""
-
 
 class Summary(BrowserView):
     """
@@ -24,7 +21,7 @@ class Summary(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.signUpSheet = self.context
+        self.signupSheet = self.context
 
     @property
     def portal_catalog(self):
@@ -35,19 +32,31 @@ class Summary(BrowserView):
         return getToolByName(self.context, 'portal_url').getPortalObject()
 
     def getListOfDays(self):
-        return self.signUpSheet.getListOfDays();
+        return self.signupSheet.getListOfDays();
         
     def getListOfTimeSlots(self, date):
-        day = self.signUpSheet.getDay(date)
+        day = self.signupSheet.getDay(date)
         return day.getListOfTimeSlots()
     
     def getListOfPeople(self, date, timeSlot):
-        day = self.signUpSheet.getDay(date)
+        day = self.signupSheet.getDay(date)
         timeSlot = day.getTimeSlot(timeSlot)
         return timeSlot.getListOfPeople()
 
     def getPersonReviewState(self, date, timeSlot, person):
-        day = self.signUpSheet.getDay(date)
+        day = self.signupSheet.getDay(date)
         timeSlot = day.getTimeSlot(timeSlot)
         person = timeSlot.getPerson(person)
         return person.getWorkflowReviewState()
+        
+    def removeAllPeopleFromDay(self):
+        date = self.request.get('daySelection')
+        if date == '':
+            raise ValueError, 'No date was selected'
+        elif date == 'Remove all people from this day':
+            raise ValueError('They''re all the same')
+        
+        day = self.signupSheet.getDay(date)
+        day.removeAllPeople()
+        
+        self.request.response.redirect(self.context.absolute_url() + '/summary')

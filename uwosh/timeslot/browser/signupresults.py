@@ -10,10 +10,7 @@ class ISignupResults(Interface):
     """
     ChooseTimeSlot view interface
     """
-
-    def test():
-        """ test method"""
-
+    
 
 class SignupResults(BrowserView):
     """
@@ -33,5 +30,8 @@ class SignupResults(BrowserView):
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
 
-
+    def wasSignupSuccessful(self):
+        success = self.request.get('success')
+        return bool(int(success))
+        
         

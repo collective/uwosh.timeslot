@@ -45,7 +45,7 @@ class Day(folder.ATFolder):
             title = timeSlot.Title()
             if title == timeSlotTitle:
                 return timeSlot
-        raise ValueError, "TimeSlot was not found"
+        raise ValueError('TimeSlot was not found')
         
     def getListOfTimeSlots(self):
         timeSlots = self.getTimeSlots()
@@ -54,5 +54,10 @@ class Day(folder.ATFolder):
             title = timeSlot.Title()
             timeSlotsList.append(title)
         return timeSlotsList
+
+    def removeAllPeople(self):
+        timeSlots = self.getTimeSlots()
+        for (id, timeSlot) in timeSlots:
+            timeSlot.removeAllPeople()
 
 atapi.registerType(Day, PROJECTNAME)

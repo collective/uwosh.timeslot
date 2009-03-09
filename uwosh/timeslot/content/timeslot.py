@@ -18,8 +18,15 @@ TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
     atapi.IntegerField('maxCapacity',
         storage=atapi.AnnotationStorage(),
         widget=atapi.IntegerWidget(label=_(u'Max Capacity'),
-                                    description=_(u'The max number of people'))
+                                   description=_(u'The max number of people'))
     ),
+
+    atapi.BooleanField('allowWaitingList',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.BooleanWidget(label=_(u'Allow Waiting List'),
+                                   description=_(u'Check if you want to allow signups to waiting list once \
+                                                   max capacity is reached'))
+    ),                                               
 
 ))
 
@@ -41,6 +48,7 @@ class TimeSlot(folder.ATFolder):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
     maxCapacity = atapi.ATFieldProperty('maxCapacity')
+    allowWaitingList = atapi.ATFieldProperty('allowWaitingList')
 
     def getNumberOfAvailableSpots(self):
         numberOfSignedUpPeople = 0
@@ -81,6 +89,11 @@ class TimeSlot(folder.ATFolder):
             if title == name or id == name:
                 return person
         raise ValueError, 'The person ' + name + ' was not found'
-        
+   
+    def removeAllPeople(self):
+        peopleToRemove = []
+        for (id, obj) in self.contentItems():
+            peopleToRemove.append(id)
+        self.manage_delObjects(peopleToRemove)
         
 atapi.registerType(TimeSlot, PROJECTNAME)

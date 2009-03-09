@@ -47,7 +47,7 @@ class SignupSheet(folder.ATFolder):
     def getDay(self, date):
         dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day', 'Title':date})
         if len(dayBrains) != 1:
-            raise ValueError, "No days were found"
+            raise ValueError('No days were found')
         return dayBrains[0].getObject()
 
 atapi.registerType(SignupSheet, PROJECTNAME)

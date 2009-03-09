@@ -10,27 +10,33 @@
             <h2>Signup Sheet Summary</h2>
             
             <div class="day" tal:repeat="day view/getListOfDays">
-                <h3 tal:content="day" />
-                <div class="timeSlot" tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
-                    <h4 tal:content="timeSlot" />
-                    <table class="plain">
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>                        
-                        </tr>
-                        <tr tal:repeat="person python:view.getListOfPeople(day, timeSlot)">
-                            <td>
-                                <span tal:content="person" />
-                            </td>
-                            <td>
-                                <span tal:content="python:view.getPersonReviewState(day, timeSlot, person)" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <form method="POST" tal:attributes="action string:${context/absolute_url}/remove-all-people-from-day;">
+                    <h3 tal:content="day" />
+                    <a tal:attributes="href python:context.absolute_url() + '/remove-all-people-from-day?daySelection=' + day">
+                        Remove all people from this day
+                    </a>
+                    <div class="timeSlot" tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
+                        <h4 tal:content="timeSlot" />
+                        
+                        <table class="plain">
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>                        
+                            </tr>
+                            <tr tal:repeat="person python:view.getListOfPeople(day, timeSlot)">
+                                <td>
+                                    <span tal:content="person" />
+                                </td>
+                                <td>
+                                    <span tal:content="python:view.getPersonReviewState(day, timeSlot, person)" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
             </div>
             
-            <a tal:attributes="href string:${context/absolute_url};">Return to the signup sheet</a>
+            <a tal:attributes="href string:${context/absolute_url};">Return to the choose timeslot view</a>
         
         </tal:main-macro>
     </div>
