@@ -14,9 +14,16 @@
                 <div class="timeSlot" tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
                     <h4 tal:content="timeSlot" />
                     <table class="plain">
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>                        
+                        </tr>
                         <tr tal:repeat="person python:view.getListOfPeople(day, timeSlot)">
                             <td>
                                 <span tal:content="person" />
+                            </td>
+                            <td>
+                                <span tal:content="python:view.getPersonReviewState(day, timeSlot, person)" />
                             </td>
                         </tr>
                     </table>

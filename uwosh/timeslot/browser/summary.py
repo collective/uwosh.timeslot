@@ -24,6 +24,7 @@ class Summary(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.signUpSheet = self.context
 
     @property
     def portal_catalog(self):
@@ -34,15 +35,19 @@ class Summary(BrowserView):
         return getToolByName(self.context, 'portal_url').getPortalObject()
 
     def getListOfDays(self):
-        return self.context.getListOfDays();
+        return self.signUpSheet.getListOfDays();
         
     def getListOfTimeSlots(self, date):
-        day = self.context.getDay(date)
+        day = self.signUpSheet.getDay(date)
         return day.getListOfTimeSlots()
     
     def getListOfPeople(self, date, timeSlot):
-        day = self.context.getDay(date)
+        day = self.signUpSheet.getDay(date)
         timeSlot = day.getTimeSlot(timeSlot)
         return timeSlot.getListOfPeople()
 
-        
+    def getPersonReviewState(self, date, timeSlot, person):
+        day = self.signUpSheet.getDay(date)
+        timeSlot = day.getTimeSlot(timeSlot)
+        person = timeSlot.getPerson(person)
+        return person.getWorkflowReviewState()

@@ -43,10 +43,13 @@ class TimeSlot(folder.ATFolder):
     maxCapacity = atapi.ATFieldProperty('maxCapacity')
 
     def getNumberOfAvailableSpots(self):
-        portal_workflow = getToolByName(self, 'portal_workflow')
-        status = portal_workflow.getStatusOf('plone_workflow', self)
-        #TODO - make this take workflow state in to account
-        return self.maxCapacity - len(self.contentItems())
+        numberOfSignedUpPeople = 0
+        people = self.contentItems()
+        for (id, person) in people:
+            reviewState = person.getWorkflowReviewState()
+            if reviewState == 'signedup':
+                numberOfSignedUpPeople += 1
+        return self.maxCapacity - numberOfSignedUpPeople
 
     def getLabel(self):
         date = self.aq_parent.Title()
@@ -70,5 +73,14 @@ class TimeSlot(folder.ATFolder):
 
     def getPeople(self):
         return self.contentItems()
+        
+    def getPerson(self, name):
+        people = self.getPeople()
+        for (id, person) in people:
+            title = person.Title()
+            if title == name or id == name:
+                return person
+        raise ValueError, 'The person ' + name + ' was not found'
+        
         
 atapi.registerType(TimeSlot, PROJECTNAME)

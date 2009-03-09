@@ -11,6 +11,8 @@ from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import IPerson
 from uwosh.timeslot.config import PROJECTNAME
 
+from Products.CMFCore.utils import getToolByName
+
 PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.StringField('email',
@@ -40,5 +42,10 @@ class Person(base.ATCTContent):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
     email = atapi.ATFieldProperty('email')
-
+    
+    def getWorkflowReviewState(self):
+        portal_workflow = getToolByName(self, 'portal_workflow')
+        status = portal_workflow.getStatusOf('person_workflow', self)
+        return status['review_state']
+                
 atapi.registerType(Person, PROJECTNAME)
