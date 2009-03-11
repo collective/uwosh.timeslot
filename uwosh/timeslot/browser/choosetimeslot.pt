@@ -9,7 +9,7 @@
 
          <form method="POST" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
 
-            <h2 tal:content="view/getSignupSheetTitle" />
+            <h2 tal:content="python:view.getSignupSheetTitle() + ' - Choose a TimeSlot'" />
             <div id="days" tal:repeat="day view/getListOfDays">
                 <h3 tal:content="day" />
                 <table class="plain">

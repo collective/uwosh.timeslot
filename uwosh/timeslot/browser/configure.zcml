@@ -5,16 +5,22 @@
 
     <include package="plone.app.contentmenu" />
 
-    <!-- -*- extra stuff goes here -*- -->
-
     <browser:page
       for="..interfaces.ISignupSheet"
-      name="summary"
-      class=".summary.Summary"
-      template="summary.pt"
+      name="manager-summary"
+      class=".managersummary.ManagerSummary"
+      template="managersummary.pt"
       allowed_interface=".choosetimeslot.IChooseTimeSlot"
       permission="zope2.View"
-    />
+      />
+    
+    <browser:page
+      for="..interfaces.ISignupSheet"
+      name="remove-all-people-from-day"
+      class=".managersummary.ManagerSummary"
+      attribute="removeAllPeopleFromDay"
+      permission="zope2.View"
+      />
 
     <browser:page
       for="..interfaces.ISignupSheet"
@@ -23,7 +29,7 @@
       template="choosetimeslot.pt"
       allowed_interface=".choosetimeslot.IChooseTimeSlot"
       permission="zope2.View"
-    />
+      />
 
     <browser:page
       for="..interfaces.ISignupSheet"
@@ -42,21 +48,12 @@
       permission="zope2.View"
       />
 
-    <browser:page
-      for="..interfaces.ISignupSheet"
-      name="remove-all-people-from-day"
-      class=".summary.Summary"
-      attribute="removeAllPeopleFromDay"
-      permission="zope2.View"
-      />
-
     <browser:menuItem
       for="..interfaces.ISignupSheet"
       menu="plone_displayviews"
       title="Choose TimeSlot view"
       action="choose-timeslot"
-      description="Default representation of an agenda"
+      description="The default user visible view of a Signup Sheet"
       />
         
-
 </configure>

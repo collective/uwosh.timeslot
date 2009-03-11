@@ -6,17 +6,17 @@ from Products.CMFCore.utils import getToolByName
 from uwosh.timeslot import timeslotMessageFactory as _
 
 
-class ISummary(Interface):
+class IManagerSummary(Interface):
     """
-    ChooseTimeSlot view interface
+    ManagerSummary view interface
     """
 
 
-class Summary(BrowserView):
+class ManagerSummary(BrowserView):
     """
-    ChooseTimeSlot browser view
+    ManagerSummary browser view
     """
-    implements(ISummary)
+    implements(IManagerSummary)
 
     def __init__(self, context, request):
         self.context = context
@@ -30,6 +30,9 @@ class Summary(BrowserView):
     @property
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
+
+    def getSignupSheetTitle(self):
+        return self.signupSheet.Title()
 
     def getListOfDays(self):
         return self.signupSheet.getListOfDays();
@@ -59,4 +62,4 @@ class Summary(BrowserView):
         day = self.signupSheet.getDay(date)
         day.removeAllPeople()
         
-        self.request.response.redirect(self.context.absolute_url() + '/summary')
+        self.request.response.redirect(self.context.absolute_url() + '/manager-summary')

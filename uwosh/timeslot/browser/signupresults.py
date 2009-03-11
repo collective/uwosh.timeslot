@@ -21,6 +21,7 @@ class SignupResults(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.signupSheet = self.context
 
     @property
     def portal_catalog(self):
@@ -30,8 +31,14 @@ class SignupResults(BrowserView):
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
 
+    def getSignupSheetTitle(self):
+        return self.signupSheet.Title()
+
     def wasSignupSuccessful(self):
         success = self.request.get('success')
         return bool(int(success))
-        
+    
+    def wasAddedToWaitingList(self):
+        waiting = self.request.get('waiting')
+        return bool(int(waiting))
         
