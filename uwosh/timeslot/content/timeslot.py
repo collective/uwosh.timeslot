@@ -54,36 +54,39 @@ class TimeSlot(folder.ATFolder):
         numberOfSignedUpPeople = 0
         people = self.contentItems()
         for (id, person) in people:
-            reviewState = person.getWorkflowReviewState()
+            reviewState = person.getReviewState()
             if reviewState == 'signedup':
                 numberOfSignedUpPeople += 1
         return self.maxCapacity - numberOfSignedUpPeople
+
+    def isCurrentUserSignedUpForThis(self):
+        portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
+        username = member.getUserName()
+        if self.isUserSignedUpForThisSlot(username):
+            return True
+        else:
+            return False
 
     def getLabel(self):
         date = self.aq_parent.Title()
         return date + ' @ ' + self.title
         
-    def isUserSignedupForThisSlot(self, username):
+    def isUserSignedUpForThisSlot(self, username):
         for (id, obj) in self.contentItems():
             if id == username:
                 return True
         return False
 
-    def getListOfPeople(self):
-        people = self.getPeople()
-        peopleList = []
-        for (id, person) in people:
-            title = person.Title()
-            if title == '':
-                title = person.id
-            peopleList.append(title)
-        return peopleList
-
     def getPeople(self):
-        return self.contentItems()
+        personTuples = self.contentItems()
+        people = []
+        for (id, person) in personTuples:
+            people.append(person)
+        return people    
         
     def getPerson(self, name):
-        people = self.getPeople()
+        people = self.contentItems()
         for (id, person) in people:
             title = person.Title()
             if title == name or id == name:

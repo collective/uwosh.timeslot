@@ -30,27 +30,6 @@ class ManagerSummary(BrowserView):
     @property
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
-
-    def getSignupSheetTitle(self):
-        return self.signupSheet.Title()
-
-    def getListOfDays(self):
-        return self.signupSheet.getListOfDays();
-        
-    def getListOfTimeSlots(self, date):
-        day = self.signupSheet.getDay(date)
-        return day.getListOfTimeSlots()
-    
-    def getListOfPeople(self, date, timeSlot):
-        day = self.signupSheet.getDay(date)
-        timeSlot = day.getTimeSlot(timeSlot)
-        return timeSlot.getListOfPeople()
-
-    def getPersonReviewState(self, date, timeSlot, person):
-        day = self.signupSheet.getDay(date)
-        timeSlot = day.getTimeSlot(timeSlot)
-        person = timeSlot.getPerson(person)
-        return person.getWorkflowReviewState()
         
     def removeAllPeopleFromDay(self):
         date = self.request.get('daySelection')

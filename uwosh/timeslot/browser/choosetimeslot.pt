@@ -9,9 +9,9 @@
 
          <form method="POST" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
 
-            <h2 tal:content="python:view.getSignupSheetTitle() + ' - Choose a TimeSlot'" />
-            <div id="days" tal:repeat="day view/getListOfDays">
-                <h3 tal:content="day" />
+            <h2 tal:content="string:${context/Title} - Choose a TimeSlot" />
+            <div id="days" tal:repeat="day context/getDays">
+                <h3 tal:content="day/Title" />
                 <table class="plain">
                     <tr>
                         <th>Select</th>
@@ -19,25 +19,25 @@
                         <th>Waiting List Available</th>
                         <th>Time</th>
                     </tr>
-                    <tr tal:repeat="timeSlot python:view.getListOfTimeSlots(day)">
-                        <td tal:define="userAlreadySignedup python:view.isUserSignedupForThisSlot(day, timeSlot)" >
+                    <tr tal:repeat="timeSlot day/getTimeSlots">
+                        <td tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThis" >
                             <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection"
-                                   tal:attributes="value python:view.getTimeSlotLabel(day, timeSlot)" /> 
+                                   tal:attributes="value timeSlot/getLabel" /> 
                             <p tal:condition="userAlreadySignedup">You're registered</p>
                         </td>
                         <td>
-                            <span tal:content="python:view.getTimeSlotNumberOfAvailableSlots(day, timeSlot)" />
+                            <span tal:content="timeSlot/getNumberOfAvailableSpots" />
                         </td>
-                        <td>
-                            <span tal:condition="python:view.timeSlotAllowsWaitingList(day, timeSlot)">
+                        <td tal:define="allowWaitingList timeSlot/getAllowWaitingList">
+                            <span tal:condition="allowWaitingList">
                                 True
                             </span>
-                            <span tal:condition="not:python:view.timeSlotAllowsWaitingList(day, timeSlot)">
+                            <span tal:condition="not:allowWaitingList">
                                 False
                             </span>
                         </td>
                         <td>
-                            <span tal:content="timeSlot" />
+                            <span tal:content="timeSlot/Title" />
                         </td>
                     </tr>
                 </table>

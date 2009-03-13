@@ -6,7 +6,7 @@
 <body>
     <div metal:fill-slot="main">
         <tal:main-macro metal:define-macro="main">
-            <h2 tal:content="python:view.getSignupSheetTitle() + ' - Sign Up Results'" />
+            <h2 tal:content="string:${context/Title} - Sign Up Results" />
             <div tal:condition="view/wasSignupSuccessful">
                 <h3>Success</h3>
                 

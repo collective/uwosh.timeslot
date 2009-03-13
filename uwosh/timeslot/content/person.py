@@ -43,7 +43,7 @@ class Person(base.ATCTContent):
     description = atapi.ATFieldProperty('description')
     email = atapi.ATFieldProperty('email')
     
-    def getWorkflowReviewState(self):
+    def getReviewState(self):
         portal_workflow = getToolByName(self, 'portal_workflow')
         status = portal_workflow.getStatusOf('person_workflow', self)
         return status['review_state']

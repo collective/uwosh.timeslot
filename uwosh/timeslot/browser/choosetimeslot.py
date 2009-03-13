@@ -30,42 +30,6 @@ class ChooseTimeSlot(BrowserView):
     @property
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
-
-    def getSignupSheetTitle(self):
-        return self.signupSheet.Title()
-    
-    def getListOfDays(self):
-        return self.signupSheet.getListOfDays();
-        
-    def getListOfTimeSlots(self, date):
-        day = self.signupSheet.getDay(date)
-        return day.getListOfTimeSlots()
-        
-    def getTimeSlotNumberOfAvailableSlots(self, date, timeSlotTitle):
-        day = self.signupSheet.getDay(date)
-        timeSlot = day.getTimeSlot(timeSlotTitle)
-        return timeSlot.getNumberOfAvailableSpots()
-    
-    def isUserSignedupForThisSlot(self, date, timeSlotTitle):
-        day = self.signupSheet.getDay(date)
-        timeSlot = day.getTimeSlot(timeSlotTitle)
-        username = self.getUserName()
-        return timeSlot.isUserSignedupForThisSlot(username)
-    
-    def getTimeSlotLabel(self, date, timeSlot):
-        day = self.signupSheet.getDay(date)
-        timeSlot = day.getTimeSlot(timeSlot)
-        return timeSlot.getLabel()
-    
-    def getUserName(self):
-        portal_membership = getToolByName(self, 'portal_membership')
-        member = portal_membership.getAuthenticatedMember()
-        return member.getUserName()
-    
-    def timeSlotAllowsWaitingList(self, date, timeSlot):
-        day = self.signupSheet.getDay(date)
-        timeSlot = day.getTimeSlot(timeSlot)
-        return timeSlot.getAllowWaitingList()
     
     def submitUserSelection(self):
         success = False

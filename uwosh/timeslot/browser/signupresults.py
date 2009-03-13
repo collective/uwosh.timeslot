@@ -31,9 +31,6 @@ class SignupResults(BrowserView):
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
 
-    def getSignupSheetTitle(self):
-        return self.signupSheet.Title()
-
     def wasSignupSuccessful(self):
         success = self.request.get('success')
         return bool(int(success))

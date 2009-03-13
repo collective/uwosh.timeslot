@@ -37,26 +37,22 @@ class Day(folder.ATFolder):
     description = atapi.ATFieldProperty('description')
     
     def getTimeSlots(self):
-        return self.contentItems()
+        timeSlotTuples = self.contentItems()
+        timeSlots = []
+        for (id, timeSlot) in timeSlotTuples:
+            timeSlots.append(timeSlot)
+        return timeSlots
         
     def getTimeSlot(self, timeSlotTitle):
-        timeSlots = self.getTimeSlots()
+        timeSlots = self.contentItems()
         for (id, timeSlot) in timeSlots:
             title = timeSlot.Title()
             if title == timeSlotTitle:
                 return timeSlot
         raise ValueError('TimeSlot was not found')
-        
-    def getListOfTimeSlots(self):
-        timeSlots = self.getTimeSlots()
-        timeSlotsList = []
-        for (id, timeSlot) in timeSlots:
-            title = timeSlot.Title()
-            timeSlotsList.append(title)
-        return timeSlotsList
 
     def removeAllPeople(self):
-        timeSlots = self.getTimeSlots()
+        timeSlots = self.contentItems()
         for (id, timeSlot) in timeSlots:
             timeSlot.removeAllPeople()
 
