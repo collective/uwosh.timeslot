@@ -11,8 +11,6 @@ from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import ITimeSlot
 from uwosh.timeslot.config import PROJECTNAME
 
-from Products.CMFCore.utils import getToolByName
-
 TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.IntegerField('maxCapacity',
@@ -50,28 +48,24 @@ class TimeSlot(folder.ATFolder):
     maxCapacity = atapi.ATFieldProperty('maxCapacity')
     allowWaitingList = atapi.ATFieldProperty('allowWaitingList')
 
-    def getNumberOfAvailableSpots(self):
-        numberOfSignedUpPeople = 0
-        people = self.contentItems()
-        for (id, person) in people:
-            reviewState = person.getReviewState()
-            if reviewState == 'signedup':
-                numberOfSignedUpPeople += 1
-        return self.maxCapacity - numberOfSignedUpPeople
+    def getLabel(self):
+        date = self.aq_parent.Title()
+        return date + ' @ ' + self.title
 
-    def isCurrentUserSignedUpForThis(self):
-        portal_membership = getToolByName(self, 'portal_membership')
-        member = portal_membership.getAuthenticatedMember()
+    def getNumberOfAvailableSpots(self):
+        query = {'portal_type':'Person','review_state':'signedup'}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        numberOfPeopleSignedUp = len(brains)
+        return self.maxCapacity - numberOfPeopleSignedUp
+
+    def isCurrentUserSignedUpForThisSlot(self):
+        member = self.portal_membership.getAuthenticatedMember()
         username = member.getUserName()
         if self.isUserSignedUpForThisSlot(username):
             return True
         else:
             return False
 
-    def getLabel(self):
-        date = self.aq_parent.Title()
-        return date + ' @ ' + self.title
-        
     def isUserSignedUpForThisSlot(self, username):
         for (id, obj) in self.contentItems():
             if id == username:
@@ -79,24 +73,27 @@ class TimeSlot(folder.ATFolder):
         return False
 
     def getPeople(self):
-        personTuples = self.contentItems()
+        query = {'portal_type':'Person'}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
         people = []
-        for (id, person) in personTuples:
+        for brain in brains:
+            person = brain.getObject()
             people.append(person)
-        return people    
+        return people
         
-    def getPerson(self, name):
-        people = self.contentItems()
-        for (id, person) in people:
-            title = person.Title()
-            if title == name or id == name:
-                return person
-        raise ValueError, 'The person ' + name + ' was not found'
+    def getPerson(self, username):
+        query = {'portal_type':'Person','id':username}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        if len(brains) < 1:
+            raise ValueError('The Person %s was not found.' % name)
+        person = brains[0].getObject()
+        return person
    
     def removeAllPeople(self):
-        peopleToRemove = []
-        for (id, obj) in self.contentItems():
-            peopleToRemove.append(id)
-        self.manage_delObjects(peopleToRemove)
+        people = self.getPeople()
+        idsToRemove = []
+        for person in people:
+            idsToRemove.append(person.id)
+        self.manage_delObjects(idsToRemove)
         
 atapi.registerType(TimeSlot, PROJECTNAME)

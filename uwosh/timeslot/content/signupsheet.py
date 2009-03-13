@@ -36,15 +36,18 @@ class SignupSheet(folder.ATFolder):
     description = atapi.ATFieldProperty('description')
     
     def getDay(self, date):
-        dayBrains = self.portal_catalog.queryCatalog({'portal_type':'Day', 'Title':date})
-        if len(dayBrains) != 1:
-            raise ValueError('No days were found')
-        return dayBrains[0].getObject()
+        query = {'portal_type':'Day', 'Title':date}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        if len(brains) != 1:
+            raise ValueError('The date %s was not found.' % date)
+        return brains[0].getObject()
 
     def getDays(self):
-        dayTuples = self.contentItems()
+        query = {'portal_type':'Day'}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
         days = []
-        for (id,day) in dayTuples:
+        for brain in brains:
+            day = brain.getObject()
             days.append(day)
         return days    
 

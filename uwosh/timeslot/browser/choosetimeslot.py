@@ -21,7 +21,6 @@ class ChooseTimeSlot(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.signupSheet = self.context
 
     @property
     def portal_catalog(self):
@@ -40,7 +39,7 @@ class ChooseTimeSlot(BrowserView):
             raise ValueError('No slot was selected')
         
         (date, time) = selectedSlot.split(' @ ')
-        day = self.signupSheet.getDay(date)
+        day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time)
         
         portal_membership = getToolByName(self, 'portal_membership')
@@ -69,7 +68,7 @@ class ChooseTimeSlot(BrowserView):
             self.sendConfirmationEmail(email, fullname, selectedSlot)
             success = True
         
-        self.request.response.redirect(self.signupSheet.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
+        self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
         
     def sendConfirmationEmail(self, toEmail, fullname, timeSlot):
         message = 'Hi ' + fullname + ',\nYou have successfully registered for: ' + timeSlot

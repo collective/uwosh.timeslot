@@ -20,7 +20,7 @@
                         <th>Time</th>
                     </tr>
                     <tr tal:repeat="timeSlot day/getTimeSlots">
-                        <td tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThis" >
+                        <td tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
                             <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection"
                                    tal:attributes="value timeSlot/getLabel" /> 
                             <p tal:condition="userAlreadySignedup">You're registered</p>

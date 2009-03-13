@@ -44,8 +44,7 @@ class Person(base.ATCTContent):
     email = atapi.ATFieldProperty('email')
     
     def getReviewState(self):
-        portal_workflow = getToolByName(self, 'portal_workflow')
-        status = portal_workflow.getStatusOf('person_workflow', self)
+        status = self.portal_workflow.getStatusOf('person_workflow', self)
         return status['review_state']
                 
 atapi.registerType(Person, PROJECTNAME)

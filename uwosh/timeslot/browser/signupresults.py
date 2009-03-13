@@ -21,7 +21,6 @@ class SignupResults(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.signupSheet = self.context
 
     @property
     def portal_catalog(self):

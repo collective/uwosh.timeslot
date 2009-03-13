@@ -37,23 +37,25 @@ class Day(folder.ATFolder):
     description = atapi.ATFieldProperty('description')
     
     def getTimeSlots(self):
-        timeSlotTuples = self.contentItems()
+        query = {'portal_type':'Time Slot'}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
         timeSlots = []
-        for (id, timeSlot) in timeSlotTuples:
+        for brain in brains:
+            timeSlot = brain.getObject()
             timeSlots.append(timeSlot)
         return timeSlots
         
-    def getTimeSlot(self, timeSlotTitle):
-        timeSlots = self.contentItems()
-        for (id, timeSlot) in timeSlots:
-            title = timeSlot.Title()
-            if title == timeSlotTitle:
-                return timeSlot
-        raise ValueError('TimeSlot was not found')
+    def getTimeSlot(self, title):
+        query = {'portal_type':'Time Slot', 'Title':title}
+        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        if len(brains) < 1:
+            raise ValueError('The TimeSlot %s was not found.' % title)
+        timeSlot = brains[0].getObject()
+        return timeSlot
 
     def removeAllPeople(self):
-        timeSlots = self.contentItems()
-        for (id, timeSlot) in timeSlots:
+        timeSlots = self.getTimeSlots()
+        for timeSlot in timeSlots:
             timeSlot.removeAllPeople()
 
 atapi.registerType(Day, PROJECTNAME)

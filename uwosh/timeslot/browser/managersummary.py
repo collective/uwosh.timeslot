@@ -21,7 +21,6 @@ class ManagerSummary(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.signupSheet = self.context
 
     @property
     def portal_catalog(self):
@@ -34,11 +33,9 @@ class ManagerSummary(BrowserView):
     def removeAllPeopleFromDay(self):
         date = self.request.get('daySelection')
         if date == '':
-            raise ValueError, 'No date was selected'
-        elif date == 'Remove all people from this day':
-            raise ValueError('They''re all the same')
+            raise ValueError('No date was selected')
         
-        day = self.signupSheet.getDay(date)
+        day = self.context.getDay(date)
         day.removeAllPeople()
         
         self.request.response.redirect(self.context.absolute_url() + '/manager-summary')
