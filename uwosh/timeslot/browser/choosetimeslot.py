@@ -57,7 +57,6 @@ class ChooseTimeSlot(BrowserView):
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
         
         if allowWaitingList or numberOfAvailableSpots > 0:
-        	
             timeSlot.invokeFactory('Person', username)
             newPerson = timeSlot[username]
             newPerson.setEmail(email)
@@ -76,17 +75,7 @@ class ChooseTimeSlot(BrowserView):
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
 
-    def getEmployeeId(self, email):
-        webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
-        employeeId = webService.getEmplidFromEmailAddress(email)
-        return employeeId
-
-    def getContactInfo(self, employeeId):
-		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
-		contactInfo = webService.CampusDirectoryZEM001UOVW(employeeId)
-		return contactInfo
-    
-    def getDepartmentAndPhone(self, email):
+	def getDepartmentAndPhone(self, email):
 		employeeId = self.getEmployeeId(email)
 		contactInfo = self.getContactInfo(employeeId)
 		if contactInfo == '<params>\n</params>\n':
@@ -97,10 +86,25 @@ class ChooseTimeSlot(BrowserView):
 			phone = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[7].firstChild.firstChild.data
 			return [department, phone]
   
+    def getEmployeeId(self, email):
+        webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
+        employeeId = webService.getEmplidFromEmailAddress(email)
+        return employeeId
+
+    def getContactInfo(self, employeeId):
+		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
+		contactInfo = webService.CampusDirectoryZEM001UOVW(employeeId)
+		return contactInfo
+
     def sendConfirmationEmail(self, toEmail, fullname, timeSlot):
-        message = 'Hi ' + fullname + ',\nYou have successfully registered for: ' + timeSlot
-        fromEmail = 'a-test-admin@uwosh.edu'
+        fromEmail = self.getSignupSheetCreatorEmail()
         subject = 'Registration success'
+        message = 'Hi ' + fullname + ',\nYou have successfully registered for: ' + timeSlot
         mailHost = self.context.MailHost
         mailHost.secureSend(message, toEmail, fromEmail, subject)
         
+    def getSignupSheetCreatorEmail(self):
+    	creatorId = self.context.Creator();
+    	portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getMemberById(creatorId)
+        return member.getProperty('email')

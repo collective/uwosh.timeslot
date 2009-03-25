@@ -15,15 +15,18 @@
                 <table class="plain">
                     <tr>
                         <th>Select</th>
+                        <th>Time</th>
                         <th>Available Spots</th>
                         <th>Waiting List Available</th>
-                        <th>Time</th>
                     </tr>
                     <tr tal:repeat="timeSlot day/getTimeSlots">
                         <td tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
                             <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection"
                                    tal:attributes="value timeSlot/getLabel" /> 
                             <p tal:condition="userAlreadySignedup">You're registered</p>
+                        </td>
+                        <td>
+                            <span tal:content="timeSlot/Title" />
                         </td>
                         <td>
                             <span tal:content="timeSlot/getNumberOfAvailableSpots" />
@@ -35,9 +38,6 @@
                             <span tal:condition="not:allowWaitingList">
                                 False
                             </span>
-                        </td>
-                        <td>
-                            <span tal:content="timeSlot/Title" />
                         </td>
                     </tr>
                 </table>
