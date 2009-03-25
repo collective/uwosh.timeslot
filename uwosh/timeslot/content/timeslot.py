@@ -15,6 +15,8 @@ TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.IntegerField('maxCapacity',
         storage=atapi.AnnotationStorage(),
+        default=1,
+        required=True,
         widget=atapi.IntegerWidget(label=_(u'Max Capacity'),
                                    description=_(u'The max number of people'))
     ),
@@ -61,10 +63,7 @@ class TimeSlot(folder.ATFolder):
     def isCurrentUserSignedUpForThisSlot(self):
         member = self.portal_membership.getAuthenticatedMember()
         username = member.getUserName()
-        if self.isUserSignedUpForThisSlot(username):
-            return True
-        else:
-            return False
+        return self.isUserSignedUpForThisSlot(username)
 
     def isUserSignedUpForThisSlot(self, username):
         try:
@@ -72,6 +71,9 @@ class TimeSlot(folder.ATFolder):
         except ValueError:
             return False
         return True
+
+    def isFull(self):
+        return (self.getNumberOfAvailableSpots() == 0 and not self.allowWaitingList)
 
     def getPeople(self):
         query = {'portal_type':'Person'}

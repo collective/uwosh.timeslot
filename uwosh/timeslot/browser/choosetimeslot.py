@@ -75,16 +75,16 @@ class ChooseTimeSlot(BrowserView):
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
 
-	def getDepartmentAndPhone(self, email):
-		employeeId = self.getEmployeeId(email)
-		contactInfo = self.getContactInfo(employeeId)
-		if contactInfo == '<params>\n</params>\n':
-			return [None, None]
-		else:
-			xmldoc = minidom.parseString(contactInfo)
-			department = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[5].firstChild.firstChild.data
-			phone = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[7].firstChild.firstChild.data
-			return [department, phone]
+    def getDepartmentAndPhone(self, email):
+        employeeId = self.getEmployeeId(email)
+        contactInfo = self.getContactInfo(employeeId)
+        if contactInfo == '<params>\n</params>\n':
+            return [None, None]
+        else:
+            xmldoc = minidom.parseString(contactInfo)
+            department = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[5].firstChild.firstChild.data
+            phone = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[7].firstChild.firstChild.data
+            return [department, phone]
   
     def getEmployeeId(self, email):
         webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)

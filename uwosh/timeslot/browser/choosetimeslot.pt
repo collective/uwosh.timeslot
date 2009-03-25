@@ -21,9 +21,15 @@
                     </tr>
                     <tr tal:repeat="timeSlot day/getTimeSlots">
                         <td tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
-                            <input tal:condition="not:userAlreadySignedup" type="radio" name="slotSelection"
-                                   tal:attributes="value timeSlot/getLabel" /> 
-                            <p tal:condition="userAlreadySignedup">You're registered</p>
+                            <span tal:condition="userAlreadySignedup">
+                                <p>You're registered</p>
+                            </span>
+                            
+                            <span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
+                                <input tal:condition="not:full" type="radio" name="slotSelection"
+                                       tal:attributes="value timeSlot/getLabel" /> 
+                                <p tal:condition="full">Full</p>
+                            </span>
                         </td>
                         <td>
                             <span tal:content="timeSlot/Title" />

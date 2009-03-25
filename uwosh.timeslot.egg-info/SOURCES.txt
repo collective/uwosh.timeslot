@@ -29,7 +29,6 @@ uwosh/timeslot/tests.py
 uwosh/timeslot/browser/__init__.py
 uwosh/timeslot/browser/choosetimeslot.pt
 uwosh/timeslot/browser/choosetimeslot.py
-uwosh/timeslot/browser/choosetimeslot.py.metadata
 uwosh/timeslot/browser/configure.zcml
 uwosh/timeslot/browser/managersummary.pt
 uwosh/timeslot/browser/managersummary.py
