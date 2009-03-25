@@ -38,7 +38,7 @@ class Day(folder.ATFolder):
     
     def getTimeSlots(self):
         query = {'portal_type':'Time Slot'}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         timeSlots = []
         for brain in brains:
             timeSlot = brain.getObject()
@@ -47,7 +47,7 @@ class Day(folder.ATFolder):
         
     def getTimeSlot(self, title):
         query = {'portal_type':'Time Slot', 'Title':title}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) < 1:
             raise ValueError('The TimeSlot %s was not found.' % title)
         timeSlot = brains[0].getObject()

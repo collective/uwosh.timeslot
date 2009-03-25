@@ -54,7 +54,7 @@ class TimeSlot(folder.ATFolder):
 
     def getNumberOfAvailableSpots(self):
         query = {'portal_type':'Person','review_state':'signedup'}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         numberOfPeopleSignedUp = len(brains)
         return self.maxCapacity - numberOfPeopleSignedUp
 
@@ -75,7 +75,7 @@ class TimeSlot(folder.ATFolder):
 
     def getPeople(self):
         query = {'portal_type':'Person'}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         people = []
         for brain in brains:
             person = brain.getObject()
@@ -84,7 +84,7 @@ class TimeSlot(folder.ATFolder):
         
     def getPerson(self, username):
         query = {'portal_type':'Person','id':username}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) < 1:
             raise ValueError('The Person %s was not found.' % username)
         person = brains[0].getObject()

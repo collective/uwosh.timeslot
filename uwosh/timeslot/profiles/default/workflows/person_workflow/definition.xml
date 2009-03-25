@@ -8,10 +8,11 @@
  <permission>Change portal events</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
+ 
  <state state_id="signedup" title="Signed Up">
   <description>This person is signed up for the time slot
 </description>
-  <exit-transition transition_id="retract"/>
+  <exit-transition transition_id="put_on_waiting_list"/>
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Anonymous</permission-role>
@@ -32,6 +33,7 @@
    <permission-role>Anonymous</permission-role>
   </permission-map>
  </state>
+ 
  <state state_id="waiting" title="Waiting List">
   <description>This person has been added to the waiting list
 </description>
@@ -66,8 +68,21 @@
    <permission-role>Member</permission-role>
   </permission-map>
  </state>
+ 
+ <transition transition_id="put_on_waiting_list"
+             title="Put on Waiting List"
+             new_state="waiting" trigger="USER"
+             before_script="" after_script="">
+  <description>This puts a person on the waiting list</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=put_on_waiting_list"
+          category="workflow">Put on Waiting List</action>
+  <guard>
+   <guard-permission>Modify portal content</guard-permission>
+  </guard>
+ </transition>
+ 
  <transition transition_id="signup"
-             title="Person gets signed up"
+             title="Signup"
              new_state="signedup" trigger="USER"
              before_script="" after_script="">
   <description>This signs a person up for a day</description>
@@ -77,6 +92,7 @@
    <guard-permission>Modify portal content</guard-permission>
   </guard>
  </transition>
+ 
  <worklist worklist_id="waiting-list" title="">
   <description>A waiting list for timeslots</description>
   <action url="%(portal_url)s/search?review_state=waiting"
@@ -86,6 +102,7 @@
   </guard>
   <match name="review_state" values="waiting"/>
  </worklist>
+ 
  <variable variable_id="action" for_catalog="False"
            for_status="True" update_always="True">
   <description>Previous transition</description>

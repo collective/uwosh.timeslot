@@ -76,13 +76,13 @@ class ChooseTimeSlot(BrowserView):
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
 
-	def getEmployeeId(self, email):
-		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/')
-		employeeId = webService.getEmplidFromEmailAddress(email)
-		return employeeId
+    def getEmployeeId(self, email):
+        webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
+        employeeId = webService.getEmplidFromEmailAddress(email)
+        return employeeId
 
     def getContactInfo(self, employeeId):
-		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/')
+		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
 		contactInfo = webService.CampusDirectoryZEM001UOVW(employeeId)
 		return contactInfo
     

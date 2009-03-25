@@ -37,14 +37,14 @@ class SignupSheet(folder.ATFolder):
     
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) != 1:
             raise ValueError('The date %s was not found.' % date)
         return brains[0].getObject()
 
     def getDays(self):
         query = {'portal_type':'Day'}
-        brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         days = []
         for brain in brains:
             day = brain.getObject()
