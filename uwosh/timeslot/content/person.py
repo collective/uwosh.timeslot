@@ -21,6 +21,24 @@ PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                   description=_(u'Your email address'))
     ),
 
+    atapi.StringField('phone',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.StringWidget(label=_(u'Phone'),
+                                  description=_(u'Your phone number'))
+    ),
+
+    atapi.StringField('department',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.StringWidget(label=_(u'Department'),
+                                  description=_(u'Your department'))
+    ),
+
+    atapi.StringField('staffType',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.StringWidget(label=_(u'Staff Type'),
+                                  description=_(u'Your staff type'))
+    ),
+
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
@@ -42,6 +60,9 @@ class Person(base.ATCTContent):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
     email = atapi.ATFieldProperty('email')
+    phone = atapi.ATFieldProperty('phone')
+    department = atapi.ATFieldProperty('department')
+    staffType = atapi.ATFieldProperty('staffType')
     
     def getReviewState(self):
         status = self.portal_workflow.getStatusOf('person_workflow', self)

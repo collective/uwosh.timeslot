@@ -5,6 +5,8 @@ from Products.CMFCore.utils import getToolByName
 
 from uwosh.timeslot import timeslotMessageFactory as _
 
+import xmlrpclib
+from xml.dom import minidom
 
 class IChooseTimeSlot(Interface):
     """
@@ -49,15 +51,19 @@ class ChooseTimeSlot(BrowserView):
         if fullname == '':
             fullname = username
         email = member.getProperty('email')
+        [department, phone] = self.getDepartmentAndPhone(email)
         
         allowWaitingList = timeSlot.getAllowWaitingList()
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
         
         if allowWaitingList or numberOfAvailableSpots > 0:
+        	
             timeSlot.invokeFactory('Person', username)
             newPerson = timeSlot[username]
             newPerson.setEmail(email)
             newPerson.setTitle(fullname)
+            newPerson.setDepartment(department)
+            newPerson.setPhone(phone)
             
             if numberOfAvailableSpots > 0:
                 portal_workflow = getToolByName(self, 'portal_workflow')
@@ -69,7 +75,28 @@ class ChooseTimeSlot(BrowserView):
             success = True
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
-        
+
+	def getEmployeeId(self, email):
+		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/')
+		employeeId = webService.getEmplidFromEmailAddress(email)
+		return employeeId
+
+    def getContactInfo(self, employeeId):
+		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/')
+		contactInfo = webService.CampusDirectoryZEM001UOVW(employeeId)
+		return contactInfo
+    
+    def getDepartmentAndPhone(self, email):
+		employeeId = self.getEmployeeId(email)
+		contactInfo = self.getContactInfo(employeeId)
+		if contactInfo == '<params>\n</params>\n':
+			return [None, None]
+		else:
+			xmldoc = minidom.parseString(contactInfo)
+			department = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[5].firstChild.firstChild.data
+			phone = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[7].firstChild.firstChild.data
+			return [department, phone]
+  
     def sendConfirmationEmail(self, toEmail, fullname, timeSlot):
         message = 'Hi ' + fullname + ',\nYou have successfully registered for: ' + timeSlot
         fromEmail = 'a-test-admin@uwosh.edu'

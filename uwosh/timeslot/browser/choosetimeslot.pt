@@ -7,7 +7,7 @@
     <div metal:fill-slot="main">
         <tal:main-macro metal:define-macro="main">
 
-         <form method="POST" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
+        <form method="POST" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
 
             <h2 tal:content="string:${context/Title} - Choose a TimeSlot" />
             <div id="days" tal:repeat="day context/getDays">

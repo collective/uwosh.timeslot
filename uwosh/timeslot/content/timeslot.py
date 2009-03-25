@@ -67,10 +67,11 @@ class TimeSlot(folder.ATFolder):
             return False
 
     def isUserSignedUpForThisSlot(self, username):
-        for (id, obj) in self.contentItems():
-            if id == username:
-                return True
-        return False
+        try:
+            self.getPerson(username)
+        except ValueError:
+            return False
+        return True
 
     def getPeople(self):
         query = {'portal_type':'Person'}
@@ -85,7 +86,7 @@ class TimeSlot(folder.ATFolder):
         query = {'portal_type':'Person','id':username}
         brains = self.portal_catalog.searchResults(query, path=self.absolute_url_path())
         if len(brains) < 1:
-            raise ValueError('The Person %s was not found.' % name)
+            raise ValueError('The Person %s was not found.' % username)
         person = brains[0].getObject()
         return person
    
