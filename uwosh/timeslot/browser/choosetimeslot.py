@@ -37,15 +37,15 @@ class ChooseTimeSlot(BrowserView):
         waiting = True
     
         selectedSlot = self.request.get('slotSelection')
-        if selectedSlot == '':
-            raise ValueError('No slot was selected')
+        if selectedSlot == None:
+        	self.request.response.redirect(self.context.absolute_url())
+        	return
         
         (date, time) = selectedSlot.split(' @ ')
         day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time)
         
-        portal_membership = getToolByName(self, 'portal_membership')
-        member = portal_membership.getAuthenticatedMember()
+        member = self.getCurrentUser()
         username = member.getUserName()
         fullname = member.getProperty('fullname')
         if fullname == '':
@@ -57,23 +57,23 @@ class ChooseTimeSlot(BrowserView):
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
         
         if allowWaitingList or numberOfAvailableSpots > 0:
-            timeSlot.invokeFactory('Person', username)
-            newPerson = timeSlot[username]
-            newPerson.setEmail(email)
-            newPerson.setTitle(fullname)
-            newPerson.setDepartment(department)
-            newPerson.setPhone(phone)
+            newPerson = self.createPerson(timeSlot, username, email, fullname, department, phone)
             
             if numberOfAvailableSpots > 0:
                 portal_workflow = getToolByName(self, 'portal_workflow')
                 portal_workflow.doActionFor(newPerson, 'signup')
+                newPerson.reindexObject()
                 waiting = False
                 
-            newPerson.reindexObject()
             self.sendConfirmationEmail(email, fullname, selectedSlot)
             success = True
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
+
+    def getCurrentUser(self):
+        portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
+        return member
 
     def getDepartmentAndPhone(self, email):
         employeeId = self.getEmployeeId(email)
@@ -95,6 +95,16 @@ class ChooseTimeSlot(BrowserView):
 		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
 		contactInfo = webService.CampusDirectoryZEM001UOVW(employeeId)
 		return contactInfo
+
+    def createPerson(self, location, username, email, fullname, department, phone):
+        location.invokeFactory('Person', username)
+        newPerson = location[username]
+        newPerson.setEmail(email)
+        newPerson.setTitle(fullname)
+        newPerson.setDepartment(department)
+        newPerson.setPhone(phone)
+        newPerson.reindexObject()
+        return newPerson
 
     def sendConfirmationEmail(self, toEmail, fullname, timeSlot):
         fromEmail = self.getSignupSheetCreatorEmail()

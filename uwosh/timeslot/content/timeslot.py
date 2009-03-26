@@ -58,7 +58,7 @@ class TimeSlot(folder.ATFolder):
         query = {'portal_type':'Person','review_state':'signedup'}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         numberOfPeopleSignedUp = len(brains)
-        return self.maxCapacity - numberOfPeopleSignedUp
+        return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
     def isCurrentUserSignedUpForThisSlot(self):
         member = self.portal_membership.getAuthenticatedMember()

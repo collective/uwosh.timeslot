@@ -17,7 +17,6 @@
                         <th>Select</th>
                         <th>Time</th>
                         <th>Available Spots</th>
-                        <th>Waiting List Available</th>
                     </tr>
                     <tr tal:repeat="timeSlot day/getTimeSlots">
                         <td tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
@@ -31,20 +30,19 @@
                                 <p tal:condition="full">Full</p>
                             </span>
                         </td>
+                        
                         <td>
                             <span tal:content="timeSlot/Title" />
                         </td>
+                        
                         <td>
                             <span tal:content="timeSlot/getNumberOfAvailableSpots" />
-                        </td>
-                        <td tal:define="allowWaitingList timeSlot/getAllowWaitingList">
-                            <span tal:condition="allowWaitingList">
-                                True
+                            <span tal:condition="timeSlot/getAllowWaitingList">
+                                + Waiting List
                             </span>
-                            <span tal:condition="not:allowWaitingList">
-                                False
-                            </span>
+                            
                         </td>
+
                     </tr>
                 </table>
             </div>
