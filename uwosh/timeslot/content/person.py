@@ -33,9 +33,9 @@ PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                   description=_(u'Your department'))
     ),
 
-    atapi.StringField('staffType',
+    atapi.StringField('classification',
         storage=atapi.AnnotationStorage(),
-        widget=atapi.StringWidget(label=_(u'Staff Type'),
+        widget=atapi.StringWidget(label=_(u'Classification'),
                                   description=_(u'Your staff type'))
     ),
 
@@ -62,7 +62,7 @@ class Person(base.ATCTContent):
     email = atapi.ATFieldProperty('email')
     phone = atapi.ATFieldProperty('phone')
     department = atapi.ATFieldProperty('department')
-    staffType = atapi.ATFieldProperty('staffType')
+    classification = atapi.ATFieldProperty('classification')
     
     def getReviewState(self):
         status = self.portal_workflow.getStatusOf('person_workflow', self)

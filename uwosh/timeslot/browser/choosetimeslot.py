@@ -36,80 +36,72 @@ class ChooseTimeSlot(BrowserView):
         success = False
         waiting = True
     
-        selectedSlot = self.request.get('slotSelection')
-        if selectedSlot == None:
+    	userInfo = self.getUserInput()
+    	userInfo.update(self.getMemberInfo())
+    
+        if userInfo['selectedSlot'] == None:
         	self.request.response.redirect(self.context.absolute_url())
         	return
-        
-        (date, time) = selectedSlot.split(' @ ')
+        	
+        (date, time) = userInfo['selectedSlot'].split(' @ ')
         day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time)
-        
-        member = self.getCurrentUser()
-        username = member.getUserName()
-        fullname = member.getProperty('fullname')
-        if fullname == '':
-            fullname = username
-        email = member.getProperty('email')
-        [department, phone] = self.getDepartmentAndPhone(email)
-        
         allowWaitingList = timeSlot.getAllowWaitingList()
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
-        
+       
         if allowWaitingList or numberOfAvailableSpots > 0:
-            newPerson = self.createPerson(timeSlot, username, email, fullname, department, phone)
+            person = self.createPerson(timeSlot, userInfo)
             
             if numberOfAvailableSpots > 0:
-                portal_workflow = getToolByName(self, 'portal_workflow')
-                portal_workflow.doActionFor(newPerson, 'signup')
-                newPerson.reindexObject()
+                self.signupPerson(person)
                 waiting = False
                 
-            self.sendConfirmationEmail(email, fullname, selectedSlot)
+            self.sendConfirmationEmail(userInfo)
             success = True
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
 
-    def getCurrentUser(self):
+    def getUserInput(self):
+        userInput = dict()
+        userInput['selectedSlot'] = self.request.get('slotSelection')
+        userInput['phone'] = self.request.get('phone')
+        userInput['classification'] = self.request.get('classification')
+        userInput['dept'] = self.request.get('dept')
+        return userInput
+		
+    def getMemberInfo(self):
+    	memberInfo = dict()
         portal_membership = getToolByName(self, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
-        return member
+        memberInfo['username'] = member.getUserName()
+        memberInfo['fullname'] = member.getProperty('fullname')
+        if memberInfo['fullname'] == '':
+            memberInfo['fullname'] = memberInfo['username'] 
+        memberInfo['email'] = member.getProperty('email')
+        return memberInfo
 
-    def getDepartmentAndPhone(self, email):
-        employeeId = self.getEmployeeId(email)
-        contactInfo = self.getContactInfo(employeeId)
-        if contactInfo == '<params>\n</params>\n':
-            return [None, None]
-        else:
-            xmldoc = minidom.parseString(contactInfo)
-            department = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[5].firstChild.firstChild.data
-            phone = xmldoc.firstChild.childNodes[1].childNodes[1].firstChild.firstChild.childNodes[7].firstChild.firstChild.data
-            return [department, phone]
-  
-    def getEmployeeId(self, email):
-        webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
-        employeeId = webService.getEmplidFromEmailAddress(email)
-        return employeeId
-
-    def getContactInfo(self, employeeId):
-		webService = xmlrpclib.Server('http://ws.it.uwosh.edu:8080/ws/', allow_none=True)
-		contactInfo = webService.CampusDirectoryZEM001UOVW(employeeId)
-		return contactInfo
-
-    def createPerson(self, location, username, email, fullname, department, phone):
-        location.invokeFactory('Person', username)
-        newPerson = location[username]
-        newPerson.setEmail(email)
-        newPerson.setTitle(fullname)
-        newPerson.setDepartment(department)
-        newPerson.setPhone(phone)
+    def createPerson(self, location, userInfo):
+        location.invokeFactory('Person', userInfo['username'])
+        newPerson = location[userInfo['username']]
+        newPerson.setEmail(userInfo['email'])
+        newPerson.setTitle(userInfo['fullname'])
+        newPerson.setClassification(userInfo['classification'])
+        newPerson.setDepartment(userInfo['dept'])
+        newPerson.setPhone(userInfo['phone'])
         newPerson.reindexObject()
         return newPerson
 
-    def sendConfirmationEmail(self, toEmail, fullname, timeSlot):
+    def signupPerson(self, person):
+        portal_workflow = getToolByName(self, 'portal_workflow')
+        portal_workflow.doActionFor(person, 'signup')
+        person.reindexObject()
+
+    def sendConfirmationEmail(self, userInfo):
+    	toEmail = userInfo['email']
         fromEmail = self.getSignupSheetCreatorEmail()
         subject = 'Registration success'
-        message = 'Hi ' + fullname + ',\nYou have successfully registered for: ' + timeSlot
+        message = 'Hi ' + userInfo['fullname'] + ',\n'
+        message += 'You have successfully registered for: ' + userInfo['selectedSlot']
         mailHost = self.context.MailHost
         mailHost.secureSend(message, toEmail, fromEmail, subject)
         
