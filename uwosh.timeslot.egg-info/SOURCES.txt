@@ -58,5 +58,6 @@ uwosh/timeslot/profiles/default/workflows/.DS_Store
 uwosh/timeslot/profiles/default/workflows/hidden_workflow/definition.xml
 uwosh/timeslot/profiles/default/workflows/person_workflow/definition.xml
 uwosh/timeslot/profiles/default/workflows/person_workflow/scripts/notifyPerson.py
+uwosh/timeslot/profiles/default/workflows/person_workflow/scripts/notifyPerson.py.metadata
 uwosh/timeslot/tests/__init__.py
 uwosh/timeslot/tests/doc_tests.py

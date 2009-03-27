@@ -1,4 +1,4 @@
-## Script (Python) "notifyUser"
+## Script (Python) "notifyPerson"
 ##bind container=container
 ##bind context=context
 ##bind namespace=
@@ -13,11 +13,10 @@ day = timeSlot.aq_parent
 signupSheet = day.aq_parent
 
 toEmail = person.getEmail()
-fromEmail = 'scorcm43@uwosh.edu'
-subject = 'Waiting list sign up'
+fromEmail = "%s <%s>" % (context.email_from_name, context.email_from_address)
+subject = signupSheet.Title() + ' - Registration Confirmation'
+message = 'Hi ' + person.Title() + ',\n\n'
+message += 'You have been signed up for: ' + timeSlot.getLabel()
 
-message = 'Hi ' + person.Title() + ',\nYou have been chosen from the waiting list and signed up for: '
-message += signupSheet.Title() + '\n'
-message += timeSlot.getLabel()
 mailHost = context.MailHost
 mailHost.secureSend(message, toEmail, fromEmail, subject)

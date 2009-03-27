@@ -72,7 +72,7 @@
  <transition transition_id="put_on_waiting_list"
              title="Put on Waiting List"
              new_state="waiting" trigger="USER"
-             before_script="" after_script="notifyPerson">
+             before_script="" after_script="">
   <description>This puts a person on the waiting list</description>
   <action url="%(content_url)s/content_status_modify?workflow_action=put_on_waiting_list"
           category="workflow">Put on Waiting List</action>
@@ -159,4 +159,7 @@
   <guard>
   </guard>
  </variable>
+ <script script_id="notifyPerson" type="Script (Python)"
+         filename="workflows/person_workflow/scripts/notifyPerson.py"
+         module="" function=""/>
 </dc-workflow>

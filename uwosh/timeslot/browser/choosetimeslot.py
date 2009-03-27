@@ -55,8 +55,9 @@ class ChooseTimeSlot(BrowserView):
             if numberOfAvailableSpots > 0:
                 self.signupPerson(person)
                 waiting = False
-                
-            self.sendConfirmationEmail(userInfo)
+            else:
+            	self.sendWaitingConfirmationEmail(userInfo)
+            	
             success = True
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
@@ -96,17 +97,12 @@ class ChooseTimeSlot(BrowserView):
         portal_workflow.doActionFor(person, 'signup')
         person.reindexObject()
 
-    def sendConfirmationEmail(self, userInfo):
+    def sendWaitingConfirmationEmail(self, userInfo):
     	toEmail = userInfo['email']
-        fromEmail = self.getSignupSheetCreatorEmail()
-        subject = 'Registration success'
-        message = 'Hi ' + userInfo['fullname'] + ',\n'
-        message += 'You have successfully registered for: ' + userInfo['selectedSlot']
+        fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
+        subject = self.context.Title() + ' - Waiting List Confirmation'
+        message = 'Hi ' + userInfo['fullname'] + ',\n\n'
+        message += 'You have been added to the waiting list for: ' + userInfo['selectedSlot']
         mailHost = self.context.MailHost
         mailHost.secureSend(message, toEmail, fromEmail, subject)
         
-    def getSignupSheetCreatorEmail(self):
-    	creatorId = self.context.Creator();
-    	portal_membership = getToolByName(self, 'portal_membership')
-        member = portal_membership.getMemberById(creatorId)
-        return member.getProperty('email')
