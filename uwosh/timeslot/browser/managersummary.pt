@@ -17,19 +17,15 @@
                                 <a tal:attributes="href day/absolute_url" tal:content="day/Title" />
                             </h3>
                         </th>
-                        <th colspan="4">
-                            <a tal:attributes="href string:${context/absolute_url}/remove-all-people-from-day?daySelection=${day/Title};">
-                                Remove everyone from this day
-                            </a>
-                        </th>
+                        <th colspan="4" />
                     </tr>
                 
                     <tr>
                             <th>Time</th>
                             <th>Name</th>
+                            <th>Status</th>    
                             <th>Email</th>
-                            <th>Extra Info (Phone, Class., Dept.)</th>
-                            <th>Status</th>                        
+                            <th>Extra Info (Phone, Class., Dept.)</th>           
                     </tr>
                     
                     <tal:block tal:repeat="timeSlot day/getTimeSlots">
@@ -49,22 +45,17 @@
                             <td>
                                 <a tal:attributes="href person/absolute_url" tal:content="person/Title" />
                             </td>
+                            <td tal:content="person/getReviewState" />
                             <td tal:content="person/getEmail" />
                             <td>
                                 <tal:block tal:define="phone person/getPhone; classification person/getClassification; dept person/getDepartment"
                                            tal:content="string:${phone}, ${classification}, ${dept}" />
                             </td>
-                            <td tal:content="person/getReviewState" />
                         </tr>
                     </tal:block>
                 
                 </tal:block>
             </table>
-            <br />
-            <br />
-            <p>
-                <a tal:attributes="href string:${context/absolute_url};">Return to the Choose a Date and Time view</a>
-            </p>
         
         </tal:main-macro>
     </div>

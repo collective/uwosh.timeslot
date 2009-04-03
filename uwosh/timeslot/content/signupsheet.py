@@ -11,6 +11,9 @@ from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import ISignupSheet
 from uwosh.timeslot.config import PROJECTNAME
 
+import csv
+from StringIO import StringIO
+
 SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     # -*- Your Archetypes field definitions here ... -*-
@@ -50,5 +53,22 @@ class SignupSheet(folder.ATFolder):
             day = brain.getObject()
             days.append(day)
         return days    
+
+	def exportToCSV(self):
+		buffer = StringIO()
+        writer = csv.writer(buffer)
+        
+        writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info'])
+        
+        for day in self.getDays():
+            for timeSlot in day.getTimeSlots():
+                for person in timeSlot.getPeople():
+                    writer.writerow([day.Title(), timeSlot.Title(), person.Title(),
+					                 person.getReviewState(), person.getEmail(), person.getExtraInfo()])
+					                 
+        result = buffer.getvalue()
+        buffer.close()
+
+        return result
 
 atapi.registerType(SignupSheet, PROJECTNAME)

@@ -44,6 +44,7 @@ uwosh/timeslot/portlets/__init__.py
 uwosh/timeslot/portlets/configure.zcml
 uwosh/timeslot/profiles/.DS_Store
 uwosh/timeslot/profiles/default/.DS_Store
+uwosh/timeslot/profiles/default/actions.xml
 uwosh/timeslot/profiles/default/factorytool.xml
 uwosh/timeslot/profiles/default/metadata.xml
 uwosh/timeslot/profiles/default/portlets.xml

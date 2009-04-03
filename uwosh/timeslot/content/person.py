@@ -67,5 +67,8 @@ class Person(base.ATCTContent):
     def getReviewState(self):
         status = self.portal_workflow.getStatusOf('person_workflow', self)
         return status['review_state']
-                
+    
+    def getExtraInfo(self):
+    	return self.phone + ' ' + self.classification + ' ' + self.department
+    
 atapi.registerType(Person, PROJECTNAME)
