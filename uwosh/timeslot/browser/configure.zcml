@@ -55,6 +55,13 @@
       allowed_interface=".choosetimeslot.IChooseTimeSlot"
       permission="zope2.View"
       />
+      
+    <browser:page
+        for="..interfaces.IDay"
+        name="clone-day"
+        class=".cloneday.CloneDayForm"
+        permission="cmf.ManagePortal"
+        />
 
     <browser:menuItem
       for="..interfaces.ISignupSheet"
