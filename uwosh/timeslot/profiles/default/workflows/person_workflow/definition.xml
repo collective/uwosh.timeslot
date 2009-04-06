@@ -84,7 +84,7 @@
  <transition transition_id="signup"
              title="Signup"
              new_state="signedup" trigger="USER"
-             before_script="" after_script="notifyPerson">
+             before_script="" after_script="">
   <description>This signs a person up for a day</description>
   <action url="%(content_url)s/content_status_modify?workflow_action=signup"
           category="workflow">Sign up</action>
@@ -159,7 +159,4 @@
   <guard>
   </guard>
  </variable>
- <script script_id="notifyPerson" type="Script (Python)"
-         filename="workflows/person_workflow/scripts/notifyPerson.py"
-         module="" function=""/>
 </dc-workflow>

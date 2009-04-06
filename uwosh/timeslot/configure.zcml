@@ -22,4 +22,11 @@
 
     <!-- -*- extra stuff goes here -*- -->
 
+    <!-- Register the Person workflow transition event handler -->
+    <subscriber
+      for=".interfaces.IPerson
+           Products.DCWorkflow.interfaces.IAfterTransitionEvent"
+      handler=".subscribers.sendSignupNotificationEmail"
+      />
+
 </configure>
