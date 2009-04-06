@@ -40,7 +40,7 @@
    <property name="url_expr">string:remove-all-people</property>
    <property name="icon_expr"></property>
    <property
-      name="available_expr">python:True</property>
+      name="available_expr">python:object.Type() in ['Signup Sheet', 'Day', 'Time Slot']</property>
    <property name="permissions">
     <element value="Manage portal"/>
    </property>

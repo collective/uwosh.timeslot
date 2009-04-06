@@ -31,7 +31,7 @@ schemata.finalizeATCTSchema(SignupSheetSchema, folderish=True, moveDiscussion=Fa
 
 class SignupSheet(folder.ATFolder):
     """Description of the Example Type"""
-    implements(ISignupSheet)
+    implements(ISignupSheet, IContainsPeople)
 
     portal_type = "Signup Sheet"
     schema = SignupSheetSchema
@@ -54,9 +54,14 @@ class SignupSheet(folder.ATFolder):
             day = brain.getObject()
             days.append(day)
         return days
-	
-	def exportToCSV(self):
-		buffer = StringIO()
+        
+    def removeAllPeople(self):
+        days = self.getDays()
+        for day in days:
+            day.removeAllPeople()
+        
+    def exportToCSV(self):
+        buffer = StringIO()
         writer = csv.writer(buffer)
         
         writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info'])

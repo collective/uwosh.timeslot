@@ -25,6 +25,7 @@ uwosh/timeslot/__init__.py
 uwosh/timeslot/config.py
 uwosh/timeslot/configure.zcml
 uwosh/timeslot/interfaces.py
+uwosh/timeslot/subscribers.py
 uwosh/timeslot/tests.py
 uwosh/timeslot/browser/__init__.py
 uwosh/timeslot/browser/choosetimeslot.pt
@@ -58,7 +59,5 @@ uwosh/timeslot/profiles/default/types/Time_Slot.xml
 uwosh/timeslot/profiles/default/workflows/.DS_Store
 uwosh/timeslot/profiles/default/workflows/hidden_workflow/definition.xml
 uwosh/timeslot/profiles/default/workflows/person_workflow/definition.xml
-uwosh/timeslot/profiles/default/workflows/person_workflow/scripts/notifyPerson.py
-uwosh/timeslot/profiles/default/workflows/person_workflow/scripts/notifyPerson.py.metadata
 uwosh/timeslot/tests/__init__.py
 uwosh/timeslot/tests/doc_tests.py
