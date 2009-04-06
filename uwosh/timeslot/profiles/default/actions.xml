@@ -33,6 +33,19 @@
    </property>
    <property name="visible">True</property>
   </object>
+  
+  <object name="remove-all-people" meta_type="CMF Action">
+   <property name="title">Remove All People</property>
+   <property name="description"></property>
+   <property name="url_expr">string:remove-all-people</property>
+   <property name="icon_expr"></property>
+   <property
+      name="available_expr">python:True</property>
+   <property name="permissions">
+    <element value="Manage portal"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
  
  </object>
 </object>

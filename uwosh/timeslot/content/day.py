@@ -9,6 +9,7 @@ from Products.ATContentTypes.content import schemata
 
 from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import IDay
+from uwosh.timeslot.interfaces import IContainsPeople
 from uwosh.timeslot.config import PROJECTNAME
 
 DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
@@ -28,7 +29,7 @@ schemata.finalizeATCTSchema(DaySchema, folderish=True, moveDiscussion=False)
 
 class Day(folder.ATFolder):
     """Description of the Example Type"""
-    implements(IDay)
+    implements(IDay, IContainsPeople)
 
     portal_type = "Day"
     schema = DaySchema

@@ -9,6 +9,7 @@ from Products.ATContentTypes.content import schemata
 
 from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import ITimeSlot
+from uwosh.timeslot.interfaces import IContainsPeople
 from uwosh.timeslot.config import PROJECTNAME
 
 TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
@@ -40,8 +41,8 @@ schemata.finalizeATCTSchema(TimeSlotSchema, folderish=True, moveDiscussion=False
 
 class TimeSlot(folder.ATFolder):
     """Description of the Example Type"""
-    implements(ITimeSlot)
-
+    implements(ITimeSlot, IContainsPeople)
+	
     portal_type = "Time Slot"
     schema = TimeSlotSchema
 
@@ -91,12 +92,13 @@ class TimeSlot(folder.ATFolder):
             raise ValueError('The Person %s was not found.' % username)
         person = brains[0].getObject()
         return person
-   
+        
     def removeAllPeople(self):
         people = self.getPeople()
         idsToRemove = []
         for person in people:
             idsToRemove.append(person.id)
         self.manage_delObjects(idsToRemove)
+        return "Success"
         
 atapi.registerType(TimeSlot, PROJECTNAME)

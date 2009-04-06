@@ -30,12 +30,6 @@ class ManagerSummary(BrowserView):
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
         
-    def removeAllPeopleFromDay(self):
-        date = self.request.get('daySelection')
-        if date == '':
-            raise ValueError('No date was selected')
-        
-        day = self.context.getDay(date)
-        day.removeAllPeople()
-        
-        self.request.response.redirect(self.context.absolute_url() + '/manager-summary')
+    def removeAllPeople(self):
+        self.context.removeAllPeople()
+        self.request.response.redirect(self.context.absolute_url())

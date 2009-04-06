@@ -15,13 +15,13 @@
       />
     
     <browser:page
-      for="..interfaces.ISignupSheet"
-      name="remove-all-people-from-day"
+      for="..interfaces.IContainsPeople"
+      name="remove-all-people"
       class=".managersummary.ManagerSummary"
-      attribute="removeAllPeopleFromDay"
+      attribute="removeAllPeople"
       permission="cmf.ManagePortal"
       />
-
+	
     <browser:page
       for="..interfaces.ISignupSheet"
       name="choose-timeslot"

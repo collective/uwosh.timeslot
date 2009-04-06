@@ -19,3 +19,7 @@ class IDay(Interface):
 
 class ISignupSheet(Interface):
     """Description of the Example Type"""
+
+class IContainsPeople(Interface):
+    def removeAllPeople():
+        """Removes all signedup/waitinglist people from the object and its children"""

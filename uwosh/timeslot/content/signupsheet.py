@@ -9,6 +9,7 @@ from Products.ATContentTypes.content import schemata
 
 from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import ISignupSheet
+from uwosh.timeslot.interfaces import IContainsPeople
 from uwosh.timeslot.config import PROJECTNAME
 
 import csv
@@ -52,8 +53,8 @@ class SignupSheet(folder.ATFolder):
         for brain in brains:
             day = brain.getObject()
             days.append(day)
-        return days    
-
+        return days
+	
 	def exportToCSV(self):
 		buffer = StringIO()
         writer = csv.writer(buffer)
