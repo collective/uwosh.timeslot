@@ -15,7 +15,13 @@ class CloneDayForm(formbase.PageForm):
     @form.action('Clone')
     def action_migrate(self, action, data):
         numToCreate = data['numToCreate']
+        day = self.context
+        signupSheet = day.aq_parent
         
+        dayCopy = signupSheet.manage_copyObjects([day])
+        for i in range(0, numToCreate):
+            signupSheet.manage_pasteObjects(dayCopy)
+            
         return self.result_template()
         
         
