@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="hidden_workflow"
+<dc-workflow workflow_id="uwosh_timeslot_hidden_workflow"
              title="Hidden Workflow"
              description=""
              state_variable="review_state"

@@ -11,7 +11,13 @@
 
   <h2>Clone Day Results</h2>
 
-  <p>Success!!</p>
+  <h3 tal:condition="view/success">Cloning successful.</h3>
+  
+  <h3 tal:condition="not:view/success">Cloning failed.</h3>
+  
+  <ul tal:repeat="error view/errors">
+    <li tal:content="error" />
+  </ul>
   
 </div>
 </body>

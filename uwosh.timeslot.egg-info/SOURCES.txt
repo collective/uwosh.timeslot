@@ -30,6 +30,8 @@ uwosh/timeslot/tests.py
 uwosh/timeslot/browser/__init__.py
 uwosh/timeslot/browser/choosetimeslot.pt
 uwosh/timeslot/browser/choosetimeslot.py
+uwosh/timeslot/browser/cloneday-results.pt
+uwosh/timeslot/browser/cloneday.py
 uwosh/timeslot/browser/configure.zcml
 uwosh/timeslot/browser/managersummary.pt
 uwosh/timeslot/browser/managersummary.py
