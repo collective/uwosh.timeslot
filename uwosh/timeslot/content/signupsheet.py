@@ -70,7 +70,7 @@ class SignupSheet(folder.ATFolder):
             for timeSlot in day.getTimeSlots():
                 for person in timeSlot.getPeople():
                     writer.writerow([day.Title(), timeSlot.Title(), person.Title(),
-					                 person.getReviewState(), person.getEmail(), person.getExtraInfo()])
+					                 person.getReviewStateTitle(), person.getEmail(), person.getExtraInfo()])
 					                 
         result = buffer.getvalue()
         buffer.close()

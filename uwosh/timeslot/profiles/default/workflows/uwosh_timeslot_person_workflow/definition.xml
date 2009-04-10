@@ -11,7 +11,6 @@
  <state state_id="signedup" title="Signed Up">
   <description>This person is signed up for the time slot
 </description>
-  <exit-transition transition_id="put_on_waiting_list"/>
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Member</permission-role>               
@@ -46,25 +45,13 @@
   </permission-map>
  </state>
  
- <transition transition_id="put_on_waiting_list"
-             title="Put on Waiting List"
-             new_state="waiting" trigger="USER"
-             before_script="" after_script="">
-  <description>This puts a person on the waiting list</description>
-  <action url="%(content_url)s/content_status_modify?workflow_action=put_on_waiting_list"
-          category="workflow">Put on Waiting List</action>
-  <guard>
-   <guard-permission>Modify portal content</guard-permission>
-  </guard>
- </transition>
- 
  <transition transition_id="signup"
              title="Signup"
              new_state="signedup" trigger="USER"
              before_script="" after_script="">
   <description>This signs a person up for a day</description>
   <action url="%(content_url)s/content_status_modify?workflow_action=signup"
-          category="workflow">signup</action>
+          category="workflow">Signup</action>
   <guard>
    <guard-permission>Modify portal content</guard-permission>
   </guard>

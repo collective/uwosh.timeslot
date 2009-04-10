@@ -45,7 +45,7 @@
                             <td>
                                 <a tal:attributes="href person/absolute_url" tal:content="person/Title" />
                             </td>
-                            <td tal:content="person/getReviewState" />
+                            <td tal:content="person/getReviewStateTitle" />
                             <td tal:content="person/getEmail" />
                             <td tal:content="person/getExtraInfo" />
                         </tr>

@@ -16,7 +16,7 @@ class CloneDayForm(formbase.PageForm):
     errors = []
 
     @form.action('Clone')
-    def action_migrate(self, action, data):
+    def action_clone(self, action, data):
         self.success = True
         self.errors = []
         numToCreate = data['numToCreate']
@@ -29,7 +29,7 @@ class CloneDayForm(formbase.PageForm):
         
         for i in range(0, numToCreate):
             newId = '%s-%d' % (origId, i)
-            newTitle = '%s-%d' % (origTitle, i)
+            newTitle = '%s_%d' % (origTitle, i)
             
             try:
                 signupSheet.invokeFactory(id=newId, type_name='Day')
@@ -41,8 +41,12 @@ class CloneDayForm(formbase.PageForm):
             newDay = signupSheet[newId]
             newDay.setTitle(newTitle)
             newDay.manage_pasteObjects(dayContentsCopy)
-            newDay.removeAllPeople()
-            newDay.reindexObject()
+            
+            if i == 0:
+                newDay.removeAllPeople()
+                dayContentsCopy = newDay.manage_copyObjects(newDay.objectIds())
+                
+            newDay.reindexObject()     
             
         return self.result_template()
         

@@ -18,7 +18,8 @@ PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('email',
         storage=atapi.AnnotationStorage(),
         widget=atapi.StringWidget(label=_(u'E-Mail'),
-                                  description=_(u'Your email address'))
+                                  description=_(u'Your email address')),
+        validators = ('isEmail')
     ),
 
     atapi.StringField('phone',
@@ -66,7 +67,13 @@ class Person(base.ATCTContent):
     
     def getReviewState(self):
         status = self.portal_workflow.getStatusOf('uwosh_timeslot_person_workflow', self)
-        return status['review_state']
+        reviewState = status['review_state']
+        return reviewState
+    
+    def getReviewStateTitle(self):
+    	reviewState = self.getReviewState()
+    	reviewStateTitle = self.portal_workflow.getTitleForStateOnType(reviewState, 'Person')
+        return reviewStateTitle
     
     def getExtraInfo(self):
         return self.phone + ' - ' + self.classification + ' - ' + self.department
