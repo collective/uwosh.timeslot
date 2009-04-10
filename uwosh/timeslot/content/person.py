@@ -65,7 +65,7 @@ class Person(base.ATCTContent):
     classification = atapi.ATFieldProperty('classification')
     
     def getReviewState(self):
-        status = self.portal_workflow.getStatusOf('person_workflow', self)
+        status = self.portal_workflow.getStatusOf('uwosh_timeslot_person_workflow', self)
         return status['review_state']
     
     def getExtraInfo(self):

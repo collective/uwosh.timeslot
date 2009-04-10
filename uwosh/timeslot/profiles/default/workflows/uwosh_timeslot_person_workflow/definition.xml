@@ -5,7 +5,6 @@
              state_variable="review_state"
              initial_state="waiting">
  <permission>Access contents information</permission>
- <permission>Change portal events</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
  
@@ -15,22 +14,15 @@
   <exit-transition transition_id="put_on_waiting_list"/>
   <permission-map name="Access contents information"
                   acquired="False">
-   <permission-role>Anonymous</permission-role>
-  </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
+   <permission-role>Member</permission-role>               
    <permission-role>Manager</permission-role>
-  </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
-   <permission-role>Anonymous</permission-role>
   </permission-map>
   <permission-map name="Modify portal content"
                   acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
-   <permission-role>Anonymous</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  
@@ -41,31 +33,14 @@
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Editor</permission-role>
-   <permission-role>Reader</permission-role>
-   <permission-role>Contributor</permission-role>
    <permission-role>Member</permission-role>
-  </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Editor</permission-role>
   </permission-map>
   <permission-map name="Modify portal content"
                   acquired="False">
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Editor</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Editor</permission-role>
-   <permission-role>Reader</permission-role>
-   <permission-role>Contributor</permission-role>
-   <permission-role>Member</permission-role>
   </permission-map>
  </state>
  
@@ -92,16 +67,6 @@
    <guard-permission>Modify portal content</guard-permission>
   </guard>
  </transition>
- 
- <worklist worklist_id="waiting-list" title="">
-  <description>A waiting list for timeslots</description>
-  <action url="%(portal_url)s/search?review_state=waiting"
-          category="global">Waiting List (%(count)d)</action>
-  <guard>
-   <guard-permission>Review portal content</guard-permission>
-  </guard>
-  <match name="review_state" values="waiting"/>
- </worklist>
  
  <variable variable_id="action" for_catalog="False"
            for_status="True" update_always="True">

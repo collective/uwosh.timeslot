@@ -67,11 +67,12 @@ class TimeSlot(folder.ATFolder):
         return self.isUserSignedUpForThisSlot(username)
 
     def isUserSignedUpForThisSlot(self, username):
-        try:
-            self.getPerson(username)
-        except ValueError:
+        query = {'portal_type':'Person','id':username}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        if len(brains) < 1:
             return False
-        return True
+        else:
+            return True
 
     def isFull(self):
         return (self.getNumberOfAvailableSpots() == 0 and not self.allowWaitingList)

@@ -59,7 +59,7 @@ uwosh/timeslot/profiles/default/types/Person.xml
 uwosh/timeslot/profiles/default/types/Signup_Sheet.xml
 uwosh/timeslot/profiles/default/types/Time_Slot.xml
 uwosh/timeslot/profiles/default/workflows/.DS_Store
-uwosh/timeslot/profiles/default/workflows/hidden_workflow/definition.xml
-uwosh/timeslot/profiles/default/workflows/person_workflow/definition.xml
+uwosh/timeslot/profiles/default/workflows/uwosh_timeslot_hidden_workflow/definition.xml
+uwosh/timeslot/profiles/default/workflows/uwosh_timeslot_person_workflow/definition.xml
 uwosh/timeslot/tests/__init__.py
 uwosh/timeslot/tests/doc_tests.py

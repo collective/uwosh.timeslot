@@ -5,7 +5,6 @@
              state_variable="review_state"
              initial_state="hidden">
  <permission>Access contents information</permission>
- <permission>Change portal events</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
  <permission>uwosh.timeslot: Add Person</permission>
@@ -13,11 +12,8 @@
   <description>Hidden from everyone except managers.</description>
   <permission-map name="Access contents information"
                   acquired="False">
-   <permission-role>Member</permission-role>
-  </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Member</permission-role>
   </permission-map>
   <permission-map name="List folder contents"
                   acquired="False">
@@ -32,6 +28,7 @@
   </permission-map>
   <permission-map name="uwosh.timeslot: Add Person"
                   acquired="False">
+   <permission-role>Manager</permission-role>
    <permission-role>Member</permission-role>
   </permission-map>
  </state>
