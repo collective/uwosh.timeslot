@@ -1,17 +1,8 @@
-.. contents::
+uwosh.timeslot
+--------------
 
-.. Note!
-   -----
-   Update the following URLs to point to your:
+A signup sheet for Plone 3.0.
 
-   - code repository
-   - bug tracker
-   - questions/comments feedback mail
-   (do not set a real mail, to avoid spams)
-
-   Or remove it if not used.
-
-- Code repository: http://svn.somewhere.com/...
-- Questions and comments to somemailing_list
-- Report bugs at http://bug.somewhere.com/..
+- Code repository: https://141.233.238.172/svn/plone/Projects/uwosh.timeslot/
+- Questions and comments to <marshall.scorcio at gmail.com>
 
