@@ -25,7 +25,7 @@
                             <th>Name</th>
                             <th>Status</th>    
                             <th>Email</th>
-                            <th>Extra Info (Phone, Class., Dept.)</th>           
+                            <th>Extra Info (Phone - Class. - Dept.)</th>           
                     </tr>
                     
                     <tal:block tal:repeat="timeSlot day/getTimeSlots">
@@ -47,10 +47,7 @@
                             </td>
                             <td tal:content="person/getReviewState" />
                             <td tal:content="person/getEmail" />
-                            <td>
-                                <tal:block tal:define="phone person/getPhone; classification person/getClassification; dept person/getDepartment"
-                                           tal:content="string:${phone}, ${classification}, ${dept}" />
-                            </td>
+                            <td tal:content="person/getExtraInfo" />
                         </tr>
                     </tal:block>
                 

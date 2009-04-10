@@ -20,6 +20,7 @@
   <permission-map name="Modify portal content"
                   acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
@@ -38,6 +39,7 @@
   <permission-map name="Modify portal content"
                   acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
@@ -62,7 +64,7 @@
              before_script="" after_script="">
   <description>This signs a person up for a day</description>
   <action url="%(content_url)s/content_status_modify?workflow_action=signup"
-          category="workflow">Sign up</action>
+          category="workflow">signup</action>
   <guard>
    <guard-permission>Modify portal content</guard-permission>
   </guard>

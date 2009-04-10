@@ -64,7 +64,7 @@ class SignupSheet(folder.ATFolder):
         buffer = StringIO()
         writer = csv.writer(buffer)
         
-        writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info'])
+        writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])
         
         for day in self.getDays():
             for timeSlot in day.getTimeSlots():
