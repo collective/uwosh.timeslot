@@ -1,6 +1,9 @@
-Test browser tests for uwosh.timeslot.
+Browser tests for uwosh.timeslot.
 A lot was copied from Products.Poi
 ==========================
+
+To create a signup sheet we need to login in as a manager and create several
+different content types.
 
 We start a test browser::
 
@@ -25,9 +28,36 @@ And make ourselves manager::
     >>> self.setRoles(['Manager'])
 
 
-Let's create a Signup Sheet::
+Let's create a signup sheet::
     >>> url = self.portal.absolute_url()
     >>> browser.open(url)
     >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
-    >>> 'A short summary of the content.' in browser.contents
+    >>> browser.getControl(name='title').value = 'Test Signup Sheet'
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
     True
+    >>> signupSheet = self.portal['test-signup-sheet']
+    
+We'll add a day to it::
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url + '/createObject?type_name=Day')
+    >>> browser.getControl(name='title').value = 'Mon, Oct 13'
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
+    True
+     >>> day = signupSheet['mon-oct-13']
+     
+And to the day we'll add a timeslot::
+    >>> url = day.absolute_url()
+    >>> browser.open(url + '/createObject?type_name=Time+Slot')
+    >>> browser.getControl(name='title').value = '12:30 - 3:00'
+    >>> browser.getControl(name='maxCapacity').value = '3'
+    >>> browser.getControl(name='allowWaitingList:boolean').value = 'off'
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
+    True
+     >>> timeSlot = day['12-30-3-00']
+     
+
+Now we should have a signup sheet that is ready to go and that will allow any
+authenticated member of your website signup for it.

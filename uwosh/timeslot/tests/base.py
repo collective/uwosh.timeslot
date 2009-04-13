@@ -21,7 +21,7 @@ setup_uwosh_timeslot()
 ptc.setupPloneSite(products=['uwosh.timeslot'])
 
 class UWOshTimeslotTestCase(ptc.PloneTestCase):
-    """A base calss for all the tests in this packages."""
+    """A base class for all the tests in this package."""
     
 class UWOshTimeslotFunctionalTestCase(UWOshTimeslotTestCase, ptc.FunctionalTestCase):
     pass
