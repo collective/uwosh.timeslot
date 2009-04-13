@@ -1,0 +1,33 @@
+Test browser tests for uwosh.timeslot.
+A lot was copied from Products.Poi
+==========================
+
+We start a test browser::
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> browser.addHeader('Accept-Language', 'en-US')
+    >>> self.portal.error_log._ignored_exceptions = ()
+
+We log in::
+
+    >>> browser.open(portal.absolute_url() + '/login_form')
+    >>> browser.getLink('Log in').click()
+    >>> browser.getControl(name='__ac_name').value = 'test_user_1_'
+    >>> browser.getControl(name='__ac_password').value = 'secret'
+    >>> browser.getControl(name='submit').click()
+    >>> 'You are now logged in' in browser.contents
+    True
+    
+And make ourselves manager::
+
+    >>> self.setRoles(['Manager'])
+
+
+Let's create a Signup Sheet::
+    >>> url = self.portal.absolute_url()
+    >>> browser.open(url)
+    >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
+    >>> 'A short summary of the content.' in browser.contents
+    True
