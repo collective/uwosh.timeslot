@@ -1,7 +1,11 @@
-Browser tests for uwosh.timeslot.
-A lot was copied from Products.Poi
+Browser tests for uwosh.timeslot
 ==========================
 
+Let's import some exceptions we'll need later::
+
+    >>> from AccessControl.unauthorized import Unauthorized
+    >>> from mechanize._mechanize import LinkNotFoundError
+    
 To create a signup sheet we need to login in as a manager and create several
 different content types.
 
@@ -27,8 +31,8 @@ And make ourselves manager::
 
     >>> self.setRoles(['Manager'])
 
-
 Let's create a signup sheet::
+
     >>> url = self.portal.absolute_url()
     >>> browser.open(url)
     >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
@@ -39,6 +43,7 @@ Let's create a signup sheet::
     >>> signupSheet = self.portal['test-signup-sheet']
     
 We'll add a day to it::
+
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url + '/createObject?type_name=Day')
     >>> browser.getControl(name='title').value = 'Mon, Oct 13'
@@ -47,7 +52,10 @@ We'll add a day to it::
     True
      >>> day = signupSheet['mon-oct-13']
      
-And to the day we'll add a timeslot::
+And to the day we'll add a number timeslots::
+
+One with no waiting list and 3 openings::
+
     >>> url = day.absolute_url()
     >>> browser.open(url + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='title').value = '12:30 - 3:00'
@@ -56,8 +64,227 @@ And to the day we'll add a timeslot::
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
     True
-     >>> timeSlot = day['12-30-3-00']
-     
 
-Now we should have a signup sheet that is ready to go and that will allow any
-authenticated member of your website signup for it.
+Another ono with 0 openings and a waiting list::
+    
+    >>> browser.open(url + '/createObject?type_name=Time+Slot')
+    >>> browser.getControl(name='title').value = '4:00 - 5:00'
+    >>> browser.getControl(name='maxCapacity').value = '0'
+    >>> browser.getControl(name='allowWaitingList:boolean').value = 'on'
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
+    True
+
+Finally, one with 0 openings and no waiting list:: 
+    
+    >>> browser.open(url + '/createObject?type_name=Time+Slot')
+    >>> browser.getControl(name='title').value = '6:00 - 7:00'
+    >>> browser.getControl(name='maxCapacity').value = '0'
+    >>> browser.getControl(name='allowWaitingList:boolean').value = 'off'
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
+    True
+     
+Now we will publish our signup sheet so any member can use it::
+
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> portal_workflow = getToolByName(self.portal, 'portal_workflow')
+    >>> portal_workflow.doActionFor(signupSheet, 'publish')
+    
+Lets make sure the sheet exists, is accessible by authenticated users, and that
+it is displaying the times and days::
+
+     >>> self.setRoles(['Authenticated'])
+     >>> url = signupSheet.absolute_url()
+     >>> browser.open(url)
+     >>> 'Test Signup Sheet - Choose a Date and Time' in browser.contents
+     True
+     >>> 'Mon, Oct 13' in browser.contents
+     True
+     >>> '12:30 - 3:00' in browser.contents
+     True
+     >>> '4:00 - 5:00' in browser.contents
+     True
+     >>> '6:00 - 7:00' in browser.contents
+     True
+
+Non-manager users should not have a manager-summary, export-to-csv, clone, or
+remove-all-people tab::
+    
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> try:
+    ...     browser.getLink('Manager Summary')
+    ... except LinkNotFoundError:
+    ...     'manager-summary not found'
+    'manager-summary not found'
+    >>> try:
+    ...     browser.getLink('Export to CSV')
+    ... except LinkNotFoundError:
+    ...     'export-to-csv not found'
+    'export-to-csv not found'
+    >>> try:
+    ...     browser.getLink('Remove All People')
+    ... except LinkNotFoundError:
+    ...     'remove-all-people not found'
+    'remove-all-people not found'
+    >>> try:
+    ...     browser.open(url + '/mon-oct-13')
+    ... except:
+    ...     'clone not found'
+    'clone not found'
+
+Non-managers should not be able to access any of those four directly either.
+An attempt to access them should throw an exception::
+
+    >>> url = signupSheet.absolute_url()
+    >>> try:
+    ...     browser.open(url + '/manager-summary')
+    ... except: 
+    ...     'user is unauthorized to access manager-summary'
+    'user is unauthorized to access manager-summary'
+    >>> try:
+    ...     browser.open(url + '/export-to-csv')
+    ... except:
+    ...     'user is unauthorized to access export-to-csv'
+    'user is unauthorized to access export-to-csv'
+    >>> try:
+    ...     browser.open(url + '/remove-all-people')
+    ... except:
+    ...     'user is unauthorized to access remove-all-people'
+    'user is unauthorized to access remove-all-people'
+    >>> url = day.absolute_url()
+    >>> try:
+    ...     browser.open(url + '/clone')
+    ... except:
+    ...     'user is unauthorized to access clone'
+    'user is unauthorized to access clone'
+    
+Any authenticated user should be able to sign up for an available slot::
+
+    >>> self.setRoles(['Authenticated'])
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 12:30 - 3:00',)
+    >>> browser.getControl(name='phone').value = '920-555-1234'
+    >>> browser.getControl(name='form.button.submit').click()
+    >>> 'Successful Signup' in browser.contents
+    True
+
+And they should also be able to put on the waiting list when there is no room::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
+    >>> browser.getControl(name='form.button.submit').click()
+    >>> 'Successfully Added to Waiting List' in browser.contents
+    True
+
+But not for a full one w/o waiting list. Instead it should throw an exception::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> try:
+    ...     browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 5:00 - 6:00',)
+    ... except:
+    ...     'full slot is not selectable'
+    'full slot is not selectable'
+
+Because the user is now signed up for 2 slots, they should see "Your Slot" twice
+when viewing the signup sheet::
+
+    >>> browser.open(url)
+    >>> browser.contents.count('Your Slot')
+    2
+    
+Now let's make sure that a manager can access the manager summary page::
+    
+    >>> self.setRoles(['Manager'])
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getLink('Manager Summary').click()
+    >>> 'Test Signup Sheet - Manager Summary' in browser.contents
+    True
+    >>> 'Mon, Oct 13' in browser.contents
+    True
+    >>> '12:30 - 3:00' in browser.contents
+    True
+
+And it should show that our test user is signed up for two slots. One of which is a
+waiting list::
+    
+    >>> browser.contents.count('>test_user_1_</a>')
+    2
+    >>> browser.contents.count('Waiting List')
+    1
+    >>> browser.contents.count('Signed Up')
+    1
+    >>> browser.contents.count('920-555-1234')
+    1
+    
+Now we'll remove our test user from the waiting list and sign them up for the second slot.
+After that our test user should be signed up for two slots and waiting on zero::
+
+    >>> person = signupSheet['mon-oct-13']['4-00-5-00']['test_user_1_']
+    >>> portal_workflow.doActionFor(person, 'signup')
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url + '/manager-summary')
+    >>> browser.contents.count('>test_user_1_</a>')
+    2
+    >>> browser.contents.count('Waiting List')
+    0
+    >>> browser.contents.count('Signed Up')
+    2
+    
+Export to a comma sperated value file (csv) should work::
+
+    >>> browser.getLink('Export to CSV').click()
+    >>> 'Day,Time,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
+    True
+    >>> '"Mon, Oct 13",12:30 - 3:00,test_user_1_,Signed Up,,920-555-1234 -  - ' in browser.contents
+    True
+    
+Clicking on Clone should make as many copies as you want of the original day
+after stripping out all the currently signed up users::
+    
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url + '/mon-oct-13')
+    >>> browser.getLink('Clone').click()
+    >>> browser.getControl(name='form.numToCreate').value = '4'
+    >>> browser.getControl(name='form.actions.clone').click()
+    >>> 'Cloning successful' in browser.contents
+    True
+
+Since we made four copies there should be a total of five days, but only
+two slots for which our user is signed up for.::
+    
+    >>> browser.open(url + '/manager-summary')
+    >>> 'Mon, Oct 13' in browser.contents
+    True
+    >>> 'Mon, Oct 13_1' in browser.contents
+    True
+    >>> 'Mon, Oct 13_2' in browser.contents
+    True
+    >>> 'Mon, Oct 13_3' in browser.contents
+    True
+    >>> 'Mon, Oct 13_4' in browser.contents
+    True
+    >>> browser.contents.count('>test_user_1_</a>')
+    2
+    
+We'll use the remove-all-people shortcut to reset our sheet. Afterward there
+should be no one signed up for anything::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url + '/remove-all-people')
+    >>> browser.open(url + '/manager-summary')
+    >>> browser.contents.count('>test_user_1_</a>')
+    0
+    >>> browser.contents.count('Waiting List')
+    0
+    >>> browser.contents.count('Signed Up')
+    0
+    >>> browser.contents.count('No one is signed up')
+    15
+
+The End.

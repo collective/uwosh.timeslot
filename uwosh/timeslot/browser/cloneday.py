@@ -27,7 +27,7 @@ class CloneDayForm(formbase.PageForm):
         
         dayContentsCopy = day.manage_copyObjects(day.objectIds())
         
-        for i in range(0, numToCreate):
+        for i in range(1, numToCreate + 1):
             newId = '%s-%d' % (origId, i)
             newTitle = '%s_%d' % (origTitle, i)
             
@@ -42,7 +42,7 @@ class CloneDayForm(formbase.PageForm):
             newDay.setTitle(newTitle)
             newDay.manage_pasteObjects(dayContentsCopy)
             
-            if i == 0:
+            if i == 1:
                 newDay.removeAllPeople()
                 dayContentsCopy = newDay.manage_copyObjects(newDay.objectIds())
                 
