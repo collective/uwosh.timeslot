@@ -65,7 +65,7 @@ One with no waiting list and 3 openings::
     >>> 'Changes saved.' in browser.contents
     True
 
-Another ono with 0 openings and a waiting list::
+Another one with 0 openings and a waiting list::
     
     >>> browser.open(url + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='title').value = '4:00 - 5:00'
@@ -171,14 +171,10 @@ Any authenticated user should be able to sign up for an available slot::
     >>> 'Successful Signup' in browser.contents
     True
 
-And they should also be able to put on the waiting list when there is no room::
-
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
-    >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
-    >>> browser.getControl(name='form.button.submit').click()
-    >>> 'Successfully Added to Waiting List' in browser.contents
-    True
+We'll remove them so they can sign up again::
+    >>> self.setRoles(['Manager'])
+    >>> signupSheet.removeAllPeople()
+    >>> self.setRoles(['Authenticated'])
 
 But not for a full one w/o waiting list. Instead it should throw an exception::
 
@@ -190,12 +186,26 @@ But not for a full one w/o waiting list. Instead it should throw an exception::
     ...     'full slot is not selectable'
     'full slot is not selectable'
 
-Because the user is now signed up for 2 slots, they should see "Your Slot" twice
+We'll remove them so they can sign up again::
+    >>> self.setRoles(['Manager'])
+    >>> signupSheet.removeAllPeople()
+    >>> self.setRoles(['Authenticated'])
+
+And they should also be able to put on the waiting list when there is no room::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
+    >>> browser.getControl(name='form.button.submit').click()
+    >>> 'Successfully Added to Waiting List' in browser.contents
+    True
+
+Because the user is now signed up for 1 slots, they should see "Your Slot" once
 when viewing the signup sheet::
 
     >>> browser.open(url)
     >>> browser.contents.count('Your Slot')
-    2
+    1
     
 Now let's make sure that a manager can access the manager summary page::
     
@@ -210,38 +220,35 @@ Now let's make sure that a manager can access the manager summary page::
     >>> '12:30 - 3:00' in browser.contents
     True
 
-And it should show that our test user is signed up for two slots. One of which is a
-waiting list::
+And it should show that our test user is signed up for one slots. Which is a waiting list.
     
     >>> browser.contents.count('>test_user_1_</a>')
-    2
+    1
     >>> browser.contents.count('Waiting List')
     1
     >>> browser.contents.count('Signed Up')
-    1
-    >>> browser.contents.count('920-555-1234')
-    1
+    0
     
 Now we'll remove our test user from the waiting list and sign them up for the second slot.
-After that our test user should be signed up for two slots and waiting on zero::
+After that our test user should be signed up for one slot and waiting on zero::
 
     >>> person = signupSheet['mon-oct-13']['4-00-5-00']['test_user_1_']
     >>> portal_workflow.doActionFor(person, 'signup')
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url + '/manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
-    2
+    1
     >>> browser.contents.count('Waiting List')
     0
     >>> browser.contents.count('Signed Up')
-    2
+    1
     
 Export to a comma sperated value file (csv) should work::
 
     >>> browser.getLink('Export to CSV').click()
     >>> 'Day,Time,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
     True
-    >>> '"Mon, Oct 13",12:30 - 3:00,test_user_1_,Signed Up,,920-555-1234 -  - ' in browser.contents
+    >>> '"Mon, Oct 13",4:00 - 5:00,test_user_1_,Signed Up,, -  - ' in browser.contents
     True
     
 Clicking on Clone should make as many copies as you want of the original day
@@ -270,7 +277,7 @@ two slots for which our user is signed up for.::
     >>> 'Mon, Oct 13_4' in browser.contents
     True
     >>> browser.contents.count('>test_user_1_</a>')
-    2
+    1
     
 We'll use the remove-all-people shortcut to reset our sheet. Afterward there
 should be no one signed up for anything::

@@ -37,4 +37,7 @@ class SignupResults(BrowserView):
     def wasAddedToWaitingList(self):
         waiting = self.request.get('waiting')
         return bool(int(waiting))
-        
+    
+    def wasEmailSent(self):
+        emailSent = self.request.get('emailSent')
+        return bool(int(emailSent))

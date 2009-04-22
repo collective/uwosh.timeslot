@@ -13,13 +13,13 @@
                     <tal:block tal:condition="not:view/wasAddedToWaitingList">
                         <h3>Successful Signup</h3>
                         <p>You have been successfully signed up for the day you selected.</p>
-                        <p>A confirmation email has been sent to you.</p>
+                        <p tal:condition="view/wasEmailSent">A confirmation email has been sent to you.</p>
                     </tal:block>
                     
                     <tal:block tal:condition="view/wasAddedToWaitingList">
                         <h3>Successfully Added to Waiting List</h3>
                         <p>You have been successfully added to the waiting list for the day you selected.</p>
-                        <p>You will receive a confirmation email when a spot opens up.</p>
+                        <p tal:condition="view/wasEmailSent">You will receive a confirmation email when a spot opens up.</p>
                     </tal:block>                
                 </tal:block>
                 

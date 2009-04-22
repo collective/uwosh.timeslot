@@ -76,5 +76,18 @@ class SignupSheet(folder.ATFolder):
         buffer.close()
 
         return result
-
+    
+    def isCurrentUserSignedUpForAnySlot(self):
+        member = self.portal_membership.getAuthenticatedMember()
+        username = member.getUserName()
+        return self.isUserSignedUpForAnySlot(username)
+    
+    def isUserSignedUpForAnySlot(self, username):
+        query = {'portal_type':'Person','id':username}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        if len(brains) == 0:
+            return False
+        else:
+            return True
+            
 atapi.registerType(SignupSheet, PROJECTNAME)

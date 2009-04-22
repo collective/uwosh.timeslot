@@ -8,6 +8,8 @@ from uwosh.timeslot import timeslotMessageFactory as _
 import xmlrpclib
 from xml.dom import minidom
 
+from Products.validation import validation
+
 class IChooseTimeSlot(Interface):
     """
     ChooseTimeSlot view interface
@@ -35,6 +37,7 @@ class ChooseTimeSlot(BrowserView):
     def submitUserSelection(self):
         success = False
         waiting = True
+        emailSent = False
     
     	userInfo = self.getUserInput()
     	userInfo.update(self.getMemberInfo())
@@ -49,18 +52,25 @@ class ChooseTimeSlot(BrowserView):
         allowWaitingList = timeSlot.getAllowWaitingList()
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
        
-        if allowWaitingList or numberOfAvailableSpots > 0:
+        isEmail = validation.validatorFor('isEmail')
+        if (isEmail(userInfo['email']) == 1):
+        	emailSent = True
+       
+        if self.context.isCurrentUserSignedUpForAnySlot():
+        	success = False
+       
+        elif allowWaitingList or numberOfAvailableSpots > 0:
             person = self.createPerson(timeSlot, userInfo)
             
             if numberOfAvailableSpots > 0:
                 self.signupPerson(person)
                 waiting = False
             else:
-            	self.sendWaitingConfirmationEmail(userInfo)
+                self.sendWaitingConfirmationEmail(userInfo)
             	
             success = True
         
-        self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d' % (success,waiting))
+        self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d&emailSent=%d' % (success,waiting,emailSent))
 
     def getUserInput(self):
         userInput = dict()
@@ -98,11 +108,14 @@ class ChooseTimeSlot(BrowserView):
         person.reindexObject()
 
     def sendWaitingConfirmationEmail(self, userInfo):
+    	isEmail = validation.validatorFor('isEmail')
+    	
     	toEmail = userInfo['email']
-        fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
-        subject = self.context.Title() + ' - Waiting List Confirmation'
-        message = 'Hi ' + userInfo['fullname'] + ',\n\n'
-        message += 'You have been added to the waiting list for: ' + userInfo['selectedSlot']
-        mailHost = self.context.MailHost
-        mailHost.secureSend(message, toEmail, fromEmail, subject)
+    	if (isEmail(toEmail) == 1):
+            fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
+            subject = self.context.Title() + ' - Waiting List Confirmation'
+            message = 'Hi ' + userInfo['fullname'] + ',\n\n'
+            message += 'You have been added to the waiting list for: ' + userInfo['selectedSlot']
+            mailHost = self.context.MailHost
+            mailHost.secureSend(message, toEmail, fromEmail, subject)
         
