@@ -17,7 +17,13 @@ from StringIO import StringIO
 
 SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
-    # -*- Your Archetypes field definitions here ... -*-
+    atapi.LinesField('extraFields',
+        storage=atapi.AnnotationStorage(),
+        vocabulary=['Phone', 'Department', 'Employee Classification'],
+        widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
+                                          description=_(u'Information you want to collect from users beyond name and email.'),
+                                          format=_(u'checkbox'))
+    ),
 
 ))
 
@@ -38,6 +44,7 @@ class SignupSheet(folder.ATFolder):
 
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
+    extraFields = atapi.ATFieldProperty('extraFields')
     
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}

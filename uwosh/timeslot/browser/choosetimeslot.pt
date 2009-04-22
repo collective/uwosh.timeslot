@@ -54,26 +54,34 @@
             
             <br />
             <div id="optionalInfo">
-                <h3>Optional Information</h3>
+                <h3>Other Information</h3>
                 
                 <br />
-                <label style="float:left; width:11em" for="phone">Campus Phone: </label>
-                <input type="text" id="phone" name="phone" /><br /><br />
+                <tal:block tal:condition="view/isPhoneRequired">
+                    <label style="float:left; width:11em" for="phone">Campus Phone: </label>
+                    <input type="text" id="phone" name="phone" /><br /><br />
+                </tal:block>
                 
-                <label style="float:left; width:11em" for="classification">Classification Type: </label>
-                <select id="classification" size="1" name="classification">
-                    <option value="" selected="selected">Select Classification Type</option>
-                    <option value="Academic">Academic Staff</option>
-                    <option value="Classified">Classified Staff</option>
-                    <option value="Faculty">Faculty</option>
-                    <option value="LTE">Limited Term Employee</option>
-                    <option value="Other">Other</option>
-                    <option value="Spouse - Faculty">Spouse - Faculty</option>
-                    <option value="Student">Student</option>
-                </select><br /><br />
+                <tal:block tal:condition="view/isClassRequired">
+                    <label style="float:left; width:11em" for="classification">Employee Classification Type: </label>
+                    <select id="classification" size="1" name="classification">
+                        <option value="" selected="selected">Select Classification Type</option>
+                        <option value="Academic">Academic Staff</option>
+                        <option value="Classified">Classified Staff</option>
+                        <option value="Faculty">Faculty</option>
+                        <option value="LTE">Limited Term Employee</option>
+                        <option value="Other">Other</option>
+                        <option value="Spouse - Faculty">Spouse - Faculty</option>
+                        <option value="Student">Student</option>
+                    </select><br /><br />
+                </tal:block>
                 
-                <label style="float:left; width:11em" for="dept">Department: </label>
-                <input type="text" id="dept" name="dept" /><br /><br /><br />
+                <tal:block tal:condition="view/isDepartmentRequired">
+                    <label style="float:left; width:11em" for="dept">Department: </label>
+                    <input type="text" id="dept" name="dept" /><br /><br />
+                </tal:block>
+                
+                <br />
             </div>
             
             <input type="submit" name="form.button.submit" value="Submit" />

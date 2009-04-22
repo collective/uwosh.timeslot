@@ -107,6 +107,22 @@ class ChooseTimeSlot(BrowserView):
         portal_workflow.doActionFor(person, 'signup')
         person.reindexObject()
 
+    def isPhoneRequired(self):
+        return self.isFieldRequired('Phone')
+    
+    def isDepartmentRequired(self):
+        return self.isFieldRequired('Department')
+        
+    def isClassRequired(self):
+    	return self.isFieldRequired('Employee Classification')
+    
+    def isFieldRequired(self, field):
+    	extraFields = self.context.getExtraFields()
+        if field in extraFields:
+            return True
+        else:
+            return False
+    
     def sendWaitingConfirmationEmail(self, userInfo):
     	isEmail = validation.validatorFor('isEmail')
     	
