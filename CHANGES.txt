@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.01 (2009-04-22)
+-------------------
+
+ - Bug fix for Zope2 permission bug that was causing "ContentProviderLookupError:
+   plone.htmlhead" [Marshall Scorcio]
+
+
 1.0 (2009-04-10)
 ------------------
 

@@ -6,6 +6,24 @@ from Products.Five.formlib import formbase
 
 from zExceptions import BadRequest
 
+# Begin ugly hack. It works around a ContentProviderLookupError: plone.htmlhead error caused by Zope 2 permissions.
+#
+# Source: http://athenageek.wordpress.com/2008/01/08/contentproviderlookuperror-plonehtmlhead/
+# Bug report: https://bugs.launchpad.net/zope2/+bug/176566
+#
+
+from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
+
+def _getContext(self):
+    self = self.aq_parent
+    while getattr(self, '_is_wrapperish', None):
+        self = self.aq_parent
+    return self    
+            
+ZopeTwoPageTemplateFile._getContext = _getContext
+
+# End ugly hack.
+
 class ICloneDay(interface.Interface):
     numToCreate = schema.Int(title=u'Number to Create', description=u'The number of clones to create', required=True)
     

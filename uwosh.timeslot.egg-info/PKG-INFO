@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: uwosh.timeslot
-Version: 1.0
+Version: 1.01
 Summary: UNKNOWN
 Home-page: http://svn.plone.org/svn/plone/plone.example
 Author: Marshall Scorcio
@@ -20,6 +20,13 @@ Description: uwosh.timeslot
         
         Changelog
         =========
+        
+        1.01 (2009-04-22)
+        -------------------
+        
+        - Bug fix for Zope2 permission bug that was causing "ContentProviderLookupError:
+        plone.htmlhead" [Marshall Scorcio]
+        
         
         1.0 (2009-04-10)
         ------------------
