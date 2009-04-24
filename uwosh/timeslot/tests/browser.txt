@@ -37,6 +37,7 @@ Let's create a signup sheet::
     >>> browser.open(url)
     >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'Test Signup Sheet'
+    >>> browser.getControl(name='extraFields:list').value = ('Phone',)
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
     True
@@ -170,6 +171,16 @@ Any authenticated user should be able to sign up for an available slot::
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Successful Signup' in browser.contents
     True
+
+And they should be unable to signup for another one::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
+    >>> browser.getControl(name='form.button.submit').click()
+    >>> 'Unsuccessful Signup' in browser.contents
+    True
+    
 
 We'll remove them so they can sign up again::
     >>> self.setRoles(['Manager'])

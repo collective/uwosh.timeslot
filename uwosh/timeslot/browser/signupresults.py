@@ -41,3 +41,7 @@ class SignupResults(BrowserView):
     def wasEmailSent(self):
         emailSent = self.request.get('emailSent')
         return bool(int(emailSent))
+        
+    def getErrorMessage(self):
+        errorMsg = self.request.get('errorMsg')
+        return errorMsg

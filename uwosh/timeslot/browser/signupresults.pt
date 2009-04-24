@@ -26,6 +26,7 @@
                 <tal:block tal:condition="not:view/wasSignupSuccessful">
                     <h3>Unsuccessful Signup</h3>
                     <p>The system was unable to register you for the day and time you selected.</p>
+                    <p tal:content="view/getErrorMessage" />
                 </tal:block>
             </div>
             

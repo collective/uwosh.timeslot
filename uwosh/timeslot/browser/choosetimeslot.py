@@ -38,6 +38,7 @@ class ChooseTimeSlot(BrowserView):
         success = False
         waiting = True
         emailSent = False
+        errorMsg = ''
     
     	userInfo = self.getUserInput()
     	userInfo.update(self.getMemberInfo())
@@ -57,7 +58,9 @@ class ChooseTimeSlot(BrowserView):
         	emailSent = True
        
         if self.context.isCurrentUserSignedUpForAnySlot():
-        	success = False
+            errorMsg = 'You are already signed up for a slot. If you would like to select a second slot \
+                        please remove yourself from the first one and try again'
+            success = False
        
         elif allowWaitingList or numberOfAvailableSpots > 0:
             person = self.createPerson(timeSlot, userInfo)
@@ -70,14 +73,18 @@ class ChooseTimeSlot(BrowserView):
             	
             success = True
         
-        self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d&emailSent=%d' % (success,waiting,emailSent))
+        else:
+        	errorMsg = 'The slot you selected is already full. Please select a different one'
+        	success = False
+        
+        self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,emailSent,errorMsg))
 
     def getUserInput(self):
         userInput = dict()
-        userInput['selectedSlot'] = self.request.get('slotSelection')
-        userInput['phone'] = self.request.get('phone')
-        userInput['classification'] = self.request.get('classification')
-        userInput['dept'] = self.request.get('dept')
+        userInput['selectedSlot'] = self.request.get('slotSelection', None)
+        userInput['phone'] = self.request.get('phone', '')
+        userInput['classification'] = self.request.get('classification', '')
+        userInput['dept'] = self.request.get('dept', '')
         return userInput
 		
     def getMemberInfo(self):
