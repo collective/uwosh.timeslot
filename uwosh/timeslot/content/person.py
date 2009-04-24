@@ -76,6 +76,6 @@ class Person(base.ATCTContent):
         return reviewStateTitle
     
     def getExtraInfo(self):
-        return self.phone + ' - ' + self.classification + ' - ' + self.department
+        return ' - '.join([self.phone, self.classification, self.department])
     
 atapi.registerType(Person, PROJECTNAME)

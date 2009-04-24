@@ -43,39 +43,42 @@ class ChooseTimeSlot(BrowserView):
     	userInfo = self.getUserInput()
     	userInfo.update(self.getMemberInfo())
     
-        if userInfo['selectedSlot'] == None:
-        	self.request.response.redirect(self.context.absolute_url())
-        	return
-        	
-        (date, time) = userInfo['selectedSlot'].split(' @ ')
-        day = self.context.getDay(date)
-        timeSlot = day.getTimeSlot(time)
-        allowWaitingList = timeSlot.getAllowWaitingList()
-        numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
-       
-        isEmail = validation.validatorFor('isEmail')
-        if (isEmail(userInfo['email']) == 1):
-        	emailSent = True
-       
-        if self.context.isCurrentUserSignedUpForAnySlot():
-            errorMsg = 'You are already signed up for a slot. If you would like to select a second slot \
-                        please remove yourself from the first one and try again'
+        (anyMissing, missingFields) = self.areAnyRequiredFieldsMissing(userInfo)   
+        if anyMissing:
             success = False
-       
-        elif allowWaitingList or numberOfAvailableSpots > 0:
-            person = self.createPerson(timeSlot, userInfo)
-            
-            if numberOfAvailableSpots > 0:
-                self.signupPerson(person)
-                waiting = False
-            else:
-                self.sendWaitingConfirmationEmail(userInfo)
-            	
-            success = True
+            errorMsg = 'You did not complete the following fields: '
+            errorMsg += ', '.join(missingFields)
         
         else:
-        	errorMsg = 'The slot you selected is already full. Please select a different one'
-        	success = False
+            (date, time) = userInfo['selectedSlot'].split(' @ ')
+            day = self.context.getDay(date)
+            timeSlot = day.getTimeSlot(time)
+            allowWaitingList = timeSlot.getAllowWaitingList()
+            numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
+           
+            isEmail = validation.validatorFor('isEmail')
+            if isEmail(userInfo['email']) == 1:
+                emailSent = True
+           
+            if self.context.isCurrentUserSignedUpForAnySlot():
+                errorMsg = 'You are already signed up for a slot. If you would like to select a second slot \
+                            please remove yourself from the first one and try again'
+                success = False
+           
+            elif allowWaitingList or numberOfAvailableSpots > 0:
+                person = self.createPerson(timeSlot, userInfo)
+                
+                if numberOfAvailableSpots > 0:
+                    self.signupPerson(person)
+                    waiting = False
+                else:
+                    self.sendWaitingConfirmationEmail(userInfo)
+                    
+                success = True
+            
+            else:
+                errorMsg = 'The slot you selected is already full. Please select a different one'
+                success = False
         
         self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,emailSent,errorMsg))
 
@@ -98,6 +101,20 @@ class ChooseTimeSlot(BrowserView):
         memberInfo['email'] = member.getProperty('email')
         return memberInfo
 
+    def areAnyRequiredFieldsMissing(self, userInput):
+        missingFields = []
+        anyMissing = False
+        if userInput['selectedSlot'] == None:
+            anyMissing = True
+            missingFields.append('selectedSlot')
+            
+        extraFields = self.context.getExtraFields()
+        for field in extraFields:
+            if len(userInput[field]) < 1:
+                anyMissing = True
+                missingFields.append(field)
+        return (anyMissing, missingFields)    	
+
     def createPerson(self, location, userInfo):
         location.invokeFactory('Person', userInfo['username'])
         newPerson = location[userInfo['username']]
@@ -115,13 +132,13 @@ class ChooseTimeSlot(BrowserView):
         person.reindexObject()
 
     def isPhoneRequired(self):
-        return self.isFieldRequired('Phone')
+        return self.isFieldRequired('phone')
     
     def isDepartmentRequired(self):
-        return self.isFieldRequired('Department')
+        return self.isFieldRequired('dept')
         
     def isClassRequired(self):
-    	return self.isFieldRequired('Employee Classification')
+    	return self.isFieldRequired('classification')
     
     def isFieldRequired(self, field):
     	extraFields = self.context.getExtraFields()

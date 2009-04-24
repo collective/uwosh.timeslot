@@ -19,7 +19,7 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.LinesField('extraFields',
         storage=atapi.AnnotationStorage(),
-        vocabulary=['Phone', 'Department', 'Employee Classification'],
+        vocabulary=[('phone','Phone'), ('dept','Department'), ('classification','Employee Classification')],
         widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
                                           description=_(u'Information you want to collect from users beyond name and email.'),
                                           format=_(u'checkbox'))

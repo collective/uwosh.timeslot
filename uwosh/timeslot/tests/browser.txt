@@ -37,7 +37,7 @@ Let's create a signup sheet::
     >>> browser.open(url)
     >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'Test Signup Sheet'
-    >>> browser.getControl(name='extraFields:list').value = ('Phone',)
+    >>> browser.getControl(name='extraFields:list').value = ('phone',)
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
     True
@@ -177,16 +177,27 @@ And they should be unable to signup for another one::
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url)
     >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
+    >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Unsuccessful Signup' in browser.contents
     True
     
-
 We'll remove them so they can sign up again::
     >>> self.setRoles(['Manager'])
     >>> signupSheet.removeAllPeople()
     >>> self.setRoles(['Authenticated'])
 
+And they should have to fill in all the required fields::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
+    >>> browser.getControl(name='form.button.submit').click()
+    >>> 'Unsuccessful Signup' in browser.contents
+    True
+    >>> 'You did not complete the following fields: phone' in browser.contents
+    True
+    
 But not for a full one w/o waiting list. Instead it should throw an exception::
 
     >>> url = signupSheet.absolute_url()
@@ -207,6 +218,7 @@ And they should also be able to put on the waiting list when there is no room::
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url)
     >>> browser.getControl(name='slotSelection').value = ('Mon, Oct 13 @ 4:00 - 5:00',)
+    >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Successfully Added to Waiting List' in browser.contents
     True
@@ -259,7 +271,7 @@ Export to a comma sperated value file (csv) should work::
     >>> browser.getLink('Export to CSV').click()
     >>> 'Day,Time,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
     True
-    >>> '"Mon, Oct 13",4:00 - 5:00,test_user_1_,Signed Up,, -  - ' in browser.contents
+    >>> '"Mon, Oct 13",4:00 - 5:00,test_user_1_,Signed Up,,920-555-1234' in browser.contents
     True
     
 Clicking on Clone should make as many copies as you want of the original day
