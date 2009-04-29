@@ -33,7 +33,7 @@ DaySchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(DaySchema, folderish=True, moveDiscussion=False)
 
 class Day(folder.ATFolder):
-    """Description of the Example Type"""
+    """Description of Day"""
     implements(IDay, IContainsPeople)
 
     portal_type = "Day"

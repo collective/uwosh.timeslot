@@ -52,7 +52,7 @@ PersonSchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(PersonSchema, moveDiscussion=False)
 
 class Person(base.ATCTContent):
-    """Description of the Example Type"""
+    """Description of Person"""
     implements(IPerson)
 
     portal_type = "Person"

@@ -6,6 +6,9 @@ from Products.Five.formlib import formbase
 
 from zExceptions import BadRequest
 
+from DateTime import DateTime
+from datetime import timedelta
+
 # Begin ugly hack. It works around a ContentProviderLookupError: plone.htmlhead error caused by Zope 2 permissions.
 #
 # Source: http://athenageek.wordpress.com/2008/01/08/contentproviderlookuperror-plonehtmlhead/
@@ -13,6 +16,8 @@ from zExceptions import BadRequest
 #
 
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
+
+import math
 
 def _getContext(self):
     self = self.aq_parent
@@ -26,6 +31,7 @@ ZopeTwoPageTemplateFile._getContext = _getContext
 
 class ICloneDay(interface.Interface):
     numToCreate = schema.Int(title=u'Number to Create', description=u'The number of clones to create', required=True)
+    includeWeekends = schema.Bool(title=u'Include Weekends', description=u'Do you want to include weekends?')
     
 class CloneDayForm(formbase.PageForm):
     form_fields = form.FormFields(ICloneDay)
@@ -37,34 +43,44 @@ class CloneDayForm(formbase.PageForm):
     def action_clone(self, action, data):
         self.success = True
         self.errors = []
+        
         numToCreate = data['numToCreate']
+        numCreated = 0
+        includeWeekends = data['includeWeekends']
+        
         day = self.context
-        origId = day.id
-        origTitle = day.Title()
-        signupSheet = day.aq_inner.aq_parent   
+        signupSheet = day.aq_inner.aq_parent 
+        origDate = day.getDate()
         
         dayContentsCopy = day.manage_copyObjects(day.objectIds())
         
-        for i in range(1, numToCreate + 1):
-            newId = '%s-%d' % (origId, i)
-            newTitle = '%s_%d' % (origTitle, i)
+        for i in range(1, numToCreate + (2 * int(math.ceil(numToCreate / 7)))):
+            newDate = origDate + i
             
-            try:
-                signupSheet.invokeFactory(id=newId, type_name='Day')
-            except BadRequest:
-                self.success = False
-                self.errors.append("Operation failed because there is already an object named: %s" % newId)
-                break
+            if (includeWeekends) or (newDate.aDay() != 'Sat' and newDate.aDay() != 'Sun'):
+                newTitle = newDate.strftime('%B %d, %Y')
+                newId = newDate.strftime('%B-%d-%Y').lower()
                 
-            newDay = signupSheet[newId]
-            newDay.setTitle(newTitle)
-            newDay.manage_pasteObjects(dayContentsCopy)
-            
-            if i == 1:
-                newDay.removeAllPeople()
-                dayContentsCopy = newDay.manage_copyObjects(newDay.objectIds())
+                try:
+                    signupSheet.invokeFactory(id=newId, type_name='Day', date=newDate)
+                except BadRequest:
+                    self.success = False
+                    self.errors.append("Operation failed because there is already an object with id: %s" % newId)
+                    break
+                    
+                newDay = signupSheet[newId]
+                newDay.setTitle(newTitle)
+                newDay.manage_pasteObjects(dayContentsCopy)
                 
-            newDay.reindexObject()     
+                if i == 1:
+                    newDay.removeAllPeople()
+                    dayContentsCopy = newDay.manage_copyObjects(newDay.objectIds())
+                    
+                newDay.reindexObject()     
+                
+                numCreated += 1
+                if not numCreated < numToCreate:
+                    break
             
         return self.result_template()
         

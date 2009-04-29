@@ -93,7 +93,7 @@ TimeSlotSchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(TimeSlotSchema, folderish=True, moveDiscussion=False)
 
 class TimeSlot(folder.ATFolder):
-    """Description of the Example Type"""
+    """Description of TimeSlot"""
     implements(ITimeSlot, IContainsPeople)
 	
     portal_type = "Time Slot"

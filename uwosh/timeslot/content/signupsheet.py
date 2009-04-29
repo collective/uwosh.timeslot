@@ -36,7 +36,7 @@ SignupSheetSchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(SignupSheetSchema, folderish=True, moveDiscussion=False)
 
 class SignupSheet(folder.ATFolder):
-    """Description of the Example Type"""
+    """Description of SignupSheet"""
     implements(ISignupSheet, IContainsPeople)
 
     portal_type = "Signup Sheet"
