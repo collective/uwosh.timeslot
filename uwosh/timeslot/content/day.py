@@ -14,15 +14,20 @@ from uwosh.timeslot.config import PROJECTNAME
 
 DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
-    # -*- Your Archetypes field definitions here ... -*-
+    atapi.DateTimeField('date',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.CalendarWidget(label=_('Date'),
+                                    show_hm=False,
+                                    format='%B %d, %Y'),
+        required=True
+    ),
 
 ))
 
-# Set storage on fields copied from ATFolderSchema, making sure
-# they work well with the python bridge properties.
-
+DaySchema['title'].required = False
+DaySchema['title'].widget.visible = {'view':'invisible', 'edit':'invisible'}
 DaySchema['title'].storage = atapi.AnnotationStorage()
-DaySchema['title'].widget.label=_(u'Date')
+DaySchema['description'].widget.visible = {'view':'invisible', 'edit':'invisible'}
 DaySchema['description'].storage = atapi.AnnotationStorage()
 
 schemata.finalizeATCTSchema(DaySchema, folderish=True, moveDiscussion=False)
@@ -35,7 +40,16 @@ class Day(folder.ATFolder):
     schema = DaySchema
 
     title = atapi.ATFieldProperty('title')
+    date = atapi.ATFieldProperty('date')
     description = atapi.ATFieldProperty('description')
+    
+    def Title(self):
+    	date = self.getDate()
+    	
+    	if date == None:
+    		return ''
+    	else:
+    	    return date.strftime('%B %d, %Y')
     
     def getTimeSlots(self):
         query = {'portal_type':'Time Slot'}
