@@ -8,7 +8,6 @@
     <browser:page
       for="..interfaces.ISignupSheet"
       name="manager-summary"
-      class=".managersummary.ManagerSummary"
       template="managersummary.pt"
       allowed_interface=".choosetimeslot.IChooseTimeSlot"
       permission="cmf.ManagePortal"
@@ -17,7 +16,7 @@
     <browser:page
       for="..interfaces.ISignupSheet"
       name="export-to-csv"
-      class=".managersummary.ManagerSummary"
+      class=".exporttocsv.ExportToCSV"
       attribute="exportToCSV"
       permission="cmf.ManagePortal"
       />

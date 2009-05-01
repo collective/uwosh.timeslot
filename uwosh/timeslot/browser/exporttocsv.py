@@ -8,18 +8,7 @@ from uwosh.timeslot import timeslotMessageFactory as _
 
 import time
 
-class IManagerSummary(Interface):
-    """
-    ManagerSummary view interface
-    """
-
-
-class ManagerSummary(BrowserView):
-    """
-    ManagerSummary browser view
-    """
-    implements(IManagerSummary)
-
+class ExportToCSV(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -37,7 +26,8 @@ class ManagerSummary(BrowserView):
         filename = '%s-%s.csv' % (self.context.Title(), currentDateTime)
         header_value = contentDispositionHeader('attachment', self.context.getCharset(), filename=filename)
         
-        self.request.response.setHeader("Content-Disposition", header_value)
-        self.request.response.setHeader("Content-Type", 'text/comma-separated-values;charset=%s' % self.context.getCharset())
+        self.request.response.setHeader('Content-Disposition', header_value)
+        self.request.response.setHeader('Content-Type', 
+                                        'text/comma-separated-values;charset=%s' % self.context.getCharset())
         
         return self.context.exportToCSV()
