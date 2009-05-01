@@ -32,10 +32,6 @@ class ManagerSummary(BrowserView):
     def portal(self):
         return getToolByName(self.context, 'portal_url').getPortalObject()
         
-    def removeAllPeople(self):
-        self.context.removeAllPeople()
-        self.request.response.redirect(self.context.absolute_url())
-        
     def exportToCSV(self):
         currentDateTime = time.strftime('%Y%m%d%H%M', time.localtime())
         filename = '%s-%s.csv' % (self.context.Title(), currentDateTime)
