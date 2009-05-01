@@ -57,9 +57,9 @@
       />
       
     <browser:page
-        for="..interfaces.IDay"
-        name="clone-day"
-        class=".cloneday.CloneDayForm"
+        for="..interfaces.ICloneable"
+        name="clone"
+        class=".clone.CloneForm"
         permission="cmf.ManagePortal"
         />
 

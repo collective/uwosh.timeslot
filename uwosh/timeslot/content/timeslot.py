@@ -47,6 +47,7 @@ from Products.ATContentTypes.content import schemata
 from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import ITimeSlot
 from uwosh.timeslot.interfaces import IContainsPeople
+from uwosh.timeslot.interfaces import ICloneable
 from uwosh.timeslot.config import PROJECTNAME
 
 from DateTime import DateTime
@@ -94,7 +95,7 @@ schemata.finalizeATCTSchema(TimeSlotSchema, folderish=True, moveDiscussion=False
 
 class TimeSlot(folder.ATFolder):
     """Description of TimeSlot"""
-    implements(ITimeSlot, IContainsPeople)
+    implements(ITimeSlot, IContainsPeople, ICloneable)
 	
     portal_type = "Time Slot"
     schema = TimeSlotSchema

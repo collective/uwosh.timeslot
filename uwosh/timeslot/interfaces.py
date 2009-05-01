@@ -23,3 +23,6 @@ class ISignupSheet(Interface):
 class IContainsPeople(Interface):
     def removeAllPeople():
         """Removes all signedup/waitinglist people from the object and its children"""
+        
+class ICloneable(Interface):
+    """Object is able to be cloned"""

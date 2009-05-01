@@ -47,13 +47,13 @@
    <property name="visible">True</property>
   </object>
   
-  <object name="clone-day" meta_type="CMF Action">
+  <object name="clone" meta_type="CMF Action">
    <property name="title">Clone</property>
    <property name="description"></property>
-   <property name="url_expr">string:clone-day</property>
+   <property name="url_expr">string:clone</property>
    <property name="icon_expr"></property>
    <property
-      name="available_expr">python:object.Type() == 'Day'</property>
+      name="available_expr">python:object.Type() in ['Day', 'Time Slot']</property>
    <property name="permissions">
     <element value="Manage portal"/>
    </property>

@@ -9,7 +9,7 @@
 <body>
 <div metal:fill-slot="body">
 
-  <h2>Clone Day Results</h2>
+  <h2>Cloning Results</h2>
 
   <h3 tal:condition="view/success">Cloning successful.</h3>
   
