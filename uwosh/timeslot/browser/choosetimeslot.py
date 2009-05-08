@@ -158,8 +158,15 @@ class ChooseTimeSlot(BrowserView):
     	if (isEmail(toEmail) == 1):
             fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
             subject = self.context.Title() + ' - Waiting List Confirmation'
+        
             message = 'Hi ' + userInfo['fullname'] + ',\n\n'
-            message += 'You have been added to the waiting list for: ' + userInfo['selectedSlot']
+            message += 'This message is to confirm that you have been added to the waiting list for:\n'
+            message += userInfo['selectedSlot'] + '\n\n'
+            message += 'For the ' + self.context.Title() + ' Signup Sheet: ' + self.context.absolute_url() + '\n\n'
+            message += 'If you have any questions please contact:\n'
+            for line in self.context.getContactInfo():
+                message += line + '\n'
+            message += '\n'
+
             mailHost = self.context.MailHost
             mailHost.secureSend(message, toEmail, fromEmail, subject)
-        
