@@ -47,9 +47,11 @@
                             </span>
                         </td>
                         <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
-                            <span tal:condition="userAlreadySignedup">
-                                -&gt; Your Slot &lt;-
-                            </span>
+                            <em>
+			      <strong tal:condition="userAlreadySignedup">
+                                 &rarr; Your Slot &larr;
+                              </strong>
+			    </em>
                             
                             <span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
                                 <input tal:condition="not:full" type="radio" name="slotSelection"

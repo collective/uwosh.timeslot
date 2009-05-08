@@ -19,7 +19,8 @@ DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
         storage=atapi.AnnotationStorage(),
         widget=atapi.CalendarWidget(label=_('Date'),
                                     show_hm=False,
-                                    format='%B %d, %Y'),
+                                    format='%A, %B %d, %Y',
+                                    starting_year=2009),
         required=True
     ),
 
@@ -50,7 +51,7 @@ class Day(folder.ATFolder):
     	if date == None:
     		return ''
     	else:
-    	    return date.strftime('%B %d, %Y')
+    	    return date.strftime('%A, %B %d, %Y')
     
     def getTimeSlots(self):
         query = {'portal_type':'Time Slot'}
