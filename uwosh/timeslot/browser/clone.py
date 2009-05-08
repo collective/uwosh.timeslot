@@ -58,7 +58,6 @@ class CloneForm(formbase.PageForm):
         self.success = True
         self.errors = []
         self.numToCreate = data['numToCreate']
-        self.numCreated = 0        
         if 'includeWeekends' in data:
             self.includeWeekends = data['includeWeekends']
         
@@ -75,14 +74,16 @@ class CloneForm(formbase.PageForm):
     def cloneDay(self):
         origDate = self.context.getDate()
         contents = self.context.manage_copyObjects(self.context.objectIds())
+        numCreated = 0
         
         i = 1
-        while self.numCreated < self.numToCreate:
+        while numCreated < self.numToCreate:
             newDate = origDate + i
             if self.includeWeekends or (newDate.aDay() not in ['Sat', 'Sun']):
                 newDay = self.createNewDay(newDate, contents)
-                self.numCreated += 1
-                if self.numCreated == 1:
+                numCreated += 1
+                if numCreated == 1:
+                    newDay.removeAllPeople()
                     contents = newDay.manage_copyObjects(newDay.objectIds())
             i += 1        
                 
@@ -108,12 +109,14 @@ class CloneForm(formbase.PageForm):
         slotLength = (float(origEndTime) - float(origStartTime)) / 60 / 60 / 24
         maxCapacity = self.context.getMaxCapacity()
         allowWaiting = self.context.getAllowWaitingList()
+        
+        numCreated = 0
 
-        while self.numCreated < self.numToCreate:
-            newStartTime = origStartTime + (slotLength * (self.numCreated + 1))
-            newEndTime = origEndTime + (slotLength *  (self.numCreated + 1))
+        while numCreated < self.numToCreate:
+            newStartTime = origStartTime + (slotLength * (numCreated + 1))
+            newEndTime = origEndTime + (slotLength *  (numCreated + 1))
             newTimeSlot = self.createNewTimeSlot(newStartTime, newEndTime, maxCapacity, allowWaiting)
-            self.numCreated += 1
+            numCreated += 1
 
     def createNewTimeSlot(self, startTime, endTime, maxCapacity, allowWaiting):
         title = startTime.strftime('%I:%M %p') + ' - ' + endTime.strftime('%I:%M %p')
