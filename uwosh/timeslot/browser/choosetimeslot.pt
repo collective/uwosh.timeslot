@@ -10,7 +10,17 @@
         <form method="post" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
 
             <h2 tal:content="string:${context/Title} - Choose a Date and Time" />
-            
+
+            <div tal:condition="context/getContactInfo" id="contactInfo">
+	        <h3>If you have any questions please contact:</h3>
+
+	            <tal:block tal:repeat="line context/getContactInfo">
+	                <span tal:content="line" />
+		        <br />
+	            </tal:block>
+	        <br />
+	    </div>
+      
             <table class="plain">
                 <tal:block tal:repeat="day context/getDays">
                     <tr style="background-color: #F0F0F0">
@@ -53,8 +63,8 @@
             </table>
             
             <br />
-            <div id="optionalInfo">
-                <h3>Other Information</h3>
+            <div tal:condition="view/isAnyExtraInfoRequired" id="optionalInfo">
+                <h3>Required Extra Information</h3>
                 
                 <br />
                 <tal:block tal:condition="view/isPhoneRequired">

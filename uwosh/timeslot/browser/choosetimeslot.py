@@ -80,7 +80,8 @@ class ChooseTimeSlot(BrowserView):
                 errorMsg = 'The slot you selected is already full. Please select a different one'
                 success = False
         
-        self.request.response.redirect(self.context.absolute_url() + '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,emailSent,errorMsg))
+        self.request.response.redirect(self.context.absolute_url() + 
+                                       '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,emailSent,errorMsg))
 
     def getUserInput(self):
         userInput = dict()
@@ -130,6 +131,9 @@ class ChooseTimeSlot(BrowserView):
         portal_workflow = getToolByName(self, 'portal_workflow')
         portal_workflow.doActionFor(person, 'signup')
         person.reindexObject()
+
+    def isAnyExtraInfoRequired(self):
+        return self.isPhoneRequired() or self.isDepartmentRequired() or self.isClassRequired()
 
     def isPhoneRequired(self):
         return self.isFieldRequired('phone')

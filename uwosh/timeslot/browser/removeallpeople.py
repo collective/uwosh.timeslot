@@ -28,8 +28,8 @@ ZopeTwoPageTemplateFile._getContext = _getContext
 
 class IRemoveAllPeople(interface.Interface):
     heading = schema.Text(title=u'Would you really like to remove all the people from this object?',
-                              description=u'Doing so will remove anyone who is signed up or on the waiting list for \
-                                            this or any contained object.', required=False, readonly=True)
+                          description=u'Doing so will remove anyone who is signed up or on the waiting list for \
+                                        this or any contained object.', required=False, readonly=True)
 
 class RemoveAllPeopleForm(formbase.PageForm):
     form_fields = form.FormFields(IRemoveAllPeople)

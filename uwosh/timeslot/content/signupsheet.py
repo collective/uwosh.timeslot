@@ -17,11 +17,17 @@ from StringIO import StringIO
 
 SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
+    atapi.LinesField('contactInfo',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.LinesWidget(label=_(u'Contact Information'),
+                                 description=_(u'Contact information for the manager of the signup sheet'))
+    ),
+
     atapi.LinesField('extraFields',
         storage=atapi.AnnotationStorage(),
         vocabulary=[('phone','Phone'), ('dept','Department'), ('classification','Employee Classification')],
         widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
-                                          description=_(u'Information you want to collect from users beyond name and email.'),
+                                          description=_(u'Information you want to collect from users besides just name and email.'),
                                           format=_(u'checkbox'))
     ),
 
@@ -45,6 +51,7 @@ class SignupSheet(folder.ATFolder):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
     extraFields = atapi.ATFieldProperty('extraFields')
+    contactInfo = atapi.ATFieldProperty('contactInfo')
     
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
