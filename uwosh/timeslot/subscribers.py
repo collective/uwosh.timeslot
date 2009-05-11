@@ -11,6 +11,9 @@ def sendSignupNotificationEmail(obj, event):
         signupSheet = day.aq_parent
         contactInfo = signupSheet.getContactInfo()
 
+        if contactInfo == () and signupSheet.isContainedInMasterSignupSheet():
+            contactInfo = signupSheet.aq_parent.getContactInfo()
+
         toEmail = person.getEmail()
         if (isEmail(toEmail) == 1):        
             fromEmail = "%s <%s>" % (obj.email_from_name, obj.email_from_address)
@@ -20,10 +23,12 @@ def sendSignupNotificationEmail(obj, event):
             message += 'This message is to confirm that you have signed up for:\n'
             message += timeSlot.getLabel() + '\n\n'
             message += 'For the ' + signupSheet.Title() + ' Signup Sheet: ' + signupSheet.absolute_url() + '\n\n'
-            message += 'If you have any questions please contact:\n'
-            for line in contactInfo:
-                message += line + '\n'
-            message += '\n'
+
+            if contactInfo != ():
+                message += 'If you have any questions please contact:\n'
+                for line in contactInfo:
+                    message += line + '\n'
+                message += '\n'
             
             mailHost = obj.MailHost
             mailHost.secureSend(message, toEmail, fromEmail, subject)

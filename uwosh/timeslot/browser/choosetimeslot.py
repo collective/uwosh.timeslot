@@ -50,8 +50,9 @@ class ChooseTimeSlot(BrowserView):
             errorMsg += ', '.join(missingFields)
         
         else:
-            (date, time) = userInfo['selectedSlot'].split(' @ ')
-            day = self.context.getDay(date)
+            (signupSheet, date, time) = userInfo['selectedSlot'].split(' @ ')
+            signupSheet = self.context.getSignupSheet(signupSheet)
+            day = signupSheet.getDay(date)
             timeSlot = day.getTimeSlot(time)
             allowWaitingList = timeSlot.getAllowWaitingList()
             numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
@@ -72,7 +73,7 @@ class ChooseTimeSlot(BrowserView):
                     self.signupPerson(person)
                     waiting = False
                 else:
-                    self.sendWaitingConfirmationEmail(userInfo)
+                    self.sendWaitingConfirmationEmail(userInfo, signupSheet)
                     
                 success = True
             
@@ -151,22 +152,28 @@ class ChooseTimeSlot(BrowserView):
         else:
             return False
     
-    def sendWaitingConfirmationEmail(self, userInfo):
+    def sendWaitingConfirmationEmail(self, userInfo, signupSheet):
     	isEmail = validation.validatorFor('isEmail')
-    	
     	toEmail = userInfo['email']
+
+        contactInfo = signupSheet.getContactInfo()
+        if contactInfo == () and signupSheet.isContainedInMasterSignupSheet():
+            contactInfo = signupSheet.aq_parent.getContactInfo()
+
     	if (isEmail(toEmail) == 1):
             fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
-            subject = self.context.Title() + ' - Waiting List Confirmation'
+            subject = signupSheet.Title() + ' - Waiting List Confirmation'
         
             message = 'Hi ' + userInfo['fullname'] + ',\n\n'
             message += 'This message is to confirm that you have been added to the waiting list for:\n'
             message += userInfo['selectedSlot'] + '\n\n'
-            message += 'For the ' + self.context.Title() + ' Signup Sheet: ' + self.context.absolute_url() + '\n\n'
-            message += 'If you have any questions please contact:\n'
-            for line in self.context.getContactInfo():
-                message += line + '\n'
-            message += '\n'
+            message += 'For the ' + signupSheet.Title() + ' Signup Sheet: ' + signupSheet.absolute_url() + '\n\n'
+
+            if contactInfo != ():
+                message += 'If you have any questions please contact:\n'
+                for line in self.context.getContactInfo():
+                    message += line + '\n'
+                message += '\n'
 
             mailHost = self.context.MailHost
             mailHost.secureSend(message, toEmail, fromEmail, subject)

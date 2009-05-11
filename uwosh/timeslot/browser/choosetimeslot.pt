@@ -9,62 +9,80 @@
 
         <form method="post" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
 
-            <h2 tal:content="string:${context/Title} - Choose a Date and Time" />
-
-            <div tal:condition="context/getContactInfo" id="contactInfo">
-	        <h3>If you have any questions please contact:</h3>
-
-	            <tal:block tal:repeat="line context/getContactInfo">
-	                <span tal:content="line" />
-		        <br />
-	            </tal:block>
-	        <br />
-	    </div>
+        <tal:block tal:repeat="signupSheet context/getSignupSheets">
+            <h2 tal:condition="signupSheet/isMasterSignupSheet" tal:content="string:${signupSheet/Title}" />
       
-            <table class="plain">
-                <tal:block tal:repeat="day context/getDays">
-                    <tr style="background-color: #F0F0F0">
-                        <th style="border: none">
-                            <h3 tal:content="day/Title" />
-                        </th>
-                        <th style="border: none" colspan="3"/>
-                    </tr>
-                    
-                    <tr>
-                        <th />
-                        <th>Time</th>
-                        <th>Available Spots</th>
-                        <th>Select</th>
-                    </tr>
-                    
-                    <tr tal:repeat="timeSlot day/getTimeSlots">
-                        <td />
-                        <td tal:content="timeSlot/Title" />
-                        <td>
-                            <span tal:content="timeSlot/getNumberOfAvailableSpots" />
-                            <span tal:condition="timeSlot/getAllowWaitingList">
-                                + Waiting List
-                            </span>
-                        </td>
-                        <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
-                            <em>
-			      <strong tal:condition="userAlreadySignedup">
-                                 &rarr; Your Slot &larr;
-                              </strong>
-			    </em>
-                            
-                            <span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
-                                <input tal:condition="not:full" type="radio" name="slotSelection"
-                                       tal:attributes="value timeSlot/getLabel" /> 
-                                <p tal:condition="full">Full</p>
-                            </span>
-                        </td>
-                    </tr>
-                    
-                </tal:block>
-            </table>
-            
-            <br />
+            <tal:block tal:condition="not:signupSheet/isMasterSignupSheet">
+                
+                <h2 tal:content="string:${signupSheet/Title} - Choose a Date and Time" />
+
+                <div tal:condition="signupSheet/getContactInfo" id="contactInfo">
+	            <h3>If you have any questions please contact:</h3>
+
+		        <tal:block tal:repeat="line signupSheet/getContactInfo">
+	                    <span tal:content="line" />
+		            <br />
+	                </tal:block>
+	            <br />
+	        </div>
+		
+		<table class="plain">
+		    <tal:block tal:condition="not:signupSheet/getDays">
+		        <tr style="background-color: #F0F0F0">
+			    <th style="border: none">
+                                <h3>No days have been made available for signup yet.</h3>
+			    </th>
+                        </tr>
+                    </tal:block>
+			
+                    <tal:block tal:repeat="day signupSheet/getDays">
+                        <tr style="background-color: #F0F0F0">
+                            <th style="border: none">
+                                <h3 tal:content="day/Title" />
+                            </th>
+                            <th style="border: none" colspan="3"/>
+                        </tr>
+                        
+                        <tr>
+                            <th />
+                            <th>Time</th>
+                            <th>Available Spots</th>
+                            <th>Select</th>
+                        </tr>
+
+			<tr tal:condition="not:day/getTimeSlots">
+		            <td>No times have been made available for signup yet.</td>
+			    <td colspan="3" />
+		        </tr>
+                        <tr tal:repeat="timeSlot day/getTimeSlots">
+                            <td />
+                            <td tal:content="timeSlot/Title" />
+                            <td>
+                                <span tal:content="timeSlot/getNumberOfAvailableSpots" />
+                                <span tal:condition="timeSlot/getAllowWaitingList">
+                                    + Waiting List
+                                </span>
+                            </td>
+                            <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot" >
+                                <em>
+                                    <strong tal:condition="userAlreadySignedup">
+                                        &rarr; Your Slot &larr;
+                                    </strong>
+                                </em>
+                                
+                                <span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
+                                    <input tal:condition="not:full" type="radio" name="slotSelection"
+                                           tal:attributes="value timeSlot/getLabel" /> 
+                                    <p tal:condition="full">Full</p>
+                                </span>
+                            </td>
+                        </tr>
+		    </tal:block>
+		</table>
+                <br />
+            </tal:block>
+	</tal:block>
+		
             <div tal:condition="view/isAnyExtraInfoRequired" id="optionalInfo">
                 <h3>Required Extra Information</h3>
                 
@@ -87,12 +105,12 @@
                         <option value="Student">Student</option>
                     </select><br /><br />
                 </tal:block>
-                
+		    
                 <tal:block tal:condition="view/isDepartmentRequired">
                     <label style="float:left; width:11em" for="dept">Department: </label>
                     <input type="text" id="dept" name="dept" /><br /><br />
                 </tal:block>
-                
+		    
                 <br />
             </div>
             

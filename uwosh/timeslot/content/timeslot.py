@@ -117,8 +117,9 @@ class TimeSlot(folder.ATFolder):
     	    return startTime.strftime('%I:%M %p') + ' - ' + endTime.strftime('%I:%M %p')
 
     def getLabel(self):
-        date = self.aq_parent.Title()
-        return date + ' @ ' + self.Title()
+        date = self.aq_parent
+        signupSheet = date.aq_parent
+        return signupSheet.Title() + ' @ ' + date.Title() + ' @ ' + self.Title()
 
     def getNumberOfAvailableSpots(self):
         query = {'portal_type':'Person','review_state':'signedup'}

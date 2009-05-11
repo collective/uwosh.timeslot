@@ -62,30 +62,35 @@ class SignupSheet(folder.ATFolder):
 
     def getDays(self):
         query = {'portal_type':'Day'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
         days = []
         for brain in brains:
             day = brain.getObject()
             days.append(day)
+        days.sort(lambda x, y : cmp(x.getDate(), y.getDate()))
         return days
         
     def removeAllPeople(self):
-        days = self.getDays()
-        for day in days:
-            day.removeAllPeople()
+        for (id, obj) in self.contentItems():
+            obj.removeAllPeople()
         
     def exportToCSV(self):
         buffer = StringIO()
         writer = csv.writer(buffer)
         
-        writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])
+        for signupSheet in self.getSignupSheets():
+            writer.writerow([signupSheet.Title()])
+            if not signupSheet.isMasterSignupSheet():
+                writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])
         
-        for day in self.getDays():
-            for timeSlot in day.getTimeSlots():
-                for person in timeSlot.getPeople():
-                    writer.writerow([day.Title(), timeSlot.Title(), person.Title(),
-					                 person.getReviewStateTitle(), person.getEmail(), person.getExtraInfo()])
-					                 
+                for day in signupSheet.getDays():
+                    for timeSlot in day.getTimeSlots():
+                        for person in timeSlot.getPeople():
+                            writer.writerow([day.Title(), timeSlot.Title(), person.Title(),
+                                             person.getReviewStateTitle(), person.getEmail(), person.getExtraInfo()])
+            writer.writerow([''])
+
         result = buffer.getvalue()
         buffer.close()
 
@@ -103,5 +108,35 @@ class SignupSheet(folder.ATFolder):
             return False
         else:
             return True
-            
+
+    def getSignupSheets(self):
+        query = {'portal_type':'Signup Sheet'}
+        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
+        sheets = [self]
+        for brain in brains:
+            sheet = brain.getObject()
+            sheets.append(sheet)
+        return sheets
+    
+    def getSignupSheet(self, name):
+        query = {'portal_type':'Signup Sheet', 'Title':name}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        if len(brains) != 1:
+            raise ValueError('The signup sheet %s was not found.' % name)
+        return brains[0].getObject()
+
+    def isMasterSignupSheet(self):
+        query = {'portal_type':'Signup Sheet'}
+        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
+        if len(brains) != 0:
+            return True
+        else:
+            return False
+        
+    def isContainedInMasterSignupSheet(self):
+        parent = self.aq_parent
+        return ISignupSheet.providedBy(parent)
+
 atapi.registerType(SignupSheet, PROJECTNAME)

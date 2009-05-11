@@ -7,10 +7,20 @@
     <div metal:fill-slot="main">
         <tal:main-macro metal:define-macro="main">
 
-            <h2 tal:content="string:${context/Title} - Manager Summary" />
+        <tal:block tal:repeat="signupSheet context/getSignupSheets">
+      
+            <h2 tal:content="string:${signupSheet/Title} - Manager Summary" />
             
             <table class="plain">
-                <tal:block tal:repeat="day context/getDays">
+	        <tal:block tal:condition="not:signupSheet/getDays">
+	            <tr style="background-color: #F0F0F0">
+		        <th style="border: none">
+                            <h3>No days have been made available for signup yet.</h3>
+		        </th>
+		    </tr>
+                </tal:block>
+		    
+                <tal:block tal:repeat="day signupSheet/getDays">
                     <tr>
                         <th>
                             <h3>
@@ -27,7 +37,11 @@
                             <th>Email</th>
                             <th>Extra Info (Phone - Class. - Dept.)</th>           
                     </tr>
-                    
+
+		    <tr tal:condition="not:day/getTimeSlots">
+		        <td>No times have been made available for signup yet.</td>
+		        <td colspan="4" />
+		    </tr>
                     <tal:block tal:repeat="timeSlot day/getTimeSlots">
                         <tr style="background-color: #F0F0F0">
                             <th>
@@ -52,8 +66,8 @@
                     </tal:block>
                 
                 </tal:block>
-            </table>
-        
+            </table>      
+        </tal:block>  
         </tal:main-macro>
     </div>
 </body>
