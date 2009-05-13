@@ -56,12 +56,12 @@ class Day(folder.ATFolder):
     def getTimeSlots(self):
         query = {'portal_type':'Time Slot'}
         pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery,
+                                                               sort_on='getStartTime', sort_order='ascending')
         timeSlots = []
         for brain in brains:
             timeSlot = brain.getObject()
             timeSlots.append(timeSlot)
-        timeSlots.sort(lambda x, y : cmp(x.getStartTime(), y.getStartTime()))
         return timeSlots
         
     def getTimeSlot(self, title):

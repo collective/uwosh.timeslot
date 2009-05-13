@@ -14,6 +14,7 @@ from uwosh.timeslot.config import PROJECTNAME
 
 import csv
 from StringIO import StringIO
+from DateTime import DateTime
 
 SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
@@ -52,25 +53,32 @@ class SignupSheet(folder.ATFolder):
     description = atapi.ATFieldProperty('description')
     extraFields = atapi.ATFieldProperty('extraFields')
     contactInfo = atapi.ATFieldProperty('contactInfo')
-    
+
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) != 1:
             raise ValueError('The date %s was not found.' % date)
         return brains[0].getObject()
-
+        
     def getDays(self):
         query = {'portal_type':'Day'}
         pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery,
+                                                               sort_on='getDate', sort_order='ascending')
         days = []
-        for brain in brains:
-            day = brain.getObject()
-            days.append(day)
-        days.sort(lambda x, y : cmp(x.getDate(), y.getDate()))
+
+        if len(brains) != 0:
+            today = DateTime().earliestTime()
+            startIndex = 0
+            while (brains[startIndex]['getDate'] < today):
+                startIndex += 1
+            for i in range(startIndex, len(brains)):
+                day = brains[i].getObject()
+                days.append(day)
+    
         return days
-        
+
     def removeAllPeople(self):
         for (id, obj) in self.contentItems():
             obj.removeAllPeople()
