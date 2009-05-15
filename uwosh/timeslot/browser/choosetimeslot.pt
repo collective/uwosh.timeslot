@@ -3,8 +3,6 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="uwosh.timeslot">
 
-
-
 <body>
     <div metal:fill-slot="main">
 	<tal:main-macro metal:define-macro="main">
@@ -48,7 +46,7 @@
 				    <tal:block tal:condition="not:signupSheet/getDays">
 					<tr style="background-color: #F0F0F0">
 					    <th style="border: none">
-						<h3>No days have been made available for signup yet.</h3>
+						<h3>No days have been made available for this signup sheet yet.</h3>
 					    </th>
 					</tr>
 				    </tal:block>
@@ -69,7 +67,7 @@
 					</tr>
 
 					<tr tal:condition="not:day/getTimeSlots">
-					    <td>No times have been made available for signup yet.</td>
+					    <td>No slots have been made available for this day yet.</td>
 					    <td colspan="3" />
 					</tr>
 					<tr tal:repeat="timeSlot day/getTimeSlots">

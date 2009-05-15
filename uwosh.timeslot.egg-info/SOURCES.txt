@@ -49,6 +49,7 @@ uwosh/timeslot/browser/clone.py
 uwosh/timeslot/browser/cloning-results.pt
 uwosh/timeslot/browser/configure.zcml
 uwosh/timeslot/browser/exporttocsv.py
+uwosh/timeslot/browser/macro-test.pt
 uwosh/timeslot/browser/managersummary.pt
 uwosh/timeslot/browser/removeallpeople.py
 uwosh/timeslot/browser/signupresults.pt
@@ -61,7 +62,9 @@ uwosh/timeslot/content/signupsheet.py
 uwosh/timeslot/content/timeslot.py
 uwosh/timeslot/portlets/__init__.py
 uwosh/timeslot/portlets/configure.zcml
+uwosh/timeslot/profiles/.DS_Store
 uwosh/timeslot/profiles/default/actions.xml
+uwosh/timeslot/profiles/default/catalog.xml
 uwosh/timeslot/profiles/default/factorytool.xml
 uwosh/timeslot/profiles/default/metadata.xml
 uwosh/timeslot/profiles/default/portlets.xml
