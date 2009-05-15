@@ -118,7 +118,7 @@ it is displaying the times and days::
 
      >>> url = signupSheet.absolute_url()
      >>> browser.open(url)
-     >>> 'Test Signup Sheet - Choose a Date and Time' in browser.contents
+     >>> 'Test Signup Sheet' in browser.contents
      True
      >>> 'Tuesday, October 13, 2009' in browser.contents
      True
