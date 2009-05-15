@@ -152,6 +152,11 @@ class ChooseTimeSlot(BrowserView):
         else:
             return False
     
+    def isCurrentUserLoggedIn(self):
+        portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
+        return 'Anonymous' not in member.getRoles()
+
     def sendWaitingConfirmationEmail(self, userInfo, signupSheet):
     	isEmail = validation.validatorFor('isEmail')
     	toEmail = userInfo['email']

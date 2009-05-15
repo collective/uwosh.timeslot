@@ -12,6 +12,13 @@
 	    <form method="post" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
                 <h2 tal:content="context/Title" />
 
+                <tal:block tal:condition="not:view/isCurrentUserLoggedIn">
+		    <p>To signup for a spot you will need to
+                       <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/choose-timeslot">
+                       login</a> first.
+                    </p>
+		</tal:block>
+      
                 <div tal:condition="context/getContactInfo" id="contactInfo">
 		    <h3>If you have any questions please contact:</h3>
 		  
@@ -133,9 +140,11 @@
 		</div>
 
 		<br />
-		<input type="submit" name="form.button.submit" value="Submit" />
-		<input type="hidden" name="form.submitted" value="1" />
-		<input tal:attributes="value member" type="hidden" name="memberToAssign" />
+		<tal:block tal:condition="view/isCurrentUserLoggedIn">
+		    <input type="submit" name="form.button.submit" value="Submit" />
+    		    <input type="hidden" name="form.submitted" value="1" />
+		    <input tal:attributes="value member" type="hidden" name="memberToAssign" />
+		</tal:block>
 	    </form>
 
         </tal:main-macro>
