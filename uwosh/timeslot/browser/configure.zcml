@@ -39,6 +39,14 @@
 
     <browser:page
       for="..interfaces.ISignupSheet"
+      name="cancel-reservation"
+      class=".cancelreservation.CancelReservation"
+      attribute="cancelReservation"
+      permission="zope2.View"
+      />
+     
+    <browser:page
+      for="..interfaces.ISignupSheet"
       name="submit-user-selection"
       class=".choosetimeslot.ChooseTimeSlot"
       attribute="submitUserSelection"

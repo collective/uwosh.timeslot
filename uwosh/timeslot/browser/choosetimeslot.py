@@ -4,10 +4,6 @@ from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 
 from uwosh.timeslot import timeslotMessageFactory as _
-
-import xmlrpclib
-from xml.dom import minidom
-
 from Products.validation import validation
 
 class IChooseTimeSlot(Interface):
@@ -177,3 +173,11 @@ class ChooseTimeSlot(BrowserView):
 
             mailHost = self.context.MailHost
             mailHost.secureSend(message, toEmail, fromEmail, subject)
+
+    def getSlotsCurrentUserIsSignedUpFor(self):
+        slots = []
+        for slot in signupSheet.getSlotsCurrentUserIsSignedUpFor():
+            slots.append(slot.getLabel())
+        return slots
+            
+        
