@@ -40,5 +40,5 @@ class RemoveAllPeopleForm(formbase.PageForm):
         self.request.response.redirect(self.context.absolute_url())
    
     @form.action('Cancel')
-    def action_remove_all_people(self, action, data):
+    def action_cancel(self, action, data):
         self.request.response.redirect(self.context.absolute_url())

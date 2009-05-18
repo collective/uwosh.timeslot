@@ -17,6 +17,7 @@
       name="available_expr">python:object.getTypeInfo().getId() == 'Signup Sheet'</property>
    <property name="permissions">
     <element value="Manage portal"/>
+    <element value="uwosh.timeslot: View Schedule"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -30,6 +31,7 @@
       name="available_expr">python:object.Type() == 'Signup Sheet'</property>
    <property name="permissions">
     <element value="Manage portal"/>
+    <element value="uwosh.timeslot: View Schedule"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -43,6 +45,7 @@
       name="available_expr">python:object.Type() in ['Signup Sheet', 'Day', 'Time Slot']</property>
    <property name="permissions">
     <element value="Manage portal"/>
+    <element value="uwosh.timeslot: Manage Schedule"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -56,6 +59,7 @@
       name="available_expr">python:object.Type() in ['Day', 'Time Slot']</property>
    <property name="permissions">
     <element value="Manage portal"/>
+    <element value="uwosh.timeslot: Manage Schedule"/>
    </property>
    <property name="visible">True</property>
   </object>

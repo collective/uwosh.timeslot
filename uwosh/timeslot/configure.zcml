@@ -4,6 +4,16 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="uwosh.timeslot">
 
+    <permission
+      id="uwosh.timeslot.ManageSchedule"
+      title="uwosh.timeslot: Manage Schedule"
+      />
+
+    <permission
+      id="uwosh.timeslot.ViewSchedule"
+      title="uwosh.timeslot: View Schedule"
+      />
+
     <five:registerPackage package="." initialize=".initialize" />
 
     <!-- Include the sub-packages that use their own configure.zcml files. -->
@@ -29,4 +39,5 @@
       handler=".subscribers.sendSignupNotificationEmail"
       />
 
+    <utility name="uwosh_timeslot_ScheduleViewer" factory=".sharing.ScheduleViewerRole"/>
 </configure>

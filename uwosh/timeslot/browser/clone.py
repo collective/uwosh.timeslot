@@ -80,24 +80,22 @@ class CloneForm(formbase.PageForm):
         while numCreated < self.numToCreate:
             newDate = origDate + i
             if self.includeWeekends or (newDate.aDay() not in ['Sat', 'Sun']):
-                newDay = self.createNewDay(newDate, contents)
-                numCreated += 1
-                if numCreated == 1:
-                    newDay.removeAllPeople()
-                    contents = newDay.manage_copyObjects(newDay.objectIds())
+                try:
+                    newDay = self.createNewDay(newDate, contents)
+                except BadRequest:
+                    self.success = False
+                    self.errors.append("Operation failed because there is already an object named: %s" % newDate)
+                else:
+                    numCreated += 1
+                    if numCreated == 1:
+                        newDay.removeAllPeople()
+                        contents = newDay.manage_copyObjects(newDay.objectIds())
             i += 1        
                 
     def createNewDay(self, date, contents):
         title = date.strftime('%B %d, %Y')
         id = date.strftime('%B-%d-%Y').lower()
-        
-        try:
-            self.parent.invokeFactory(id=id, title=title, type_name='Day', date=date)
-        except BadRequest:
-            self.success = False
-            self.errors.append("Operation failed because there is already an object with id: %s" % id)
-            return None
-            
+        self.parent.invokeFactory(id=id, title=title, type_name='Day', date=date)            
         newDay = self.parent[id]
         newDay.manage_pasteObjects(contents)
         newDay.reindexObject()     

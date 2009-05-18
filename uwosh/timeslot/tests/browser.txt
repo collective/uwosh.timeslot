@@ -186,16 +186,6 @@ Any authenticated user should be able to sign up for an available slot::
     >>> 'Successful Signup' in browser.contents
     True
 
-And they should be unable to signup for another one::
-
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
-    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
-    >>> browser.getControl(name='phone').value = '920-555-1234'
-    >>> browser.getControl(name='form.button.submit').click()
-    >>> 'Unsuccessful Signup' in browser.contents
-    True
-    
 We'll remove them so they can sign up again::
 
     >>> self.setRoles(['Manager'])
@@ -282,7 +272,7 @@ After that our test user should be signed up for one slot and waiting on zero::
 Export to a comma sperated value file (csv) should work::
 
     >>> browser.getLink('Export to CSV').click()
-    >>> 'Day,Time,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
+    >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
     True
     >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
     True

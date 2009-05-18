@@ -56,22 +56,19 @@
 					    <th style="border: none">
 						<h3 tal:content="day/Title" />
 					    </th>
-					    <th style="border: none" colspan="3"/>
+					    <th style="border: none" colspan="2"/>
 					</tr>
 
 					<tr>
-					    <th />
 					    <th>Time</th>
 					    <th>Available Spots</th>
 					    <th>Select</th>
 					</tr>
 
 					<tr tal:condition="not:day/getTimeSlots">
-					    <td>No slots have been made available for this day yet.</td>
-					    <td colspan="3" />
+					    <td colspan="3">No slots have been made available for this day yet.</td>
 					</tr>
 					<tr tal:repeat="timeSlot day/getTimeSlots">
-					    <td />
 					    <td tal:content="timeSlot/Title" />
 					    <td>
 						<span tal:content="timeSlot/getNumberOfAvailableSpots" />

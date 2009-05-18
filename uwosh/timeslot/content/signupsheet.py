@@ -87,18 +87,16 @@ class SignupSheet(folder.ATFolder):
     def exportToCSV(self):
         buffer = StringIO()
         writer = csv.writer(buffer)
-        
+
+        writer.writerow(['SignupSheet','Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])  
+      
         for signupSheet in self.getSignupSheets():
-            writer.writerow([signupSheet.Title()])
             if not signupSheet.isMasterSignupSheet():
-                writer.writerow(['Day', 'Time', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])
-        
                 for day in signupSheet.getDays():
                     for timeSlot in day.getTimeSlots():
                         for person in timeSlot.getPeople():
-                            writer.writerow([day.Title(), timeSlot.Title(), person.Title(),
+                            writer.writerow([signupSheet.Title(), day.Title(), timeSlot.Title(), person.Title(),
                                              person.getReviewStateTitle(), person.getEmail(), person.getExtraInfo()])
-            writer.writerow([''])
 
         result = buffer.getvalue()
         buffer.close()

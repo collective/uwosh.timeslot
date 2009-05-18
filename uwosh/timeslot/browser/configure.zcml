@@ -10,7 +10,7 @@
       name="manager-summary"
       template="managersummary.pt"
       allowed_interface=".choosetimeslot.IChooseTimeSlot"
-      permission="cmf.ManagePortal"
+      permission="uwosh.timeslot.ViewSchedule"
       />
       
     <browser:page
@@ -18,14 +18,14 @@
       name="export-to-csv"
       class=".exporttocsv.ExportToCSV"
       attribute="exportToCSV"
-      permission="cmf.ManagePortal"
+      permission="uwosh.timeslot.ViewSchedule"
       />
     
     <browser:page
         for="..interfaces.IContainsPeople"
         name="remove-all-people"
         class=".removeallpeople.RemoveAllPeopleForm"
-        permission="cmf.ManagePortal"
+        permission="uwosh.timeslot.ManageSchedule"
         />
 	
     <browser:page
@@ -58,7 +58,7 @@
         for="..interfaces.ICloneable"
         name="clone"
         class=".clone.CloneForm"
-        permission="cmf.ManagePortal"
+        permission="uwosh.timeslot.ManageSchedule"
         />
 
     <browser:menuItem

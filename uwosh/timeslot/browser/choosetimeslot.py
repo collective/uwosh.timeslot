@@ -61,12 +61,7 @@ class ChooseTimeSlot(BrowserView):
             if isEmail(userInfo['email']) == 1:
                 emailSent = True
            
-            if self.context.isCurrentUserSignedUpForAnySlot():
-                errorMsg = 'You are already signed up for a slot. If you would like to select a second slot \
-                            please remove yourself from the first one and try again'
-                success = False
-           
-            elif allowWaitingList or numberOfAvailableSpots > 0:
+            if allowWaitingList or numberOfAvailableSpots > 0:
                 person = self.createPerson(timeSlot, userInfo)
                 
                 if numberOfAvailableSpots > 0:
