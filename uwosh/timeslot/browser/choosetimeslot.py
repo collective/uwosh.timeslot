@@ -151,19 +151,20 @@ class ChooseTimeSlot(BrowserView):
     def sendWaitingConfirmationEmail(self, userInfo, signupSheet):
     	isEmail = validation.validatorFor('isEmail')
     	toEmail = userInfo['email']
+        
+        if signupSheet.isContainedInMasterSignupSheet():
+            signupSheet = signupSheet.aq_parent
 
         contactInfo = signupSheet.getContactInfo()
-        if contactInfo == () and signupSheet.isContainedInMasterSignupSheet():
-            contactInfo = signupSheet.aq_parent.getContactInfo()
 
-    	if (isEmail(toEmail) == 1):
+    	if isEmail(toEmail) == 1:
             fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
             subject = signupSheet.Title() + ' - Waiting List Confirmation'
         
             message = 'Hi ' + userInfo['fullname'] + ',\n\n'
             message += 'This message is to confirm that you have been added to the waiting list for:\n'
             message += userInfo['selectedSlot'] + '\n\n'
-            message += 'For the ' + signupSheet.Title() + ' Signup Sheet: ' + signupSheet.absolute_url() + '\n\n'
+            message += signupSheet.absolute_url() + '\n\n'
 
             if contactInfo != ():
                 message += 'If you have any questions please contact:\n'
@@ -180,4 +181,8 @@ class ChooseTimeSlot(BrowserView):
             slots.append(slot.getLabel())
         return slots
             
-        
+    def getSlotsCurrentUserIsWaitingFor(self):    
+        slots = []
+        for slot in signupSheet.getSlotsCurrentUserIsWaitingFor():
+            slots.append(slot.getLabel())
+        return slots

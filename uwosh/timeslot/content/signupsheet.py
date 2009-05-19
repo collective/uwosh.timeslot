@@ -103,18 +103,84 @@ class SignupSheet(folder.ATFolder):
 
         return result
     
-    def isCurrentUserSignedUpForAnySlot(self):
-        member = self.portal_membership.getAuthenticatedMember()
-        username = member.getUserName()
-        return self.isUserSignedUpForAnySlot(username)
-    
-    def isUserSignedUpForAnySlot(self, username):
+    def hasCurrentUserSelectedAnySlot(self):
+        username = self.getCurrentUsername()
+        return self.hasUserSelectedAnySlot(username)
+
+    def hasUserSelectedAnySlot(self, username):
         query = {'portal_type':'Person','id':username}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) == 0:
             return False
         else:
             return True
+
+    def isCurrentUserSignedUpForAnySlot(self):
+        username = self.getCurrentUsername()
+        return self.isUserSignedUpForAnySlot(username)
+    
+    def isUserSignedUpForAnySlot(self, username):
+        query = {'portal_type':'Person','id':username,'review_state':'signedup'}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        if len(brains) == 0:
+            return False
+        else:
+            return True
+
+    def isCurrentUserWaitingForAnySlot(self):
+        username = self.getCurrentUsername()
+        return self.isUserWaitingForAnySlot(username)
+    
+    def isUserWaitingForAnySlot(self, username):
+        query = {'portal_type':'Person','id':username,'review_state':'waiting'}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        if len(brains) == 0:
+            return False
+        else:
+            return True
+
+    def getSlotsCurrentUserIsSignedUpFor(self):
+        username = self.getCurrentUsername()
+        return self.getSlotsUserIsSignedUpFor(username)
+
+    def getSlotsUserIsSignedUpFor(self, username):
+        today = DateTime().earliestTime()
+        query = {'portal_type':'Person','id':username,'review_state':'signedup'}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+
+        slots = []
+        for brain in brains:
+            person = brain.getObject()
+            timeSlot = person.aq_parent
+            day = timeSlot.aq_parent
+            if day.getDate() >= today:
+                slots.append(timeSlot)
+                
+        return slots
+
+    def getSlotsCurrentUserIsWaitingFor(self):
+        username = self.getCurrentUsername()
+        return self.getSlotsUserIsWaitingFor(username)
+
+    def getSlotsUserIsWaitingFor(self, username):
+        today = DateTime().earliestTime()
+        query = {'portal_type':'Person','id':username,'review_state':'waiting'}
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+
+        slots = []
+        for brain in brains:
+            person = brain.getObject()
+            timeSlot = person.aq_parent
+            day = timeSlot.aq_parent
+            if day.getDate() >= today:
+                slots.append(timeSlot)
+                
+        return slots
+
+    def getCurrentUsername(self):
+        member = self.portal_membership.getAuthenticatedMember()
+        username = member.getUserName()
+        return username
 
     def getSignupSheets(self):
         query = {'portal_type':'Signup Sheet'}

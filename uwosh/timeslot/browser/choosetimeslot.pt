@@ -8,17 +8,28 @@
 	<tal:main-macro metal:define-macro="main">
             <h2 tal:content="context/Title" />
 
-            <div style="border: 1px solid black; padding: 10px" tal:condition="context/isCurrentUserSignedUpForAnySlot">
-	        <p>You are currently signed up for the following slots.<br />
-		To cancel any of them: select one or more and click the "Cancel Selected Slots" button</p>
+            <div style="border: 1px solid black; padding: 10px" tal:condition="context/hasCurrentUserSelectedAnySlot">
+	        <p>To cancel any of the following: select one or more and click the "Cancel Selected Slots" button</p>
 		<form method="post" tal:attributes="action string:${context/absolute_url}/cancel-reservation;">
 	            <table class="plain">
-		        <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
-		            <td tal:content="slot/getLabel" />
-		            <td>
-			        <input type="checkbox" name="selectedSlot" tal:attributes="value slot/getLabel" />
-			    </td>
-		        </tr>
+		        <tal:block tal:condition="context/isCurrentUserSignedUpForAnySlot">
+		            <th colspan="2">You are signed up for the following slots:</th>
+			    <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
+		                 <td tal:content="slot/getLabel" />
+				 <td>
+				     <input type="checkbox" name="selectedSlot" tal:attributes="value slot/getLabel" />
+				 </td>
+			     </tr>
+			</tal:block>
+			<tal:block tal:condition="context/isCurrentUserWaitingForAnySlot">
+		            <th colspan="2">You are on a waiting list for the following slots:</th>
+			    <tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
+		                 <td tal:content="slot/getLabel" />
+				 <td>
+				     <input type="checkbox" name="selectedSlot" tal:attributes="value slot/getLabel" />
+				 </td>
+			     </tr>
+			</tal:block>
 		    </table>
 		    <br />
 		    <input type="submit" value="Cancel Selected Slots" />

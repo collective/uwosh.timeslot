@@ -1,5 +1,6 @@
 
 from Products.validation import validation
+from Products.CMFCore.utils import getToolByName
 
 def sendSignupNotificationEmail(obj, event):
     isEmail = validation.validatorFor('isEmail')
@@ -9,20 +10,21 @@ def sendSignupNotificationEmail(obj, event):
         timeSlot = person.aq_parent
         day = timeSlot.aq_parent
         signupSheet = day.aq_parent
+
+        if signupSheet.isContainedInMasterSignupSheet():
+            signupSheet = signupSheet.aq_parent
+
         contactInfo = signupSheet.getContactInfo()
 
-        if contactInfo == () and signupSheet.isContainedInMasterSignupSheet():
-            contactInfo = signupSheet.aq_parent.getContactInfo()
-
         toEmail = person.getEmail()
-        if (isEmail(toEmail) == 1):        
+        if isEmail(toEmail) == 1:        
             fromEmail = "%s <%s>" % (obj.email_from_name, obj.email_from_address)
             subject = signupSheet.Title() + ' - Registration Confirmation'
 
             message = 'Hi ' + person.Title() + ',\n\n'
-            message += 'This message is to confirm that you have signed up for:\n'
+            message += 'This message is to confirm that you have been signed up for:\n'
             message += timeSlot.getLabel() + '\n\n'
-            message += 'For the ' + signupSheet.Title() + ' Signup Sheet: ' + signupSheet.absolute_url() + '\n\n'
+            message += signupSheet.absolute_url() + '\n\n'
 
             if contactInfo != ():
                 message += 'If you have any questions please contact:\n'
@@ -33,3 +35,16 @@ def sendSignupNotificationEmail(obj, event):
             mailHost = obj.MailHost
             mailHost.secureSend(message, toEmail, fromEmail, subject)
                 
+
+def attemptToFillEmptySpot(obj, event):
+    if obj.getReviewState() == 'signedup':
+        timeSlot = obj.aq_parent
+        portal_catalog = getToolByName(obj, 'portal_catalog')
+        query = {'portal_type':'Person','review_state':'waiting', 'sort_on':'Date', 'sort_order':'ascending'}
+        brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.absolute_url_path())
+        if len(brains) > 0:
+            person = brains[0].getObject()
+            portal_workflow = getToolByName(obj, 'portal_workflow')
+            portal_workflow.doActionFor(person, 'signup')
+            person.reindexObject()
+        

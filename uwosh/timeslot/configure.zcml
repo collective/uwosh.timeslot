@@ -4,6 +4,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="uwosh.timeslot">
 
+    <!-- Enable our custom permissions -->
     <permission
       id="uwosh.timeslot.ManageSchedule"
       title="uwosh.timeslot: Manage Schedule"
@@ -30,14 +31,19 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-    <!-- -*- extra stuff goes here -*- -->
-
-    <!-- Register the Person workflow transition event handler -->
+    <!-- Register the event handlers -->
     <subscriber
       for=".interfaces.IPerson
            Products.DCWorkflow.interfaces.IAfterTransitionEvent"
       handler=".subscribers.sendSignupNotificationEmail"
       />
 
+    <subscriber
+      for=".interfaces.IPerson
+           zope.app.container.interfaces.IObjectRemovedEvent"
+      handler=".subscribers.attemptToFillEmptySpot"
+      />
+
+    <!-- Add the custom roles to the sharing tab -->
     <utility name="uwosh_timeslot_ScheduleViewer" factory=".sharing.ScheduleViewerRole"/>
 </configure>
