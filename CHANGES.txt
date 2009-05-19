@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2 (2009-05-19)
+
+ - I'm gonna say this is the final release [Marshall Scorcio]
+
 1.2beta (2009-05-19)
 -----------------
 
