@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2beta (2009-05-19)
+-----------------
+
+ - Sort of a beta release [Marshall Scorcio]
+
 1.1 (2009-05-11)
 ------------------
 

@@ -126,10 +126,9 @@
          	    </tal:block>
 			
 		</tal:block>
-
-		<br />
 			
 		<div tal:condition="view/isAnyExtraInfoRequired" id="extraInfo">
+		    <br />
 		    <h3>Required Extra Information</h3>
 
 		    <br />
@@ -158,11 +157,12 @@
 
 		    <tal:block tal:condition="view/isDepartmentRequired">
 			<label style="float:left; width:11em" for="dept">Department: </label>
-			<input type="text" id="dept" name="dept" /><br /><br />
+			<input type="text" id="dept" name="dept" />
+			<br />
+			<br />
 		    </tal:block>
 		</div>
 
-		<br />
 		<tal:block tal:condition="view/isCurrentUserLoggedIn">
 		    <input type="submit" name="form.button.submit" value="Submit" />
     		    <input type="hidden" name="form.submitted" value="1" />

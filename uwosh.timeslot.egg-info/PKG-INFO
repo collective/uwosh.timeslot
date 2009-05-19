@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: uwosh.timeslot
-Version: 1.1
+Version: 1.2beta
 Summary: UNKNOWN
 Home-page: http://svn.plone.org/svn/plone/plone.example
 Author: Marshall Scorcio
@@ -20,6 +20,11 @@ Description: uwosh.timeslot
         
         Changelog
         =========
+        
+        1.2beta (2009-05-19)
+        -----------------
+        
+        - Sort of a beta release [Marshall Scorcio]
         
         1.1 (2009-05-11)
         ------------------
