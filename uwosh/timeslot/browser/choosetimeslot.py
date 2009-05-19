@@ -95,17 +95,23 @@ class ChooseTimeSlot(BrowserView):
         return memberInfo
 
     def areAnyRequiredFieldsMissing(self, userInput):
+        fieldNames = self.context.schema['extraFields'].vocabulary
         missingFields = []
         anyMissing = False
         if userInput['selectedSlot'] == None:
             anyMissing = True
-            missingFields.append('selectedSlot')
+            missingFields.append('Timeslot')
             
         extraFields = self.context.getExtraFields()
         for field in extraFields:
             if len(userInput[field]) < 1:
                 anyMissing = True
-                missingFields.append(field)
+
+                for (id, name) in fieldNames:
+                    if id == field:
+                        missingFields.append(name)
+                        break
+
         return (anyMissing, missingFields)    	
 
     def createPerson(self, location, userInfo):

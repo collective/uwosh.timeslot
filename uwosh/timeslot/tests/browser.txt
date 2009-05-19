@@ -186,6 +186,14 @@ Any authenticated user should be able to sign up for an available slot::
     >>> 'Successful Signup' in browser.contents
     True
 
+Because the user is now signed up for 1 slot, they should see "Your Slot" once
+when viewing the signup sheet::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.contents.count('Your Slot')
+    1
+    
 We'll remove them so they can sign up again::
 
     >>> self.setRoles(['Manager'])
@@ -200,7 +208,7 @@ A user should have to fill in all the required fields::
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Unsuccessful Signup' in browser.contents
     True
-    >>> 'You did not complete the following fields: phone' in browser.contents
+    >>> 'You did not complete the following fields: Phone' in browser.contents
     True
 
 A user should not be able to even select full slot w/o a waiting list. Instead it should throw an exception::
@@ -222,14 +230,6 @@ But a user should be able to be put on the waiting list when there is no room::
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Successfully Added to Waiting List' in browser.contents
     True
-
-Because the user is now signed up for 1 slot, they should see "Your Slot" once
-when viewing the signup sheet::
-
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
-    >>> browser.contents.count('Your Slot')
-    1
 
 Now we switch back to being a manager::
     
