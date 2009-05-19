@@ -5,7 +5,11 @@
 
 <body>
     <div metal:fill-slot="main">
-	<tal:main-macro metal:define-macro="main">
+	<tal:main-macro metal:define-macro="main"
+                        tal:define="contextIsMasterSignupSheet context/isMasterSignupSheet;
+                                    isCurrentUserLoggedIn view/isCurrentUserLoggedIn;
+                                    contactInfo context/getContactInfo">
+      
             <h2 tal:content="context/Title" />
 
             <div style="border: 1px solid #8CACBB; padding: 10px" tal:condition="context/hasCurrentUserSelectedAnySlot">
@@ -15,19 +19,23 @@
 		        <tal:block tal:condition="context/isCurrentUserSignedUpForAnySlot">
 		            <th colspan="2">You are signed up for the following slots:</th>
 			    <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
-		                 <td tal:content="slot/getLabel" />
-				 <td>
-				     <input type="checkbox" name="selectedSlot" tal:attributes="value slot/getLabel" />
-				 </td>
+			        <tal:block tal:define="label slot/getLabel">
+		                    <td tal:content="label" />
+				    <td>
+				        <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
+				    </td>
+				</tal:block>
 			     </tr>
 			</tal:block>
 			<tal:block tal:condition="context/isCurrentUserWaitingForAnySlot">
 		            <th colspan="2">You are on a waiting list for the following slots:</th>
 			    <tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
-		                 <td tal:content="slot/getLabel" />
-				 <td>
-				     <input type="checkbox" name="selectedSlot" tal:attributes="value slot/getLabel" />
-				 </td>
+		                <tal:block tal:define="label slot/getLabel">
+		                    <td tal:content="label" />
+				    <td>
+				        <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
+				    </td>
+				</tal:block>
 			     </tr>
 			</tal:block>
 		    </table>
@@ -37,17 +45,17 @@
 		     
             </div>
       
-            <tal:block tal:condition="not:view/isCurrentUserLoggedIn">
+            <tal:block tal:condition="not:isCurrentUserLoggedIn">
 		<p>To signup for a spot you will need to
                    <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/choose-timeslot">
                    login</a> first.
                 </p>
 	    </tal:block>
-      
-            <div tal:condition="context/getContactInfo" id="contactInfo">
+
+            <div tal:condition="contactInfo" id="contactInfo">
 		<h3>If you have any questions please contact:</h3>
 		  
-		<tal:block tal:repeat="line context/getContactInfo">
+		<tal:block tal:repeat="line contactInfo">
 		    <span tal:content="line" /><br />
 		</tal:block>
 		  
@@ -55,23 +63,24 @@
 	    </div>
 		
 	    <form method="post" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
-		<p tal:condition="context/isMasterSignupSheet">
+		<p tal:condition="contextIsMasterSignupSheet">
 		    Please select a time from one of the following signup sheets:
 		</p>
 
 	        <tal:block tal:repeat="signupSheet context/getSignupSheets">
 
-		    <tal:block tal:condition="not:signupSheet/isMasterSignupSheet">
+		    <tal:block tal:condition="not:signupSheet/isMasterSignupSheet"
+	                       tal:define="days signupSheet/getDays">
 		
-		        <dl tal:omit-tag="not:context/isMasterSignupSheet" class="collapsible inline collapsedOnLoad">
+		        <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsedOnLoad">
 
-			    <h1 tal:condition="context/isMasterSignupSheet" style="border-bottom: none">
+			    <h1 tal:condition="contextIsMasterSignupSheet" style="border-bottom: none">
 		                <dt tal:content="signupSheet/Title" class="collapsibleHeader" />
 			    </h1>
 				  
-		            <dd tal:omit-tag="not:context/isMasterSignupSheet" class="collapsibleContent">
+		            <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
 				<table class="plain">
-				    <tal:block tal:condition="not:signupSheet/getDays">
+				    <tal:block tal:condition="not:days">
 					<tr style="background-color: #F0F0F0">
 					    <th style="border: none">
 						<h3>No days have been made available for this signup sheet yet.</h3>
@@ -79,7 +88,7 @@
 					</tr>
 				    </tal:block>
 
-				    <tal:block tal:repeat="day signupSheet/getDays">
+				    <tal:block tal:repeat="day days">
 					<tr style="background-color: #F0F0F0">
 					    <th style="border: none">
 						<h3 tal:content="day/Title" />
@@ -92,32 +101,33 @@
 					    <th>Available Spots</th>
 					    <th>Select</th>
 					</tr>
+					<tal:block tal:define="timeSlots day/getTimeSlots">
+					    <tr tal:condition="not:timeSlots">
+					        <td colspan="3">No slots have been made available for this day yet.</td>
+					    </tr>
+					    <tr tal:repeat="timeSlot timeSlots">
+					        <td tal:content="timeSlot/Title" />
+						<td>
+						    <span tal:content="timeSlot/getNumberOfAvailableSpots" />
+						    <span tal:condition="timeSlot/getAllowWaitingList">
+						        + Waiting List
+						    </span>
+					        </td>
+					        <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot">
+						    <em>
+						        <strong tal:condition="userAlreadySignedup">
+							    &rarr; Your Slot &larr;
+						        </strong>
+					            </em>
 
-					<tr tal:condition="not:day/getTimeSlots">
-					    <td colspan="3">No slots have been made available for this day yet.</td>
-					</tr>
-					<tr tal:repeat="timeSlot day/getTimeSlots">
-					    <td tal:content="timeSlot/Title" />
-					    <td>
-						<span tal:content="timeSlot/getNumberOfAvailableSpots" />
-						<span tal:condition="timeSlot/getAllowWaitingList">
-						    + Waiting List
-						</span>
-					    </td>
-					    <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot">
-						<em>
-						    <strong tal:condition="userAlreadySignedup">
-							&rarr; Your Slot &larr;
-						    </strong>
-						</em>
-
-						<span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
-						    <input tal:condition="not:full" type="radio" name="slotSelection"
-							   tal:attributes="value timeSlot/getLabel" /> 
-						    <p tal:condition="full">Full</p>
-						</span>
-					    </td>
-					</tr>
+						    <span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
+						        <input tal:condition="not:full" type="radio" name="slotSelection"
+							       tal:attributes="value timeSlot/getLabel" /> 
+						        <p tal:condition="full">Full</p>
+						    </span>
+					        </td>
+				  	    </tr>
+					</tal:block>
 				    </tal:block>
 				</table>
 				<br />
@@ -163,7 +173,7 @@
 		    </tal:block>
 		</div>
 
-		<tal:block tal:condition="view/isCurrentUserLoggedIn">
+		<tal:block tal:condition="isCurrentUserLoggedIn">
 		    <input type="submit" name="form.button.submit" value="Submit" />
     		    <input type="hidden" name="form.submitted" value="1" />
 		    <input tal:attributes="value member" type="hidden" name="memberToAssign" />

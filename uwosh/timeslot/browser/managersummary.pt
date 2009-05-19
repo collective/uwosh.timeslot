@@ -5,23 +5,25 @@
 
 <body>
     <div metal:fill-slot="main">
-	<tal:main-macro metal:define-macro="main">
+	<tal:main-macro metal:define-macro="main"
+                        tal:define="contextIsMasterSignupSheet context/isMasterSignupSheet">
       
             <h2 tal:content="string:${context/Title} - Manager Summary" />
 
             <tal:block tal:repeat="signupSheet context/getSignupSheets">
 
-		<tal:block tal:condition="not:signupSheet/isMasterSignupSheet">
+		<tal:block tal:condition="not:signupSheet/isMasterSignupSheet"
+                           tal:define="days signupSheet/getDays">
 		
-		    <dl tal:omit-tag="not:context/isMasterSignupSheet" class="collapsible inline collapsed OnLoad">
+		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsed OnLoad">
 
-			<h1 tal:condition="context/isMasterSignupSheet" style="border-bottom: none">
+			<h1 tal:condition="contextIsMasterSignupSheet" style="border-bottom: none">
 		            <dt tal:content="signupSheet/Title" class="collapsibleHeader" />
 			</h1>
 				  
-		        <dd tal:omit-tag="not:context/isMasterSignupSheet" class="collapsibleContent">
+		        <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
 			    <table class="plain">
-				<tal:block tal:condition="not:signupSheet/getDays">
+				<tal:block tal:condition="not:days">
 			            <tr style="background-color: #F0F0F0">
 					<th style="border: none">
 				            <h3>No days have been made available for this signup sheet yet.</h3>
@@ -29,7 +31,7 @@
 				    </tr>
 				</tal:block>
 
-				<tal:block tal:repeat="day signupSheet/getDays">
+				<tal:block tal:repeat="day days">
 				    <tr style="background-color: #F0F0F0">
 				        <th style="border: none" colspan="1">
 					   <h3>
@@ -47,29 +49,33 @@
 					<th>Extra Info (Phone - Class. - Dept.)</th>           
 			            </tr>
 
-			            <tr tal:condition="not:day/getTimeSlots">
-					<td colspan="5">No slots have been made available for this day yet.</td>
-			            </tr>
-				    <tal:block tal:repeat="timeSlot day/getTimeSlots">
-					<tr style="background-color: #F0F0F0">
-					    <th>
-					  	<a tal:attributes="href timeSlot/absolute_url" tal:content="timeSlot/Title" />
-					    </th>
-					    <th colspan="4" />
-					</tr>
-					<tr tal:condition="not:timeSlot/getPeople">
-					    <td />
-					    <td colspan="4">No one is signed up yet.</td>
-					</tr>
-					<tr tal:repeat="person timeSlot/getPeople">
-					    <td />
-					    <td>
-					        <a tal:attributes="href person/absolute_url" tal:content="person/Title" />
-					    </td>
-					    <td tal:content="person/getReviewStateTitle" />
-					    <td tal:content="person/getEmail" />
-			                    <td tal:content="person/getExtraInfo" />
-				        </tr>
+				    <tal:block tal:define="timeSlots day/getTimeSlots">
+			                <tr tal:condition="not:timeSlots">
+					    <td colspan="5">No slots have been made available for this day yet.</td>
+			                </tr>
+				        <tal:block tal:repeat="timeSlot timeSlots">
+					    <tr style="background-color: #F0F0F0">
+					        <th>
+					  	    <a tal:attributes="href timeSlot/absolute_url" tal:content="timeSlot/Title" />
+					        </th>
+					        <th colspan="4" />
+					    </tr>
+					    <tal:block tal:define="people timeSlot/getPeople">
+					        <tr tal:condition="not:people">
+						    <td />
+						    <td colspan="4">No one is signed up yet.</td>
+						</tr>
+						<tr tal:repeat="person people">
+						    <td />
+					            <td>
+					                <a tal:attributes="href person/absolute_url" tal:content="person/Title" />
+					            </td>
+						    <td tal:content="person/getReviewStateTitle" />
+						    <td tal:content="person/getEmail" />
+						    <td tal:content="person/getExtraInfo" />
+						</tr>
+					    </tal:block>	
+					</tal:block>    
 				    </tal:block>
 				</tal:block>
 		            </table>
