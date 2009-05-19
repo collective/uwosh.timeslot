@@ -223,9 +223,10 @@ But a user should be able to be put on the waiting list when there is no room::
     >>> 'Successfully Added to Waiting List' in browser.contents
     True
 
-Because the user is now signed up for 1 slots, they should see "Your Slot" once
+Because the user is now signed up for 1 slot, they should see "Your Slot" once
 when viewing the signup sheet::
 
+    >>> url = signupSheet.absolute_url()
     >>> browser.open(url)
     >>> browser.contents.count('Your Slot')
     1
