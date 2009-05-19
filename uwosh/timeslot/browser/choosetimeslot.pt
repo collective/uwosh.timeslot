@@ -20,8 +20,8 @@
 		            <th colspan="2">You are signed up for the following slots:</th>
 			    <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
 			        <tal:block tal:define="label slot/getLabel">
-		                    <td tal:content="label" />
-				    <td>
+		                    <td style="border-right: none" tal:content="label" />
+				    <td style="border-left: none">
 				        <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
 				    </td>
 				</tal:block>
@@ -31,8 +31,8 @@
 		            <th colspan="2">You are on a waiting list for the following slots:</th>
 			    <tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
 		                <tal:block tal:define="label slot/getLabel">
-		                    <td tal:content="label" />
-				    <td>
+		                    <td style="border-right: none" tal:content="label" />
+				    <td style="border-left: none">
 				        <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
 				    </td>
 				</tal:block>
@@ -40,7 +40,7 @@
 			</tal:block>
 		    </table>
 		    <br />
-		    <input type="submit" value="Cancel Selected Slots" />
+		    <input type="submit" name="cancelSlots" value="Cancel Selected Slots" />
 		</form>
 		     
             </div>

@@ -1,7 +1,7 @@
 Browser tests for uwosh.timeslot
 ==========================
 
-Let's import some exceptions we'll need later::
+Let's import some exceptions we'll need to catch later::
 
     >>> from AccessControl.unauthorized import Unauthorized
     >>> from mechanize._mechanize import LinkNotFoundError
@@ -55,7 +55,7 @@ We'll add a day to it::
     True
     >>> day = signupSheet['tuesday-october-13-2009']
  
-And to the day we'll add a number timeslots::
+And to the day we'll add a number of timeslots:
 
 One with no waiting list and 3 openings::
 
@@ -74,7 +74,7 @@ One with no waiting list and 3 openings::
     True
 
 Another one with 0 openings and a waiting list::
-    
+
     >>> browser.open(url + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='startTime_hour').value = ['04',]
     >>> browser.getControl(name='startTime_minute').value = ['00',]
@@ -89,7 +89,7 @@ Another one with 0 openings and a waiting list::
     True
 
 Finally, one with 0 openings and no waiting list:: 
-    
+
     >>> browser.open(url + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='startTime_hour').value = ['06',]
     >>> browser.getControl(name='startTime_minute').value = ['00',]
@@ -103,18 +103,29 @@ Finally, one with 0 openings and no waiting list::
     >>> 'Changes saved.' in browser.contents
     True
      
-Now we will publish our signup sheet so any member can use it::
+Now we will publish our signup sheet so Anonymous users can see it
+and Authenticated users can signup on it::
 
     >>> from Products.CMFCore.utils import getToolByName
     >>> portal_workflow = getToolByName(self.portal, 'portal_workflow')
     >>> portal_workflow.doActionFor(signupSheet, 'publish')
 
-Now we make ourselves just an Authenticated user::
-    
+We switch to an Anonymous user and attempt to view the page::
+
+    >>> self.setRoles(['Anonymous'])
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> 'To signup for a spot you will need to <a' and 'login</a> first.'  in browser.contents
+    True
+    >>> 'Submit' not in browser.contents
+    True
+
+Now we make ourselves an Authenticated user::
+
     >>> self.setRoles(['Authenticated'])
 
-Lets make sure the sheet exists, is accessible by authenticated users, and that
-it is displaying the times and days::
+Lets make sure the sheet is accessible by authenticated users, and that it is
+displaying the correct times and days::
 
      >>> url = signupSheet.absolute_url()
      >>> browser.open(url)
@@ -186,19 +197,17 @@ Any authenticated user should be able to sign up for an available slot::
     >>> 'Successful Signup' in browser.contents
     True
 
-Because the user is now signed up for 1 slot, they should see "Your Slot" once
-when viewing the signup sheet::
+Because the user is now signed up for 1 slot, they should see "Your Slot" once and an option
+to cancel the slot reservation::
 
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url)
     >>> browser.contents.count('Your Slot')
     1
-    
-We'll remove them so they can sign up again::
-
-    >>> self.setRoles(['Manager'])
-    >>> signupSheet.removeAllPeople()
-    >>> self.setRoles(['Authenticated'])
+    >>> 'You are signed up for the following slots:' and 'Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
+    True
+    >>> browser.getControl(name='cancelSlots')
+    <SubmitControl name='cancelSlots' type='submit'>
 
 A user should have to fill in all the required fields::
 
@@ -211,7 +220,7 @@ A user should have to fill in all the required fields::
     >>> 'You did not complete the following fields: Phone' in browser.contents
     True
 
-A user should not be able to even select full slot w/o a waiting list. Instead it should throw an exception::
+A user should not be able to even select full slot w/o a waiting list::
 
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url)
@@ -221,7 +230,7 @@ A user should not be able to even select full slot w/o a waiting list. Instead i
     ...     'full slot is not selectable'
     'full slot is not selectable'
 
-But a user should be able to be put on the waiting list when there is no room::
+But a user should be able to be put on the waiting list even when the slot is 'full'::
 
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url)
@@ -247,28 +256,28 @@ Now let's make sure that a manager can access the manager summary page::
     >>> '12:30 PM - 03:00 PM' in browser.contents
     True
 
-And it should show that our test user is signed up for one slots. Which is a waiting list.
+And it should show that our test user is signed up for two slots. One waiting one regular::
     
     >>> browser.contents.count('>test_user_1_</a>')
-    1
+    2
     >>> browser.contents.count('Waiting List')
     1
     >>> browser.contents.count('Signed Up')
-    0
+    1
     
-Now we'll move our test user from the waiting list and sign them up for the second slot.
-After that our test user should be signed up for one slot and waiting on zero::
+Now we'll bump our test user from the waiting list to be actually signed up.
+After that our test user should be signed up for two slots and waiting on zero::
 
     >>> person = signupSheet['tuesday-october-13-2009']['04-00-pm-05-00-pm']['test_user_1_']
     >>> portal_workflow.doActionFor(person, 'signup')
     >>> url = signupSheet.absolute_url()
     >>> browser.open(url + '/manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
-    1
+    2
     >>> browser.contents.count('Waiting List')
     0
     >>> browser.contents.count('Signed Up')
-    1
+    2
     
 Export to a comma sperated value file (csv) should work::
 
@@ -276,6 +285,8 @@ Export to a comma sperated value file (csv) should work::
     >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
     True
     >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    True
+    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
     True
 
 Clicking on Clone should make as many copies as you want of the original day
@@ -290,7 +301,7 @@ after stripping out all the currently signed up users::
     True
 
 Since we made four copies there should be a total of five days, by default it should skip the weekends,
-but there should still be only one slot for which our user is signed up for.::
+and there should still be only two slots for which our user is signed up for.::
     
     >>> browser.open(url + '/manager-summary')
     >>> 'Tuesday, October 13, 2009' in browser.contents
@@ -304,9 +315,28 @@ but there should still be only one slot for which our user is signed up for.::
     >>> 'Monday, October 19, 2009' in browser.contents
     True
     >>> browser.contents.count('>test_user_1_</a>')
-    1
+    2
 
-We'll use the remove-all-people shortcut to reset our sheet. Afterward there
+Let's switch back to being an authenticated user::
+
+     >>> self.setRoles(['Authenticated'])
+
+The "Cancel Selected Slots" button should let our happy users cancel any slot that
+they have reserved::
+
+     >>> url = signupSheet.absolute_url()
+     >>> browser.open(url)
+     >>> browser.getControl(name='selectedSlot').value = ['Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM',]
+     >>> browser.getControl(name='cancelSlots').click()
+     >>> browser.open(url)
+     >>> browser.contents.count('Your Slot')
+     1
+
+We hastily switch back to being a Manager::
+
+   >>> self.setRoles(['Manager'])
+
+And to wrap it up, we'll use the remove-all-people shortcut to reset our sheet. Afterward there
 should be no one signed up for anything::
 
     >>> url = signupSheet.absolute_url()
