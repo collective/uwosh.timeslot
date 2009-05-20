@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.2.1 - 2009-05-20
+----------------
+
+* Removed useless ScheduleManager role
+* Prefixed 'Can view schedule' with 'uwosh.timeslot:' on sharing tab
+* Added some more tests
+
 1.2 - 2009-05-19
 ---------------
 

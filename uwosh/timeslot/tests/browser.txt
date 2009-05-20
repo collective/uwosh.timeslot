@@ -57,6 +57,18 @@ We'll add a day to it::
  
 And to the day we'll add a number of timeslots:
 
+This one shouldn't show up as the date will be before today::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url + '/createObject?type_name=Day')
+    >>> browser.getControl(name='date_year').value = ['2009',]
+    >>> browser.getControl(name='date_month').value = ['04',]
+    >>> browser.getControl(name='date_day').value = ['13',]
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
+    True
+ 
+
 One with no waiting list and 3 openings::
 
     >>> url = day.absolute_url()
@@ -130,6 +142,8 @@ displaying the correct times and days::
      >>> url = signupSheet.absolute_url()
      >>> browser.open(url)
      >>> 'Test Signup Sheet' in browser.contents
+     True
+     >>> 'Monday, April 13, 2009' not in browser.contents
      True
      >>> 'Tuesday, October 13, 2009' in browser.contents
      True
@@ -316,6 +330,50 @@ and there should still be only two slots for which our user is signed up for.::
     True
     >>> browser.contents.count('>test_user_1_</a>')
     2
+
+After we add contact information to the signup sheet it should show up when viewing it::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> 'If you have any questions please contact:' and 'Marshall Scorcio' and 'email@example.com' and '123-456-7890' not in browser.contents
+    True
+    >>> browser.open(url + '/edit')
+    >>> browser.getControl(name='contactInfo:lines').value = 'Marshall Scorcio\nemail@example.com\n123-456-7890'
+    >>> browser.getControl(name='form_submit').click()
+    >>> browser.open(url)
+    >>> 'If you have any questions please contact:' and 'Marshall Scorcio' and 'email@example.com' and '123-456-7890' in browser.contents
+    True
+
+There should be an entry for the ScheduleViewer role on the sharing tab::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url + '/@@sharing')
+    >>> 'uwosh.timeslot: Can view schedule' in browser.contents
+    True
+
+Let's switch to the ScheduleViewer role::
+
+    >>> self.setRoles(['uwosh_timeslot_ScheduleViewer'])
+
+And make sure we can view the manager summary and export to csv::
+
+    >>> url = signupSheet.absolute_url()
+    >>> browser.open(url)
+    >>> browser.getLink('Manager Summary').click()
+    >>> 'Test Signup Sheet - Manager Summary' in browser.contents
+    True
+    >>> 'Tuesday, October 13, 2009' in browser.contents
+    True
+    >>> '12:30 PM - 03:00 PM' in browser.contents
+    True
+
+    >>> browser.getLink('Export to CSV').click()
+    >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
+    True
+    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    True
+    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    True
 
 Let's switch back to being an authenticated user::
 

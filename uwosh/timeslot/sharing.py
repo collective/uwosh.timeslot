@@ -4,5 +4,5 @@ from Products.CMFPlone import PloneMessageFactory as _
 
 class ScheduleViewerRole(object):
    implements(ISharingPageRole)
-   title = _(u"title_can_view_schedule", default=u"Can view schedule")
+   title = _(u"title_can_view_schedule", default=u"uwosh.timeslot: Can view schedule")
    required_permission = "uwosh.timeslot: Manage Schedule"
