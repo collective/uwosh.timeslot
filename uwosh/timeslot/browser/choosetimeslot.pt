@@ -17,7 +17,9 @@
 		<form method="post" tal:attributes="action string:${context/absolute_url}/cancel-reservation;">
 	            <table class="plain">
 		        <tal:block tal:condition="context/isCurrentUserSignedUpForAnySlot">
-		            <th colspan="2">You are signed up for the following slots:</th>
+		            <tr>
+		                <th colspan="2">You are signed up for the following slots:</th>
+		            </tr>
 			    <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
 			        <tal:block tal:define="label slot/getLabel">
 		                    <td style="border-right: none" tal:content="label" />
@@ -28,7 +30,9 @@
 			     </tr>
 			</tal:block>
 			<tal:block tal:condition="context/isCurrentUserWaitingForAnySlot">
-		            <th colspan="2">You are on a waiting list for the following slots:</th>
+			    <tr>
+		                <th colspan="2">You are on a waiting list for the following slots:</th>
+		            </tr>
 			    <tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
 		                <tal:block tal:define="label slot/getLabel">
 		                    <td style="border-right: none" tal:content="label" />
@@ -120,11 +124,11 @@
 						        </strong>
 					            </em>
 
-						    <span tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
+						    <tal:block tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
 						        <input tal:condition="not:full" type="radio" name="slotSelection"
 							       tal:attributes="value timeSlot/getLabel" /> 
-						        <p tal:condition="full">Full</p>
-						    </span>
+						        <span tal:condition="full">Full</span>
+						    </tal:block>
 					        </td>
 				  	    </tr>
 					</tal:block>

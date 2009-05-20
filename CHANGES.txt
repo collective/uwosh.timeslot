@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.2 (2009-05-20)
+
+- All html validates now
+
 1.2.1 (2009-05-20)
 
 - Removed useless ScheduleManager role

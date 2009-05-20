@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: uwosh.timeslot
-Version: 1.2
+Version: 1.2.1
 Summary: UNKNOWN
 Home-page: http://svn.plone.org/svn/plone/plone.example
 Author: Marshall Scorcio
@@ -20,6 +20,12 @@ Description: uwosh.timeslot
         
         Changelog
         =========
+        
+        1.2.1 (2009-05-20)
+        
+        - Removed useless ScheduleManager role
+        - Prefixed 'Can view schedule' with 'uwosh.timeslot:' on sharing tab
+        - Added some more tests
         
         1.2 (2009-05-19)
         

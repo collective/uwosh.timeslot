@@ -39,7 +39,6 @@ uwosh/timeslot/README.txt
 uwosh/timeslot/__init__.py
 uwosh/timeslot/config.py
 uwosh/timeslot/configure.zcml
-uwosh/timeslot/confirmationemailer.py
 uwosh/timeslot/interfaces.py
 uwosh/timeslot/sharing.py
 uwosh/timeslot/subscribers.py
