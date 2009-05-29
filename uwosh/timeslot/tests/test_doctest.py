@@ -8,4 +8,7 @@ def test_suite():
     suite.addTest(ztc.FunctionalDocFileSuite(
                       'browser.txt', package='uwosh.timeslot.tests',
                       test_class=UWOshTimeslotFunctionalTestCase))
+    suite.addTest(ztc.FunctionalDocFileSuite(
+                      'browser-nestedsheets.txt', package='uwosh.timeslot.tests',
+                      test_class=UWOshTimeslotFunctionalTestCase))
     return suite

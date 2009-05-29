@@ -72,73 +72,69 @@
 		</p>
 
 	        <tal:block tal:repeat="signupSheet context/getSignupSheets">
+		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsedOnLoad">
 
-		    <tal:block tal:condition="not:signupSheet/isMasterSignupSheet"
-	                       tal:define="days signupSheet/getDays">
-		
-		        <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsedOnLoad">
-
-			    <h1 tal:condition="contextIsMasterSignupSheet" style="border-bottom: none">
-		                <dt tal:content="signupSheet/Title" class="collapsibleHeader" />
-			    </h1>
+			<h1 tal:condition="contextIsMasterSignupSheet" style="border-bottom: none">
+		            <dt tal:content="signupSheet/Title" class="collapsibleHeader" />
+			</h1>
 				  
-		            <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
-				<table class="plain">
-				    <tal:block tal:condition="not:days">
-					<tr style="background-color: #F0F0F0">
-					    <th style="border: none">
-						<h3>No days have been made available for this signup sheet yet.</h3>
-					    </th>
+		        <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
+			  
+			    <table class="plain" tal:define="days signupSheet/getDays">
+				<tal:block tal:condition="not:days">
+			            <tr style="background-color: #F0F0F0">
+					<th style="border: none">
+					    <h3>No days have been made available for this signup sheet yet.</h3>
+					</th>
+				    </tr>
+				</tal:block>
+
+				<tal:block tal:repeat="day days">
+				    <tr style="background-color: #F0F0F0">
+					<th style="border: none">
+					    <h3 tal:content="day/Title" />
+					</th>
+					<th style="border: none" colspan="2"/>
+				    </tr>
+
+				    <tr>
+					<th>Time</th>
+					<th>Available Spots</th>
+					<th>Select</th>
+				    </tr>
+				    <tal:block tal:define="timeSlots day/getTimeSlots">
+					<tr tal:condition="not:timeSlots">
+					    <td colspan="3">No slots have been made available for this day yet.</td>
 					</tr>
+					<tr tal:repeat="timeSlot timeSlots">
+					    <td tal:content="timeSlot/Title" />
+					    <td>
+						<span tal:content="timeSlot/getNumberOfAvailableSpots" />
+						<span tal:condition="timeSlot/getAllowWaitingList">
+						    + Waiting List
+						</span>
+					    </td>
+					    <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot">
+						<em>
+						    <strong tal:condition="userAlreadySignedup">
+							&rarr; Your Slot &larr;
+						    </strong>
+					        </em>
+
+						<tal:block tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
+						    <input tal:condition="not:full" type="radio" name="slotSelection"
+							   tal:attributes="value timeSlot/getLabel" /> 
+						    <span tal:condition="full">Full</span>
+						</tal:block>
+					    </td>
+				        </tr>
 				    </tal:block>
-
-				    <tal:block tal:repeat="day days">
-					<tr style="background-color: #F0F0F0">
-					    <th style="border: none">
-						<h3 tal:content="day/Title" />
-					    </th>
-					    <th style="border: none" colspan="2"/>
-					</tr>
-
-					<tr>
-					    <th>Time</th>
-					    <th>Available Spots</th>
-					    <th>Select</th>
-					</tr>
-					<tal:block tal:define="timeSlots day/getTimeSlots">
-					    <tr tal:condition="not:timeSlots">
-					        <td colspan="3">No slots have been made available for this day yet.</td>
-					    </tr>
-					    <tr tal:repeat="timeSlot timeSlots">
-					        <td tal:content="timeSlot/Title" />
-						<td>
-						    <span tal:content="timeSlot/getNumberOfAvailableSpots" />
-						    <span tal:condition="timeSlot/getAllowWaitingList">
-						        + Waiting List
-						    </span>
-					        </td>
-					        <td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot">
-						    <em>
-						        <strong tal:condition="userAlreadySignedup">
-							    &rarr; Your Slot &larr;
-						        </strong>
-					            </em>
-
-						    <tal:block tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
-						        <input tal:condition="not:full" type="radio" name="slotSelection"
-							       tal:attributes="value timeSlot/getLabel" /> 
-						        <span tal:condition="full">Full</span>
-						    </tal:block>
-					        </td>
-				  	    </tr>
-					</tal:block>
-				    </tal:block>
-				</table>
-				<br />
-			    </dd>
-		        </dl>
-         	    </tal:block>
-			
+				</tal:block>
+			    </table>
+			    
+			    <br />
+			</dd>
+		    </dl>	
 		</tal:block>
 			
 		<div tal:condition="view/isAnyExtraInfoRequired" id="extraInfo">

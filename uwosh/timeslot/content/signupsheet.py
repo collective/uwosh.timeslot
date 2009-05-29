@@ -183,10 +183,17 @@ class SignupSheet(folder.ATFolder):
         return username
 
     def getSignupSheets(self):
+        if self.isMasterSignupSheet():
+            return self.getContainedSignupSheets()
+        else:
+            return [self]
+
+    def getContainedSignupSheets(self):
         query = {'portal_type':'Signup Sheet'}
         pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
-        sheets = [self]
+        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery, sort_on='sortable_title', sort_order='ascending')
+        sheets = []
+
         for brain in brains:
             sheet = brain.getObject()
             sheets.append(sheet)

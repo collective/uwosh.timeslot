@@ -33,20 +33,20 @@ And make ourselves manager::
 
 Let's create a signup sheet::
 
-    >>> url = self.portal.absolute_url()
-    >>> browser.open(url)
-    >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
+    >>> portalUrl = self.portal.absolute_url()
+    >>> browser.open(portalUrl)
+    >>> browser.open(portalUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'Test Signup Sheet'
     >>> browser.getControl(name='extraFields:list').value = ('phone',)
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
     True
     >>> signupSheet = self.portal['test-signup-sheet']
+    >>> signupSheetUrl = signupSheet.absolute_url()
     
 We'll add a day to it::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url + '/createObject?type_name=Day')
+    >>> browser.open(signupSheetUrl + '/createObject?type_name=Day')
     >>> browser.getControl(name='date_year').value = ['2009',]
     >>> browser.getControl(name='date_month').value = ['10',]
     >>> browser.getControl(name='date_day').value = ['13',]
@@ -54,25 +54,13 @@ We'll add a day to it::
     >>> 'Changes saved.' in browser.contents
     True
     >>> day = signupSheet['tuesday-october-13-2009']
+    >>> dayUrl = day.absolute_url()
  
 And to the day we'll add a number of timeslots:
 
-This one shouldn't show up as the date will be before today::
-
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url + '/createObject?type_name=Day')
-    >>> browser.getControl(name='date_year').value = ['2009',]
-    >>> browser.getControl(name='date_month').value = ['04',]
-    >>> browser.getControl(name='date_day').value = ['13',]
-    >>> browser.getControl(name='form_submit').click()
-    >>> 'Changes saved.' in browser.contents
-    True
- 
-
 One with no waiting list and 3 openings::
 
-    >>> url = day.absolute_url()
-    >>> browser.open(url + '/createObject?type_name=Time+Slot')
+    >>> browser.open(dayUrl + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='startTime_hour').value = ['12',]
     >>> browser.getControl(name='startTime_minute').value = ['30',]
     >>> browser.getControl(name='startTime_ampm').value = ['PM',]
@@ -87,7 +75,7 @@ One with no waiting list and 3 openings::
 
 Another one with 0 openings and a waiting list::
 
-    >>> browser.open(url + '/createObject?type_name=Time+Slot')
+    >>> browser.open(dayUrl + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='startTime_hour').value = ['04',]
     >>> browser.getControl(name='startTime_minute').value = ['00',]
     >>> browser.getControl(name='startTime_ampm').value = ['PM',]
@@ -102,7 +90,7 @@ Another one with 0 openings and a waiting list::
 
 Finally, one with 0 openings and no waiting list:: 
 
-    >>> browser.open(url + '/createObject?type_name=Time+Slot')
+    >>> browser.open(dayUrl + '/createObject?type_name=Time+Slot')
     >>> browser.getControl(name='startTime_hour').value = ['06',]
     >>> browser.getControl(name='startTime_minute').value = ['00',]
     >>> browser.getControl(name='startTime_ampm').value = ['PM',]
@@ -114,7 +102,17 @@ Finally, one with 0 openings and no waiting list::
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
     True
-     
+
+This day shouldn't show up as the date will be before today::
+
+    >>> browser.open(signupSheetUrl + '/createObject?type_name=Day')
+    >>> browser.getControl(name='date_year').value = ['2009',]
+    >>> browser.getControl(name='date_month').value = ['04',]
+    >>> browser.getControl(name='date_day').value = ['13',]
+    >>> browser.getControl(name='form_submit').click()
+    >>> 'Changes saved.' in browser.contents
+    True
+      
 Now we will publish our signup sheet so Anonymous users can see it
 and Authenticated users can signup on it::
 
@@ -125,8 +123,7 @@ and Authenticated users can signup on it::
 We switch to an Anonymous user and attempt to view the page::
 
     >>> self.setRoles(['Anonymous'])
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> 'To signup for a spot you will need to <a' and 'login</a> first.'  in browser.contents
     True
     >>> 'Submit' not in browser.contents
@@ -139,8 +136,7 @@ Now we make ourselves an Authenticated user::
 Lets make sure the sheet is accessible by authenticated users, and that it is
 displaying the correct times and days::
 
-     >>> url = signupSheet.absolute_url()
-     >>> browser.open(url)
+     >>> browser.open(signupSheetUrl)
      >>> 'Test Signup Sheet' in browser.contents
      True
      >>> 'Monday, April 13, 2009' not in browser.contents
@@ -157,8 +153,7 @@ displaying the correct times and days::
 Non-manager users should not have a manager-summary, export-to-csv, clone, or
 remove-all-people tab::
     
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> try:
     ...     browser.getLink('Manager Summary')
     ... except LinkNotFoundError:
@@ -178,33 +173,30 @@ remove-all-people tab::
 Non-managers should not be able to access any of those four directly either.
 An attempt to access them should throw an exception::
 
-    >>> url = signupSheet.absolute_url()
     >>> try:
-    ...     browser.open(url + '/manager-summary')
+    ...     browser.open(signupSheetUrl + '/manager-summary')
     ... except: 
     ...     'user is unauthorized to access manager-summary'
     'user is unauthorized to access manager-summary'
     >>> try:
-    ...     browser.open(url + '/export-to-csv')
+    ...     browser.open(signupSheetUrl + '/export-to-csv')
     ... except:
     ...     'user is unauthorized to access export-to-csv'
     'user is unauthorized to access export-to-csv'
     >>> try:
-    ...     browser.open(url + '/remove-all-people')
+    ...     browser.open(signupSheetUrl + '/remove-all-people')
     ... except:
     ...     'user is unauthorized to access remove-all-people'
     'user is unauthorized to access remove-all-people'
-    >>> url = day.absolute_url()
     >>> try:
-    ...     browser.open(url + '/clone')
+    ...     browser.open(dayUrl + '/clone')
     ... except:
     ...     'user is unauthorized to access clone'
     'user is unauthorized to access clone'
 
 Any authenticated user should be able to sign up for an available slot::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM',)
     >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
@@ -214,8 +206,7 @@ Any authenticated user should be able to sign up for an available slot::
 Because the user is now signed up for 1 slot, they should see "Your Slot" once and an option
 to cancel the slot reservation::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> browser.contents.count('Your Slot')
     1
     >>> 'You are signed up for the following slots:' and 'Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
@@ -225,8 +216,7 @@ to cancel the slot reservation::
 
 A user should have to fill in all the required fields::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Unsuccessful Signup' in browser.contents
@@ -236,8 +226,7 @@ A user should have to fill in all the required fields::
 
 A user should not be able to even select full slot w/o a waiting list::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> try:
     ...     browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 05:00 PM - 06:00 PM',)
     ... except:
@@ -246,8 +235,7 @@ A user should not be able to even select full slot w/o a waiting list::
 
 But a user should be able to be put on the waiting list even when the slot is 'full'::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
     >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
@@ -260,8 +248,7 @@ Now we switch back to being a manager::
 
 Now let's make sure that a manager can access the manager summary page::
     
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> browser.getLink('Manager Summary').click()
     >>> 'Test Signup Sheet - Manager Summary' in browser.contents
     True
@@ -284,8 +271,7 @@ After that our test user should be signed up for two slots and waiting on zero::
 
     >>> person = signupSheet['tuesday-october-13-2009']['04-00-pm-05-00-pm']['test_user_1_']
     >>> portal_workflow.doActionFor(person, 'signup')
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url + '/manager-summary')
+    >>> browser.open(signupSheetUrl + '/manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
     2
     >>> browser.contents.count('Waiting List')
@@ -306,8 +292,7 @@ Export to a comma sperated value file (csv) should work::
 Clicking on Clone should make as many copies as you want of the original day
 after stripping out all the currently signed up users::
     
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url + '/tuesday-october-13-2009')
+    >>> browser.open(signupSheetUrl + '/tuesday-october-13-2009')
     >>> browser.getLink('Clone').click()
     >>> browser.getControl(name='form.numToCreate').value = '4'
     >>> browser.getControl(name='form.actions.clone').click()
@@ -317,7 +302,7 @@ after stripping out all the currently signed up users::
 Since we made four copies there should be a total of five days, by default it should skip the weekends,
 and there should still be only two slots for which our user is signed up for.::
     
-    >>> browser.open(url + '/manager-summary')
+    >>> browser.open(signupSheetUrl + '/manager-summary')
     >>> 'Tuesday, October 13, 2009' in browser.contents
     True
     >>> 'Wednesday, October 14, 2009' in browser.contents
@@ -333,21 +318,19 @@ and there should still be only two slots for which our user is signed up for.::
 
 After we add contact information to the signup sheet it should show up when viewing it::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> 'If you have any questions please contact:' and 'Marshall Scorcio' and 'email@example.com' and '123-456-7890' not in browser.contents
     True
-    >>> browser.open(url + '/edit')
+    >>> browser.open(signupSheetUrl + '/edit')
     >>> browser.getControl(name='contactInfo:lines').value = 'Marshall Scorcio\nemail@example.com\n123-456-7890'
     >>> browser.getControl(name='form_submit').click()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> 'If you have any questions please contact:' and 'Marshall Scorcio' and 'email@example.com' and '123-456-7890' in browser.contents
     True
 
 There should be an entry for the ScheduleViewer role on the sharing tab::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url + '/@@sharing')
+    >>> browser.open(signupSheetUrl + '/@@sharing')
     >>> 'uwosh.timeslot: Can view schedule' in browser.contents
     True
 
@@ -357,8 +340,7 @@ Let's switch to the ScheduleViewer role::
 
 And make sure we can view the manager summary and export to csv::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url)
+    >>> browser.open(signupSheetUrl)
     >>> browser.getLink('Manager Summary').click()
     >>> 'Test Signup Sheet - Manager Summary' in browser.contents
     True
@@ -382,11 +364,10 @@ Let's switch back to being an authenticated user::
 The "Cancel Selected Slots" button should let our happy users cancel any slot that
 they have reserved::
 
-     >>> url = signupSheet.absolute_url()
-     >>> browser.open(url)
+     >>> browser.open(signupSheetUrl)
      >>> browser.getControl(name='selectedSlot').value = ['Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM',]
      >>> browser.getControl(name='cancelSlots').click()
-     >>> browser.open(url)
+     >>> browser.open(signupSheetUrl)
      >>> browser.contents.count('Your Slot')
      1
 
@@ -397,10 +378,9 @@ We hastily switch back to being a Manager::
 And to wrap it up, we'll use the remove-all-people shortcut to reset our sheet. Afterward there
 should be no one signed up for anything::
 
-    >>> url = signupSheet.absolute_url()
-    >>> browser.open(url + '/remove-all-people')
+    >>> browser.open(signupSheetUrl + '/remove-all-people')
     >>> browser.getControl(name='form.actions.52656d6f766520416c6c2050656f706c65').click()
-    >>> browser.open(url + '/manager-summary')
+    >>> browser.open(signupSheetUrl + '/manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
     0
     >>> browser.contents.count('Waiting List')

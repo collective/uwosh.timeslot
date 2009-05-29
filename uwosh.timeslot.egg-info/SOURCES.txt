@@ -80,5 +80,6 @@ uwosh/timeslot/profiles/default/workflows/uwosh_timeslot_hidden_workflow/definit
 uwosh/timeslot/profiles/default/workflows/uwosh_timeslot_person_workflow/definition.xml
 uwosh/timeslot/tests/__init__.py
 uwosh/timeslot/tests/base.py
+uwosh/timeslot/tests/browser-containedsheets.txt
 uwosh/timeslot/tests/browser.txt
 uwosh/timeslot/tests/test_doctest.py
