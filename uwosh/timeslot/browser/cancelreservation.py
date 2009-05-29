@@ -1,11 +1,9 @@
-from zope.interface import implements, Interface
+from zope.interface import implements
 
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 
 from uwosh.timeslot import timeslotMessageFactory as _
-
-from Products.validation import validation
 
 class CancelReservation(BrowserView):
     def __init__(self, context, request):

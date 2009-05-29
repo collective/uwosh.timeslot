@@ -46,40 +46,46 @@ class ChooseTimeSlot(BrowserView):
             errorMsg += ', '.join(missingFields)
         
         else:
-            (signupSheet, date, time) = userInfo['selectedSlot'].split(' @ ')
-            signupSheet = self.context.getSignupSheet(signupSheet)
-            day = signupSheet.getDay(date)
-            timeSlot = day.getTimeSlot(time)
-            allowWaitingList = timeSlot.getAllowWaitingList()
-            numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
-
-            isEmail = validation.validatorFor('isEmail')
-            validEmail = isEmail(userInfo['email']) == 1
-           
-            if allowWaitingList or numberOfAvailableSpots > 0:
-                person = self.createPerson(timeSlot, userInfo)
+            for slot in userInfo['selectedSlots']:
+                (signupSheet, date, time) = slot.split(' @ ')
+                signupSheet = self.context.getSignupSheet(signupSheet)
+                day = signupSheet.getDay(date)
+                timeSlot = day.getTimeSlot(time)
+                allowWaitingList = timeSlot.getAllowWaitingList()
+                numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
                 
-                if numberOfAvailableSpots > 0:
-                    self.signupPerson(person)
-                    waiting = False
-                elif validEmail:
-                    self.sendWaitingConfirmationEmail(userInfo, signupSheet)
+                isEmail = validation.validatorFor('isEmail')
+                validEmail = isEmail(userInfo['email']) == 1
+                
+                if allowWaitingList or numberOfAvailableSpots > 0:
+                    person = self.createPerson(timeSlot, userInfo)
+                
+                    if numberOfAvailableSpots > 0:
+                        self.signupPerson(person)
+                        waiting = False
+                    elif validEmail:
+                        self.sendWaitingConfirmationEmail(userInfo, signupSheet, slot)
                     
-                success = True
+                    success = True
             
-            else:
-                errorMsg = 'The slot you selected is already full. Please select a different one'
-                success = False
+                else:
+                    errorMsg = 'The slot you selected is already full. Please select a different one'
+                    success = False
         
         self.request.response.redirect(self.context.absolute_url() + 
                                        '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,validEmail,errorMsg))
 
+
     def getUserInput(self):
         userInput = dict()
-        userInput['selectedSlot'] = self.request.get('slotSelection', None)
         userInput['phone'] = self.request.get('phone', '')
         userInput['classification'] = self.request.get('classification', '')
         userInput['dept'] = self.request.get('dept', '')
+        userInput['selectedSlots'] = self.request.get('slotSelection', None)
+
+        if type(userInput['selectedSlots']) != list:
+            userInput['selectedSlots'] = [userInput['selectedSlots']]
+
         return userInput
 		
     def getMemberInfo(self):
@@ -97,7 +103,7 @@ class ChooseTimeSlot(BrowserView):
         fieldNames = self.context.schema['extraFields'].vocabulary
         missingFields = []
         anyMissing = False
-        if userInput['selectedSlot'] == None:
+        if userInput['selectedSlots'] == [None]:
             anyMissing = True
             missingFields.append('Timeslot')
             
@@ -153,7 +159,7 @@ class ChooseTimeSlot(BrowserView):
         member = portal_membership.getAuthenticatedMember()
         return 'Anonymous' not in member.getRoles()
 
-    def sendWaitingConfirmationEmail(self, userInfo, signupSheet):
+    def sendWaitingConfirmationEmail(self, userInfo, signupSheet, slot):
         if signupSheet.isContainedInMasterSignupSheet():
             signupSheet = signupSheet.aq_parent
 
@@ -165,7 +171,7 @@ class ChooseTimeSlot(BrowserView):
         
         message = 'Hi ' + userInfo['fullname'] + ',\n\n'
         message += 'This message is to confirm that you have been added to the waiting list for:\n'
-        message += userInfo['selectedSlot'] + '\n\n'
+        message += slot + '\n\n'
 
         if extraEmailContent != ():
             for line in extraEmailContent:
