@@ -2,9 +2,9 @@ from zope.interface import implements, Interface
 
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
+from Products.validation import validation
 
 from uwosh.timeslot import timeslotMessageFactory as _
-from Products.validation import validation
 
 class IChooseTimeSlot(Interface):
     """
@@ -33,7 +33,7 @@ class ChooseTimeSlot(BrowserView):
     def submitUserSelection(self):
         success = False
         waiting = True
-        emailSent = False
+        validEmail = False
         errorMsg = ''
     
     	userInfo = self.getUserInput()
@@ -52,10 +52,9 @@ class ChooseTimeSlot(BrowserView):
             timeSlot = day.getTimeSlot(time)
             allowWaitingList = timeSlot.getAllowWaitingList()
             numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
-           
+
             isEmail = validation.validatorFor('isEmail')
-            if isEmail(userInfo['email']) == 1:
-                emailSent = True
+            validEmail = isEmail(userInfo['email']) == 1
            
             if allowWaitingList or numberOfAvailableSpots > 0:
                 person = self.createPerson(timeSlot, userInfo)
@@ -63,7 +62,7 @@ class ChooseTimeSlot(BrowserView):
                 if numberOfAvailableSpots > 0:
                     self.signupPerson(person)
                     waiting = False
-                else:
+                elif validEmail:
                     self.sendWaitingConfirmationEmail(userInfo, signupSheet)
                     
                 success = True
@@ -73,7 +72,7 @@ class ChooseTimeSlot(BrowserView):
                 success = False
         
         self.request.response.redirect(self.context.absolute_url() + 
-                                       '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,emailSent,errorMsg))
+                                       '/signup-results?success=%d&waiting=%d&emailSent=%d&errorMsg=%s' % (success,waiting,validEmail,errorMsg))
 
     def getUserInput(self):
         userInput = dict()
@@ -155,31 +154,34 @@ class ChooseTimeSlot(BrowserView):
         return 'Anonymous' not in member.getRoles()
 
     def sendWaitingConfirmationEmail(self, userInfo, signupSheet):
-    	isEmail = validation.validatorFor('isEmail')
-    	toEmail = userInfo['email']
-        
         if signupSheet.isContainedInMasterSignupSheet():
             signupSheet = signupSheet.aq_parent
 
+        extraEmailContent = signupSheet.getExtraEmailContent()
         contactInfo = signupSheet.getContactInfo()
-
-    	if isEmail(toEmail) == 1:
-            fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
-            subject = signupSheet.Title() + ' - Waiting List Confirmation'
+        toEmail = userInfo['email']
+        fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
+        subject = signupSheet.Title() + ' - Waiting List Confirmation'
         
-            message = 'Hi ' + userInfo['fullname'] + ',\n\n'
-            message += 'This message is to confirm that you have been added to the waiting list for:\n'
-            message += userInfo['selectedSlot'] + '\n\n'
-            message += signupSheet.absolute_url() + '\n\n'
+        message = 'Hi ' + userInfo['fullname'] + ',\n\n'
+        message += 'This message is to confirm that you have been added to the waiting list for:\n'
+        message += userInfo['selectedSlot'] + '\n\n'
 
-            if contactInfo != ():
-                message += 'If you have any questions please contact:\n'
-                for line in self.context.getContactInfo():
-                    message += line + '\n'
-                message += '\n'
+        if extraEmailContent != ():
+            for line in extraEmailContent:
+                message += line + '\n'
+            message += '\n'
 
-            mailHost = self.context.MailHost
-            mailHost.secureSend(message, toEmail, fromEmail, subject)
+        message += signupSheet.absolute_url() + '\n\n'
+        
+        if contactInfo != ():
+            message += 'If you have any questions please contact:\n'
+            for line in self.context.getContactInfo():
+                message += line + '\n'
+            message += '\n'
+
+        mailHost = self.context.MailHost
+        mailHost.secureSend(message, toEmail, fromEmail, subject)
 
     def getSlotsCurrentUserIsSignedUpFor(self):
         slots = []

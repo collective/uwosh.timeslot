@@ -12,12 +12,13 @@ from mechanize._mechanize import LinkNotFoundError
 from smtplib import SMTPRecipientsRefused
 from Products.validation import validation
 
+import uwosh.timeslot
+
 @onsetup
 def setup_uwosh_timeslot():
     """Set up the additional products required for uwosh.timeslot"""
     
     fiveconfigure.debug_mode = True
-    import uwosh.timeslot
     zcml.load_config('configure.zcml', uwosh.timeslot)
     fiveconfigure.debug_mode = False
     

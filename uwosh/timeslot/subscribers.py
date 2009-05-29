@@ -14,16 +14,22 @@ def sendSignupNotificationEmail(obj, event):
         if signupSheet.isContainedInMasterSignupSheet():
             signupSheet = signupSheet.aq_parent
 
-        contactInfo = signupSheet.getContactInfo()
-
-        toEmail = person.getEmail()
-        if isEmail(toEmail) == 1:        
+        if isEmail(person.getEmail()) == 1:        
+            extraEmailContent = signupSheet.getExtraEmailContent()
+            contactInfo = signupSheet.getContactInfo()
+            toEmail = person.getEmail()
             fromEmail = "%s <%s>" % (obj.email_from_name, obj.email_from_address)
             subject = signupSheet.Title() + ' - Registration Confirmation'
 
             message = 'Hi ' + person.Title() + ',\n\n'
             message += 'This message is to confirm that you have been signed up for:\n'
             message += timeSlot.getLabel() + '\n\n'
+
+            if extraEmailContent != ():
+                for line in extraEmailContent:
+                    message += line + '\n'
+                message += '\n'
+
             message += signupSheet.absolute_url() + '\n\n'
 
             if contactInfo != ():
@@ -33,8 +39,8 @@ def sendSignupNotificationEmail(obj, event):
                 message += '\n'
             
             mailHost = obj.MailHost
-            mailHost.secureSend(message, toEmail, fromEmail, subject)
-                
+            mailHost.secureSend(message, toEmail, fromEmail, subject)          
+
 
 def attemptToFillEmptySpot(obj, event):
     if obj.getReviewState() == 'signedup':

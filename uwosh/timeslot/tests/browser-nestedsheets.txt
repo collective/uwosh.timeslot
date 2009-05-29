@@ -1,11 +1,6 @@
 Browser tests for uwosh.timeslot
 ==========================
 
-Let's import some exceptions we'll need to catch later::
-
-    >>> from AccessControl.unauthorized import Unauthorized
-    >>> from mechanize._mechanize import LinkNotFoundError
-    
 To create a signup sheet we need to login in as a manager and create several
 different content types.
 

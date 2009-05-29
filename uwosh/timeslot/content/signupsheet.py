@@ -18,10 +18,17 @@ from DateTime import DateTime
 
 SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
+    atapi.LinesField('extraEmailContent',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.LinesWidget(label=_(u'Extra Email Content'),
+                                 description=_(u'Any additional information that you want included in the notification emails. \
+                                                 Note: Contact info., sheet, day, time, and a url are included by default.'))
+    ),
+
     atapi.LinesField('contactInfo',
         storage=atapi.AnnotationStorage(),
         widget=atapi.LinesWidget(label=_(u'Contact Information'),
-                                 description=_(u'Contact information for the manager of the signup sheet'))
+                                 description=_(u'Contact information for the manager of the signup sheet.'))
     ),
 
     atapi.LinesField('extraFields',
@@ -31,7 +38,6 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
                                           description=_(u'Information you want to collect from users besides just name and email.'),
                                           format=_(u'checkbox'))
     ),
-
 ))
 
 # Set storage on fields copied from ATFolderSchema, making sure
@@ -53,6 +59,7 @@ class SignupSheet(folder.ATFolder):
     description = atapi.ATFieldProperty('description')
     extraFields = atapi.ATFieldProperty('extraFields')
     contactInfo = atapi.ATFieldProperty('contactInfo')
+    extraEmailContent = atapi.ATFieldProperty('extraEmailContent')
 
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
