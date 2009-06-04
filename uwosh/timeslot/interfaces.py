@@ -6,23 +6,22 @@ from zope.app.container.constraints import containers
 
 from uwosh.timeslot import timeslotMessageFactory as _
 
-# -*- extra stuff goes here -*-
 
 class IPerson(Interface):
-    """Description of the Example Type"""
+    pass
 
 class ITimeSlot(Interface):
-    """Description of the Example Type"""
+    pass
 
 class IDay(Interface):
-    """Description of the Example Type"""
+    pass
 
 class ISignupSheet(Interface):
-    """Description of the Example Type"""
+    pass
 
 class IContainsPeople(Interface):
     def removeAllPeople():
-        """Removes all signedup/waitinglist people from the object and its children"""
+        """Should remove all signedup/waitinglist people from the object and its children"""
         
 class ICloneable(Interface):
-    """Object is able to be cloned"""
+    pass

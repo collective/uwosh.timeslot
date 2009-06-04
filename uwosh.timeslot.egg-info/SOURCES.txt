@@ -36,6 +36,7 @@ uwosh.timeslot.egg-info/requires.txt
 uwosh.timeslot.egg-info/top_level.txt
 uwosh/timeslot/.DS_Store
 uwosh/timeslot/README.txt
+uwosh/timeslot/Widget.py
 uwosh/timeslot/__init__.py
 uwosh/timeslot/config.py
 uwosh/timeslot/configure.zcml
@@ -62,8 +63,6 @@ uwosh/timeslot/content/day.py
 uwosh/timeslot/content/person.py
 uwosh/timeslot/content/signupsheet.py
 uwosh/timeslot/content/timeslot.py
-uwosh/timeslot/portlets/__init__.py
-uwosh/timeslot/portlets/configure.zcml
 uwosh/timeslot/profiles/.DS_Store
 uwosh/timeslot/profiles/default/actions.xml
 uwosh/timeslot/profiles/default/catalog.xml
