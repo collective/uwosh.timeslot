@@ -7,28 +7,38 @@
     <div metal:fill-slot="main">
         <tal:main-macro metal:define-macro="main">
             <h2 tal:content="string:${context/Title} - Sign Up Results" />
+
+            <tal:block tal:condition="view/areAnyRequiredFieldsEmpty">
+	        <h3>Failure</h3>
+                <p>You did not complete the following fields:</p>
+	        <ul>
+	            <strong><li tal:repeat="field view/getListOfEmptyRequiredFields" tal:content="field" /></strong>
+		</ul>
+	    </tal:block>
       
-            <div>
-                <tal:block tal:condition="view/success">
-                    <tal:block tal:condition="not:view/waiting">
-                        <h3>Successful Signup</h3>
-                        <p>You have been successfully signed up for the day you selected.</p>
+            <div tal:repeat="result view/results">
+                <tal:block tal:condition="python: result['success']">
+                    <tal:block tal:condition="not:result/waiting">
+                        <h3>Success</h3>
+                        <p>You have been successfully signed up for: <span tal:content="result/slotLabel" /></p>
                         <p tal:condition="view/isEmailValid">A confirmation email has been sent to you.</p>
                     </tal:block>
                     
-                    <tal:block tal:condition="view/waiting">
-                        <h3>Successfully Added to Waiting List</h3>
-                        <p>You have been successfully added to the waiting list for the day you selected.</p>
+                    <tal:block tal:condition="result/waiting">
+                        <h3>Success</h3>
+                        <p>You have been successfully added to the waiting list for: <span tal:content="result/slotLabel" /></p>
                         <p tal:condition="view/isEmailValid">You will receive a confirmation email when a spot opens up.</p>
                     </tal:block>
                 </tal:block>
                 
-                <tal:block tal:condition="not:view/success">
-                    <h3>Unsuccessful Signup</h3>
-                    <p>The system was unable to register you for the day and time you selected.</p>
-                    <p tal:content="view/errorMsg" />
+                <tal:block tal:condition="not:result/success">
+                    <h3>Failure</h3>
+                    <p>The system was unable to register you for: <span tal:content="result/slotLabel" /></p>
+	            <p tal:content="result/error" />
                 </tal:block>
             </div>
+
+	    
             
             <a tal:attributes="href string:${context/absolute_url};">Return to the signup sheet</a>
         </tal:main-macro>

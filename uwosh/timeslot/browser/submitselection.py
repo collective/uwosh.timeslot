@@ -21,19 +21,12 @@ class SubmitSelection(BrowserView):
         self.request = request
     
     def submitUserSelection(self):
-        self.success = False
-        self.waiting = True
-        self.errorMsg = ''
-    
+        self.results = list()
+
     	self.getUserInput()
     	self.getMemberInfo()
-               
-        if self.areAnyRequiredFieldsEmpty():
-            self.success = False
-            self.errorMsg = 'You did not complete the following fields: '
-            self.errorMsg += ', '.join(self.getListOfEmptyRequiredFields())
         
-        else:
+        if not self.areAnyRequiredFieldsEmpty():
             for slotLabel in self.selectedSlots:
                 self.getSlotAndSignUserUpForIt(slotLabel)
 
@@ -79,6 +72,10 @@ class SubmitSelection(BrowserView):
         return emptyRequiredFields
 
     def getSlotAndSignUserUpForIt(self, slotLabel):
+        success = False
+        waiting = True
+        error = ''
+
         (signupSheetTitle, date, time) = slotLabel.split(' @ ')
         signupSheet = self.context.getSignupSheet(signupSheetTitle)
         day = signupSheet.getDay(date)
@@ -91,15 +88,22 @@ class SubmitSelection(BrowserView):
                 
             if numberOfAvailableSpots > 0:
                 self.signupPerson(person)
-                self.waiting = False
+                waiting = False
             elif self.isEmailValid():
                 self.sendWaitingListConfirmationEmail(signupSheet, slotLabel)
                     
-            self.success = True
+            success = True
             
         else:
-            self.errorMsg = 'The slot you selected is already full. Please select a different one'
-            self.success = False
+           error = 'The slot you selected is already full. Please select a different one'
+           success = False
+
+        result = dict()
+        result['slotLabel'] = slotLabel
+        result['success'] = success
+        result['waiting'] = waiting
+        result['error'] = error
+        self.results.append(result)
 
     def createPersonObject(self, container):
         container.invokeFactory('Person', self.username)

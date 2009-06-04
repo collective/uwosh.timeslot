@@ -200,7 +200,7 @@ Any authenticated user should be able to sign up for an available slot::
     >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM',)
     >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
-    >>> 'Successful Signup' in browser.contents
+    >>> 'Success' in browser.contents
     True
 
 Because the user is now signed up for 1 slot, they should see "Your Slot" once and an option
@@ -219,9 +219,9 @@ A user should have to fill in all the required fields::
     >>> browser.open(signupSheetUrl)
     >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
     >>> browser.getControl(name='form.button.submit').click()
-    >>> 'Unsuccessful Signup' in browser.contents
+    >>> 'Failure' in browser.contents
     True
-    >>> 'You did not complete the following fields: Phone' in browser.contents
+    >>> 'You did not complete the following fields:' and 'Phone' in browser.contents
     True
 
 A user should not be able to even select full slot w/o a waiting list::
@@ -239,7 +239,7 @@ But a user should be able to be put on the waiting list even when the slot is 'f
     >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
     >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
-    >>> 'Successfully Added to Waiting List' in browser.contents
+    >>> 'successfully added to the waiting list for:' in browser.contents
     True
 
 Now we switch back to being a manager::
