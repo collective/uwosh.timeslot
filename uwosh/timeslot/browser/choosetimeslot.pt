@@ -142,12 +142,12 @@
 		    </dl>	
 		</tal:block>
 			
-		<div tal:condition="view/isAnyExtraInfoRequired" id="extraInfo">
+		<div tal:condition="view/areAnyExtraFieldsRequired" id="extraInfo">
 		    <br />
 		    <h3>Required Extra Information</h3>
 		    <br />
 		  
-		    <div tal:condition="view/isPhoneRequired">
+		    <div tal:condition="python: view.isFieldRequired('phone')">
 			<label for="phone">Campus Phone</label>
 		        <span class="fieldRequired" title="Required">  (Required) </span><br />
 			<input type="text" id="phone" name="phone" />
@@ -155,7 +155,7 @@
 			<br />
 		    </div>
 
-		    <div tal:condition="view/isClassRequired">
+		    <div tal:condition="python: view.isFieldRequired('classification')">
 			<label for="classification">Employee Classification Type</label>
 		        <span class="fieldRequired" title="Required">  (Required) </span><br />
 			<select id="classification" size="1" name="classification">
@@ -172,7 +172,7 @@
 			<br />
 		    </div>
 
-		    <div tal:condition="view/isDepartmentRequired">
+		    <div tal:condition="python: view.isFieldRequired('dept')">
 			<label for="dept">Department</label>
 			<span class="fieldRequired" title="Required">  (Required) </span><br />
 			<input type="text" id="dept" name="dept" />
