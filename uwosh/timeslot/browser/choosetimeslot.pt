@@ -8,7 +8,8 @@
 	<tal:main-macro metal:define-macro="main"
                         tal:define="contextIsMasterSignupSheet context/isMasterSignupSheet;
                                     isCurrentUserLoggedIn view/isCurrentUserLoggedIn;
-                                    contactInfo context/getContactInfo">
+                                    contactInfo context/getContactInfo;
+                                    allowSignupForMultipleSlots context/getAllowSignupForMultipleSlots">
       
             <h2 tal:content="context/Title" />
 
@@ -122,8 +123,12 @@
 					        </em>
 
 						<tal:block tal:condition="not:userAlreadySignedup" tal:define="full timeSlot/isFull">
-						    <input tal:condition="not:full" type="checkbox" name="slotSelection"
-							   tal:attributes="value timeSlot/getLabel" /> 
+					            <tal:block tal:condition="not:full">
+					                <input tal:condition="allowSignupForMultipleSlots" type="checkbox" name="slotSelection"
+							       tal:attributes="value timeSlot/getLabel" />
+					                <input tal:condition="not:allowSignupForMultipleSlots" type="radio" name="slotSelection"
+							       tal:attributes="value timeSlot/getLabel" />
+					            </tal:block>
 						    <span tal:condition="full">Full</span>
 						</tal:block>
 					    </td>

@@ -1,6 +1,3 @@
-"""Definition of the Day content type
-"""
-
 from zope.interface import implements, directlyProvides
 
 from Products.Archetypes import atapi
@@ -17,11 +14,11 @@ DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.DateTimeField('date',
         storage=atapi.AnnotationStorage(),
+        required=True,
         widget=atapi.CalendarWidget(label=_('Date'),
                                     show_hm=False,
                                     format='%A, %B %d, %Y',
-                                    starting_year=2009),
-        required=True
+                                    starting_year=2009)
     ),
 
 ))
@@ -35,7 +32,6 @@ DaySchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(DaySchema, folderish=True, moveDiscussion=False)
 
 class Day(folder.ATFolder):
-    """Description of Day"""
     implements(IDay, IContainsPeople, ICloneable)
 
     portal_type = "Day"

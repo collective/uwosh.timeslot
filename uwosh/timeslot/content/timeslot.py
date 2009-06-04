@@ -1,43 +1,3 @@
-
-from Products.Archetypes.Widget import CalendarWidget
-
-""" A widget that allows a user select time only, because CalendarWidget doesn't
-    support this correctly yet.
-    This is probably not a good general solution to the problem and I am only
-    using it as a workaround here.
-"""
-class TimeWidget(CalendarWidget):
-    def process_form(self, instance, field, form, empty_marker=None,
-                     emptyReturnsMarker=False, validating=True):
-        """Basic impl for form processing in a widget"""
-
-        fname = field.getName()
-        value = form.get(fname, empty_marker)
-        if value is empty_marker:
-            return empty_marker
-        # If JS support is unavailable, the value
-        # in the request may be missing or incorrect
-        # since it won't have been assembled from the
-        # input components. Instead of relying on it,
-        # assemble the date/time from its input components.
-        hour = form.get('%s_hour' % fname, '--')
-        minute = form.get('%s_minute' % fname, '--')
-        ampm = form.get('%s_ampm' % fname, '')
-        if (hour != '--') and (minute != '--'):
-            value = "%s-%s-%s %s:%s" % ('2000', '01', '01', hour, minute)
-            if ampm:
-                value = '%s %s' % (value, ampm)
-        else:
-            value = ''
-        if emptyReturnsMarker and value == '':
-            return empty_marker
-        # stick it back in request.form
-        form[fname] = value
-        return value, {}
-
-"""Definition of the Time Slot content type
-"""
-
 from zope.interface import implements, directlyProvides
 
 from Products.Archetypes import atapi
@@ -49,6 +9,7 @@ from uwosh.timeslot.interfaces import ITimeSlot
 from uwosh.timeslot.interfaces import IContainsPeople
 from uwosh.timeslot.interfaces import ICloneable
 from uwosh.timeslot.config import PROJECTNAME
+from uwosh.timeslot.Widget import TimeWidget
 
 from DateTime import DateTime
 
@@ -57,7 +18,6 @@ TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
     atapi.DateTimeField('startTime',
         storage=atapi.AnnotationStorage(),
         widget=TimeWidget(label=_('Start Time'),
-                          show_ymd=False,
                           format='%I:%M %p')
     ),
     
@@ -94,7 +54,6 @@ TimeSlotSchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(TimeSlotSchema, folderish=True, moveDiscussion=False)
 
 class TimeSlot(folder.ATFolder):
-    """Description of TimeSlot"""
     implements(ITimeSlot, IContainsPeople, ICloneable)
 	
     portal_type = "Time Slot"

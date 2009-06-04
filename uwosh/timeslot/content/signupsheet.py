@@ -1,6 +1,3 @@
-"""Definition of the Signup Sheet content type
-"""
-
 from zope.interface import implements, directlyProvides
 
 from Products.Archetypes import atapi
@@ -38,18 +35,21 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
                                           description=_(u'Information you want to collect from users besides just name and email.'),
                                           format=_(u'checkbox'))
     ),
-))
 
-# Set storage on fields copied from ATFolderSchema, making sure
-# they work well with the python bridge properties.
+    atapi.BooleanField('allowSignupForMultipleSlots',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.BooleanWidget(label=_(u'Allow Signup For Multiple Slots'),
+                                 description=_(u'Allow the user to signup for more than one slot.'))
+    ),
+))
 
 SignupSheetSchema['title'].storage = atapi.AnnotationStorage()
 SignupSheetSchema['description'].storage = atapi.AnnotationStorage()
+SignupSheetSchema['description'].widget.visible = {'view':'invisible', 'edit':'invisible'}
 
 schemata.finalizeATCTSchema(SignupSheetSchema, folderish=True, moveDiscussion=False)
 
 class SignupSheet(folder.ATFolder):
-    """Description of SignupSheet"""
     implements(ISignupSheet, IContainsPeople)
 
     portal_type = "Signup Sheet"
@@ -60,6 +60,7 @@ class SignupSheet(folder.ATFolder):
     extraFields = atapi.ATFieldProperty('extraFields')
     contactInfo = atapi.ATFieldProperty('contactInfo')
     extraEmailContent = atapi.ATFieldProperty('extraEmailContent')
+    allowSignupForMultipleSlots = atapi.ATFieldProperty('allowSignupForMultipleSlots')
 
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
