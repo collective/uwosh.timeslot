@@ -1,13 +1,11 @@
-from zope.interface import implements, directlyProvides
+from zope.interface import implements
 
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import folder
 from Products.ATContentTypes.content import schemata
 
 from uwosh.timeslot import timeslotMessageFactory as _
-from uwosh.timeslot.interfaces import IDay
-from uwosh.timeslot.interfaces import IContainsPeople
-from uwosh.timeslot.interfaces import ICloneable
+from uwosh.timeslot.interfaces import IDay, IContainsPeople, ICloneable
 from uwosh.timeslot.config import PROJECTNAME
 
 DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((

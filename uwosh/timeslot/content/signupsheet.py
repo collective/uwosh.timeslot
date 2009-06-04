@@ -1,12 +1,11 @@
-from zope.interface import implements, directlyProvides
+from zope.interface import implements
 
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import folder
 from Products.ATContentTypes.content import schemata
 
 from uwosh.timeslot import timeslotMessageFactory as _
-from uwosh.timeslot.interfaces import ISignupSheet
-from uwosh.timeslot.interfaces import IContainsPeople
+from uwosh.timeslot.interfaces import ISignupSheet, IContainsPeople
 from uwosh.timeslot.config import PROJECTNAME
 
 import csv
@@ -30,7 +29,7 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.LinesField('extraFields',
         storage=atapi.AnnotationStorage(),
-        vocabulary=[('phone','Phone'), ('dept','Department'), ('classification','Employee Classification')],
+        vocabulary=[('phone','Phone'), ('department','Department'), ('classification','Employee Classification')],
         widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
                                           description=_(u'Information you want to collect from users besides just name and email.'),
                                           format=_(u'checkbox'))

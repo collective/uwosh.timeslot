@@ -1,10 +1,8 @@
-from zope import interface, schema
+from zope import schema
+from zope.interface import Interface
 from zope.formlib import form
-from Products.CMFCore import utils as cmfutils
-from Products.Five.browser import pagetemplatefile
+from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.Five.formlib import formbase
-
-from zExceptions import BadRequest
 
 from uwosh.timeslot.interfaces import *
 
@@ -13,9 +11,6 @@ from uwosh.timeslot.interfaces import *
 # Source: http://athenageek.wordpress.com/2008/01/08/contentproviderlookuperror-plonehtmlhead/
 # Bug report: https://bugs.launchpad.net/zope2/+bug/176566
 #
-from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
-
-import math
 
 def _getContext(self):
     self = self.aq_parent
@@ -24,9 +19,10 @@ def _getContext(self):
     return self    
             
 ZopeTwoPageTemplateFile._getContext = _getContext
+
 # End ugly hack.
 
-class IRemoveAllPeople(interface.Interface):
+class IRemoveAllPeople(Interface):
     heading = schema.Text(title=u'Would you really like to remove all the people from this object?',
                           description=u'Doing so will remove anyone who is signed up or on the waiting list for \
                                         this or any contained object.', required=False, readonly=True)

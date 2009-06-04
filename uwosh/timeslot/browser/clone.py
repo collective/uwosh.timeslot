@@ -1,10 +1,8 @@
-from zope import interface, schema
+from zope import schema
+from zope.interface import Interface
 from zope.formlib import form
-from Products.CMFCore import utils as cmfutils
-from Products.Five.browser import pagetemplatefile
+from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.Five.formlib import formbase
-
-from zExceptions import BadRequest
 
 from DateTime import DateTime
 from uwosh.timeslot.interfaces import *
@@ -14,9 +12,6 @@ from uwosh.timeslot.interfaces import *
 # Source: http://athenageek.wordpress.com/2008/01/08/contentproviderlookuperror-plonehtmlhead/
 # Bug report: https://bugs.launchpad.net/zope2/+bug/176566
 #
-from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
-
-import math
 
 def _getContext(self):
     self = self.aq_parent
@@ -25,9 +20,10 @@ def _getContext(self):
     return self    
             
 ZopeTwoPageTemplateFile._getContext = _getContext
+
 # End ugly hack.
 
-class IClone(interface.Interface):
+class IClone(Interface):
     numToCreate = schema.Int(title=u'Number to Create', description=u'The number of clones to create', required=True)
 
 class ICloneDay(IClone):
@@ -37,7 +33,7 @@ class ICloneTimeSlot(IClone):
     pass
 
 class CloneForm(formbase.PageForm):
-    result_template = pagetemplatefile.ZopeTwoPageTemplateFile('cloning-results.pt')
+    result_template = ZopeTwoPageTemplateFile('cloning-results.pt')
     success = True
     errors = []
     form_fields = form.FormFields(IClone)

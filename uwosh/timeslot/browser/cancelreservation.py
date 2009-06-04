@@ -1,5 +1,3 @@
-from zope.interface import implements
-
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 
@@ -10,14 +8,6 @@ class CancelReservation(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-
-    @property
-    def portal_catalog(self):
-        return getToolByName(self.context, 'portal_catalog')
-
-    @property
-    def portal(self):
-        return getToolByName(self.context, 'portal_url').getPortalObject()
 
     def getCurrentUsername(self):
         portal_membership = getToolByName(self, 'portal_membership')

@@ -172,7 +172,7 @@
 			<br />
 		    </div>
 
-		    <div tal:condition="python: view.isFieldRequired('dept')">
+		    <div tal:condition="python: view.isFieldRequired('department')">
 			<label for="dept">Department</label>
 			<span class="fieldRequired" title="Required">  (Required) </span><br />
 			<input type="text" id="dept" name="dept" />
