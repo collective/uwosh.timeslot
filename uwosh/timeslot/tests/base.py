@@ -16,8 +16,6 @@ import uwosh.timeslot
 
 @onsetup
 def setup_uwosh_timeslot():
-    """Set up the additional products required for uwosh.timeslot"""
-    
     fiveconfigure.debug_mode = True
     zcml.load_config('configure.zcml', uwosh.timeslot)
     fiveconfigure.debug_mode = False
@@ -28,8 +26,7 @@ setup_uwosh_timeslot()
 ptc.setupPloneSite(products=['uwosh.timeslot'])
 
 class MockMailHost(object):
-    """Make a mock mail host to avoid sending emails when testing.
-    """
+    """A mock mail host to avoid actually sending emails when testing."""
 
     def getId(self):
         return 'MailHost'

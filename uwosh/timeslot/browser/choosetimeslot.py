@@ -7,15 +7,10 @@ from Products.validation import validation
 from uwosh.timeslot import timeslotMessageFactory as _
 
 class IChooseTimeSlot(Interface):
-    """
-    ChooseTimeSlot view interface
-    """
+    pass
 
 
 class ChooseTimeSlot(BrowserView):
-    """
-    ChooseTimeSlot browser view
-    """
     implements(IChooseTimeSlot)
 
     def __init__(self, context, request):

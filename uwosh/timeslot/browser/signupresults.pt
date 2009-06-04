@@ -20,7 +20,7 @@
                         <h3>Successfully Added to Waiting List</h3>
                         <p>You have been successfully added to the waiting list for the day you selected.</p>
                         <p tal:condition="view/wasEmailSent">You will receive a confirmation email when a spot opens up.</p>
-                    </tal:block>                
+                    </tal:block>
                 </tal:block>
                 
                 <tal:block tal:condition="not:view/wasSignupSuccessful">

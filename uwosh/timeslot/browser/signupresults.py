@@ -7,15 +7,10 @@ from uwosh.timeslot import timeslotMessageFactory as _
 
 
 class ISignupResults(Interface):
-    """
-    ChooseTimeSlot view interface
-    """
-    
+    pass
 
+    
 class SignupResults(BrowserView):
-    """
-    ChooseTimeSlot browser view
-    """
     implements(ISignupResults)
 
     def __init__(self, context, request):
