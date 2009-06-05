@@ -15,7 +15,7 @@
 
             <div style="border: 1px solid #8CACBB; padding: 10px" tal:condition="context/isCurrentUserSignedUpOrWaitingForAnySlot">
 	        <p>To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
-		<form method="post" tal:attributes="action string:${context/absolute_url}/cancel-reservation;">
+		<form method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
 	            <table class="plain">
 		        <tal:block tal:condition="context/isCurrentUserSignedUpForAnySlot">
 		            <tr>
@@ -52,7 +52,7 @@
       
             <tal:block tal:condition="not:isCurrentUserLoggedIn">
 		<p>To signup for a spot you will need to
-                   <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/choose-timeslot">
+                   <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view">
                    login</a> first.
                 </p>
 	    </tal:block>
@@ -67,7 +67,7 @@
 		<br />
 	    </div>
 		
-	    <form method="post" tal:attributes="action string:${context/absolute_url}/submit-user-selection;">
+	    <form method="post" tal:attributes="action string:${context/absolute_url}/@@submit-user-selection;">
 		<p tal:condition="contextIsMasterSignupSheet">
 		    Please select a time from one of the following signup sheets:
 		</p>

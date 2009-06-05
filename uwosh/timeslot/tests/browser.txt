@@ -174,22 +174,22 @@ Non-managers should not be able to access any of those four directly either.
 An attempt to access them should throw an exception::
 
     >>> try:
-    ...     browser.open(signupSheetUrl + '/manager-summary')
+    ...     browser.open(signupSheetUrl + '/@@manager-summary')
     ... except: 
     ...     'user is unauthorized to access manager-summary'
     'user is unauthorized to access manager-summary'
     >>> try:
-    ...     browser.open(signupSheetUrl + '/export-to-csv')
+    ...     browser.open(signupSheetUrl + '/@@export-to-csv')
     ... except:
     ...     'user is unauthorized to access export-to-csv'
     'user is unauthorized to access export-to-csv'
     >>> try:
-    ...     browser.open(signupSheetUrl + '/remove-all-people')
+    ...     browser.open(signupSheetUrl + '/@@remove-all-people')
     ... except:
     ...     'user is unauthorized to access remove-all-people'
     'user is unauthorized to access remove-all-people'
     >>> try:
-    ...     browser.open(dayUrl + '/clone')
+    ...     browser.open(dayUrl + '/@@clone')
     ... except:
     ...     'user is unauthorized to access clone'
     'user is unauthorized to access clone'
@@ -271,7 +271,7 @@ After that our test user should be signed up for two slots and waiting on zero::
 
     >>> person = signupSheet['tuesday-october-13-2009']['04-00-pm-05-00-pm']['test_user_1_']
     >>> portal_workflow.doActionFor(person, 'signup')
-    >>> browser.open(signupSheetUrl + '/manager-summary')
+    >>> browser.open(signupSheetUrl + '/@@manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
     2
     >>> browser.contents.count('Waiting List')
@@ -302,7 +302,7 @@ after stripping out all the currently signed up users::
 Since we made four copies there should be a total of five days, by default it should skip the weekends,
 and there should still be only two slots for which our user is signed up for.::
     
-    >>> browser.open(signupSheetUrl + '/manager-summary')
+    >>> browser.open(signupSheetUrl + '/@@manager-summary')
     >>> 'Tuesday, October 13, 2009' in browser.contents
     True
     >>> 'Wednesday, October 14, 2009' in browser.contents
@@ -378,9 +378,9 @@ We hastily switch back to being a Manager::
 And to wrap it up, we'll use the remove-all-people shortcut to reset our sheet. Afterward there
 should be no one signed up for anything::
 
-    >>> browser.open(signupSheetUrl + '/remove-all-people')
+    >>> browser.open(signupSheetUrl + '/@@remove-all-people')
     >>> browser.getControl(name='form.actions.52656d6f766520416c6c2050656f706c65').click()
-    >>> browser.open(signupSheetUrl + '/manager-summary')
+    >>> browser.open(signupSheetUrl + '/@@manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
     0
     >>> browser.contents.count('Waiting List')

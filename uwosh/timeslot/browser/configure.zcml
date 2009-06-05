@@ -30,7 +30,7 @@
 	
     <browser:page
       for="..interfaces.ISignupSheet"
-      name="choose-timeslot"
+      name="choose-timeslot-view"
       class=".choosetimeslot.ChooseTimeSlot"
       template="choosetimeslot.pt"
       allowed_interface=".choosetimeslot.IChooseTimeSlot"
@@ -63,8 +63,8 @@
     <browser:menuItem
       for="..interfaces.ISignupSheet"
       menu="plone_displayviews"
-      title="Choose TimeSlot view"
-      action="choose-timeslot"
+      title="Choose TimeSlot View"
+      action="choose-timeslot-view"
       description="The default user visible view of a Signup Sheet"
       />
         

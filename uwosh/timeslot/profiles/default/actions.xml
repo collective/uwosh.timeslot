@@ -11,7 +11,7 @@
   <object name="exportcsv" meta_type="CMF Action">
    <property name="title">Export to CSV</property>
    <property name="description"></property>
-   <property name="url_expr">string:export-to-csv</property>
+   <property name="url_expr">string:@@export-to-csv</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.getTypeInfo().getId() == 'Signup Sheet'</property>
@@ -25,7 +25,7 @@
   <object name="manager-summary" meta_type="CMF Action">
    <property name="title">Manager Summary</property>
    <property name="description"></property>
-   <property name="url_expr">string:manager-summary</property>
+   <property name="url_expr">string:@@manager-summary</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.Type() == 'Signup Sheet'</property>
@@ -39,7 +39,7 @@
   <object name="remove-all-people" meta_type="CMF Action">
    <property name="title">Remove All People</property>
    <property name="description"></property>
-   <property name="url_expr">string:remove-all-people</property>
+   <property name="url_expr">string:@@remove-all-people</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.Type() in ['Signup Sheet', 'Day', 'Time Slot']</property>
@@ -53,7 +53,7 @@
   <object name="clone" meta_type="CMF Action">
    <property name="title">Clone</property>
    <property name="description"></property>
-   <property name="url_expr">string:clone</property>
+   <property name="url_expr">string:@@clone</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.Type() in ['Day', 'Time Slot']</property>

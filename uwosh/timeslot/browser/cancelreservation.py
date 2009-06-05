@@ -21,13 +21,13 @@ class CancelReservation(BrowserView):
         if selectedSlots != None:
             if type(selectedSlots) == list:
                 for slot in selectedSlots:
-                    self.deleteUserFromSlot(slot)
+                    self.deleteCurrentUserFromSlot(slot)
             else:
-                self.deleteUserFromSlot(selectedSlots)
+                self.deleteCurrentUserFromSlot(selectedSlots)
 
         self.request.response.redirect(self.context.absolute_url())
 
-    def deleteUserFromSlot(self, slot):
+    def deleteCurrentUserFromSlot(self, slot):
         username = self.getCurrentUsername()
 
         (signupSheet, date, time) = slot.split(' @ ')
