@@ -38,6 +38,7 @@ Let's create a signup sheet::
     >>> browser.open(portalUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'Test Signup Sheet'
     >>> browser.getControl(name='extraFields:list').value = ('phone',)
+    >>> browser.getControl(name='allowSignupForMultipleSlots:boolean').value = 'on'
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
     True

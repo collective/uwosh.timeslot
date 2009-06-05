@@ -26,7 +26,7 @@ class SubmitSelection(BrowserView):
     	self.getUserInput()
     	self.getMemberInfo()
         
-        if not self.areAnyRequiredFieldsEmpty():
+        if not self.areAnyRequiredFieldsEmpty() and self.isAtLeastOneSlotSelected():
             for slotLabel in self.selectedSlots:
                 self.getSlotAndSignUserUpForIt(slotLabel)
 
@@ -51,16 +51,16 @@ class SubmitSelection(BrowserView):
             self.fullname = self.username
         self.email = member.getProperty('email')
 
+    def isAtLeastOneSlotSelected(self):
+        return self.selectedSlots != [None]
+
     def areAnyRequiredFieldsEmpty(self):
         return len(self.getListOfEmptyRequiredFields()) > 0
 
     def getListOfEmptyRequiredFields(self):
         fieldNames = self.context.schema['extraFields'].vocabulary
         emptyRequiredFields = []
-
-        if self.selectedSlots == [None]:
-            emptyRequiredFields.append('Timeslot')
-            
+    
         requiredExtraFields = self.context.getExtraFields()
         for field in requiredExtraFields:
             if len(getattr(self, field)) < 1:
@@ -76,6 +76,8 @@ class SubmitSelection(BrowserView):
         waiting = True
         error = ''
 
+        allowSignupForMultipleSlots = self.context.getAllowSignupForMultipleSlots()
+
         (signupSheetTitle, date, time) = slotLabel.split(' @ ')
         signupSheet = self.context.getSignupSheet(signupSheetTitle)
         day = signupSheet.getDay(date)
@@ -83,7 +85,15 @@ class SubmitSelection(BrowserView):
         allowWaitingList = timeSlot.getAllowWaitingList()
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
         
-        if allowWaitingList or numberOfAvailableSpots > 0:
+        if (not allowSignupForMultipleSlots) and signupSheet.isCurrentUserSignedUpOrWaitingForAnySlot():
+            success = False
+            error = 'You are already signed up for a slot in this signup sheet.'
+
+        elif timeSlot.isCurrentUserSignedUpForThisSlot():
+            sucess = False
+            error = 'You are already signed up for this slot.'
+
+        elif allowWaitingList or numberOfAvailableSpots > 0:
             person = self.createPersonObject(timeSlot)
                 
             if numberOfAvailableSpots > 0:
@@ -95,8 +105,8 @@ class SubmitSelection(BrowserView):
             success = True
             
         else:
-           error = 'The slot you selected is already full. Please select a different one'
-           success = False
+            success = False
+            error = 'The slot you selected is already full. Please select a different one'
 
         result = dict()
         result['slotLabel'] = slotLabel
@@ -136,7 +146,7 @@ class SubmitSelection(BrowserView):
         
         message = 'Hi ' + self.fullname + ',\n\n'
         message += 'This message is to confirm that you have been added to the waiting list for:\n'
-        message += slot + '\n\n'
+        message += slotLabel + '\n\n'
 
         if extraEmailContent != ():
             for line in extraEmailContent:

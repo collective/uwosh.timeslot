@@ -89,9 +89,8 @@ class CloneForm(formbase.PageForm):
             i += 1        
                 
     def createNewDay(self, date, contents):
-        title = date.strftime('%B %d, %Y')
         id = date.strftime('%B-%d-%Y').lower()
-        self.parent.invokeFactory(id=id, title=title, type_name='Day', date=date)            
+        self.parent.invokeFactory('Day', id, date=date)            
         newDay = self.parent[id]
         newDay.manage_pasteObjects(contents)
         newDay.reindexObject()     
@@ -113,12 +112,11 @@ class CloneForm(formbase.PageForm):
             numCreated += 1
 
     def createNewTimeSlot(self, startTime, endTime, maxCapacity, allowWaiting):
-        title = startTime.strftime('%I:%M %p') + ' - ' + endTime.strftime('%I:%M %p')
         id = (startTime.strftime('%I-%M-%p') + '-' + endTime.strftime('%I-%M-%p')).lower()
         
         try:
-            self.parent.invokeFactory(id=id, title=title, type_name='Time Slot', startTime=startTime, 
-                                      endTime=endTime, maxCapacity=maxCapacity, allowWaitingList=allowWaiting)
+            self.parent.invokeFactory('Time Slot', id, startTime=startTime, endTime=endTime,
+                                      maxCapacity=maxCapacity, allowWaitingList=allowWaiting)
         except BadRequest:
             self.success = False
             self.errors.append("An object already exists with id: %s" % id)

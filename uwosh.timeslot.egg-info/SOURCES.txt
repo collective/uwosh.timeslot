@@ -44,6 +44,7 @@ uwosh/timeslot/interfaces.py
 uwosh/timeslot/sharing.py
 uwosh/timeslot/subscribers.py
 uwosh/timeslot/version.txt
+uwosh/timeslot/widget.py
 uwosh/timeslot/browser/.DS_Store
 uwosh/timeslot/browser/__init__.py
 uwosh/timeslot/browser/cancelreservation.py
@@ -56,7 +57,7 @@ uwosh/timeslot/browser/exporttocsv.py
 uwosh/timeslot/browser/managersummary.pt
 uwosh/timeslot/browser/removeallpeople.py
 uwosh/timeslot/browser/signupresults.pt
-uwosh/timeslot/browser/signupresults.py
+uwosh/timeslot/browser/submitselection.py
 uwosh/timeslot/content/__init__.py
 uwosh/timeslot/content/configure.zcml
 uwosh/timeslot/content/day.py

@@ -8,13 +8,22 @@
         <tal:main-macro metal:define-macro="main">
             <h2 tal:content="string:${context/Title} - Sign Up Results" />
 
-            <tal:block tal:condition="view/areAnyRequiredFieldsEmpty">
+            <div tal:condition="python: view.areAnyRequiredFieldsEmpty() or not view.isAtLeastOneSlotSelected()">
 	        <h3>Failure</h3>
-                <p>You did not complete the following fields:</p>
-	        <ul>
-	            <strong><li tal:repeat="field view/getListOfEmptyRequiredFields" tal:content="field" /></strong>
+                <ul>
+                    <li tal:condition="not:view/isAtLeastOneSlotSelected">
+                        <p>You need to select at least one slot.</p>
+                    </li>
+                    <li tal:condition="view/areAnyRequiredFieldsEmpty">
+                        <p>You did not complete the following fields:</p>
+	                <ul>
+	                    <li tal:repeat="field view/getListOfEmptyRequiredFields">
+			        <strong tal:content="field" />
+			    </li>
+		        </ul>
+		    </li>
 		</ul>
-	    </tal:block>
+	    </div>
       
             <div tal:repeat="result view/results">
                 <tal:block tal:condition="python: result['success']">
@@ -29,7 +38,7 @@
                         <h3>Success</h3>
                         <p>You have been successfully added to the waiting list for:<br />
 	                   <span tal:content="result/slotLabel" /></p>
-                        <p tal:condition="view/isEmailValid">You will receive a confirmation email when a spot opens up.</p>
+                        <p tal:condition="view/isEmailValid">You will receive a confirmation email now and second one when a spot opens up.</p>
                     </tal:block>
                 </tal:block>
                 
