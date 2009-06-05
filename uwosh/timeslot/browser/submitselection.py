@@ -5,6 +5,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.validation import validation
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 
+from Acquisition import aq_inner
+
 from uwosh.timeslot import timeslotMessageFactory as _
 
 class ISubmitSelection(Interface):
@@ -58,10 +60,11 @@ class SubmitSelection(BrowserView):
         return len(self.getListOfEmptyRequiredFields()) > 0
 
     def getListOfEmptyRequiredFields(self):
+        context = aq_inner(self.context)
         fieldNames = self.context.schema['extraFields'].vocabulary
         emptyRequiredFields = []
     
-        requiredExtraFields = self.context.getExtraFields()
+        requiredExtraFields = context.getExtraFields()
         for field in requiredExtraFields:
             if len(getattr(self, field)) < 1:
                 for (id, name) in fieldNames:
@@ -76,7 +79,8 @@ class SubmitSelection(BrowserView):
         waiting = True
         error = ''
 
-        allowSignupForMultipleSlots = self.context.getAllowSignupForMultipleSlots()
+        context = aq_inner(self.context)
+        allowSignupForMultipleSlots = context.getAllowSignupForMultipleSlots()
 
         (signupSheetTitle, date, time) = slotLabel.split(' @ ')
         signupSheet = self.context.getSignupSheet(signupSheetTitle)
@@ -135,9 +139,6 @@ class SubmitSelection(BrowserView):
         return isEmail(self.email) == 1
 
     def sendWaitingListConfirmationEmail(self, signupSheet, slotLabel):
-        if signupSheet.isContainedInMasterSignupSheet():
-            signupSheet = signupSheet.aq_parent
-
         extraEmailContent = signupSheet.getExtraEmailContent()
         contactInfo = signupSheet.getContactInfo()
         toEmail = self.email
@@ -157,7 +158,7 @@ class SubmitSelection(BrowserView):
         
         if contactInfo != ():
             message += 'If you have any questions please contact:\n'
-            for line in self.context.getContactInfo():
+            for line in contactInfo:
                 message += line + '\n'
             message += '\n'
 

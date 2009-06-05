@@ -61,6 +61,30 @@ class SignupSheet(folder.ATFolder):
     extraEmailContent = atapi.ATFieldProperty('extraEmailContent')
     allowSignupForMultipleSlots = atapi.ATFieldProperty('allowSignupForMultipleSlots')
 
+    def getExtraEmailContent(self):
+        if self.isContainedInMasterSignupSheet():
+            return self.aq_parent.getExtraEmailContent()
+        else:
+            return self.extraEmailContent
+
+    def getContactInfo(self):
+        if self.isContainedInMasterSignupSheet():
+            return self.aq_parent.getContactInfo()
+        else:
+            return self.contactInfo
+
+    def getExtraFields(self):
+        if self.isContainedInMasterSignupSheet():
+            return self.aq_parent.getExtraFields()
+        else:
+            return self.extraFields
+
+    def getAllowSignupForMultipleSlots(self):
+        if self.isContainedInMasterSignupSheet():
+            return self.aq_parent.getAllowSignupForMultipleSlots()
+        else:
+            return self.allowSignupForMultipleSlots
+
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
