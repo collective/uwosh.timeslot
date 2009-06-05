@@ -30,15 +30,3 @@ class ChooseTimeSlot(BrowserView):
         portal_membership = getToolByName(self, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
         return 'Anonymous' not in member.getRoles()
-
-    def getSlotsCurrentUserIsSignedUpFor(self):
-        slots = []
-        for slot in signupSheet.getSlotsCurrentUserIsSignedUpFor():
-            slots.append(slot.getLabel())
-        return slots
-            
-    def getSlotsCurrentUserIsWaitingFor(self):    
-        slots = []
-        for slot in signupSheet.getSlotsCurrentUserIsWaitingFor():
-            slots.append(slot.getLabel())
-        return slots

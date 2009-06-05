@@ -13,7 +13,7 @@
       
             <h2 tal:content="context/Title" />
 
-            <div style="border: 1px solid #8CACBB; padding: 10px" tal:condition="context/hasCurrentUserSelectedAnySlot">
+            <div style="border: 1px solid #8CACBB; padding: 10px" tal:condition="context/isCurrentUserSignedUpOrWaitingForAnySlot">
 	        <p>To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
 		<form method="post" tal:attributes="action string:${context/absolute_url}/cancel-reservation;">
 	            <table class="plain">
