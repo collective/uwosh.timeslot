@@ -54,7 +54,7 @@ schemata.finalizeATCTSchema(TimeSlotSchema, folderish=True, moveDiscussion=False
 class TimeSlot(folder.ATFolder):
     implements(ITimeSlot, IContainsPeople, ICloneable)
 	
-    portal_type = "Time Slot"
+    portal_type = 'Time Slot'
     schema = TimeSlotSchema
 
     title = atapi.ATFieldProperty('title')
@@ -79,7 +79,7 @@ class TimeSlot(folder.ATFolder):
         return signupSheet.Title() + ' @ ' + date.Title() + ' @ ' + self.Title()
 
     def getNumberOfAvailableSpots(self):
-        query = {'portal_type':'Person','review_state':'signedup'}
+        query = {'portal_type':'Person', 'review_state':'signedup'}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         numberOfPeopleSignedUp = len(brains)
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
@@ -90,7 +90,7 @@ class TimeSlot(folder.ATFolder):
         return self.isUserSignedUpForThisSlot(username)
 
     def isUserSignedUpForThisSlot(self, username):
-        query = {'portal_type':'Person','id':username}
+        query = {'portal_type':'Person', 'id':username}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) == 0:
             return False
@@ -110,7 +110,7 @@ class TimeSlot(folder.ATFolder):
         return people
         
     def getPerson(self, username):
-        query = {'portal_type':'Person','id':username}
+        query = {'portal_type':'Person', 'id':username}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) == 0:
             raise ValueError('The Person %s was not found.' % username)
@@ -123,6 +123,5 @@ class TimeSlot(folder.ATFolder):
         for person in people:
             idsToRemove.append(person.id)
         self.manage_delObjects(idsToRemove)
-        return "Success"
         
 atapi.registerType(TimeSlot, PROJECTNAME)

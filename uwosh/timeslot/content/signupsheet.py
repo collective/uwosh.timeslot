@@ -51,7 +51,7 @@ schemata.finalizeATCTSchema(SignupSheetSchema, folderish=True, moveDiscussion=Fa
 class SignupSheet(folder.ATFolder):
     implements(ISignupSheet, IContainsPeople)
 
-    portal_type = "Signup Sheet"
+    portal_type = 'Signup Sheet'
     schema = SignupSheetSchema
 
     title = atapi.ATFieldProperty('title')
@@ -64,7 +64,7 @@ class SignupSheet(folder.ATFolder):
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) != 1:
+        if len(brains) == 0:
             raise ValueError('The date %s was not found.' % date)
         return brains[0].getObject()
         
@@ -95,7 +95,7 @@ class SignupSheet(folder.ATFolder):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
-        writer.writerow(['SignupSheet','Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])  
+        writer.writerow(['SignupSheet', 'Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])  
       
         for signupSheet in self.getSignupSheets():
             if not signupSheet.isMasterSignupSheet():
@@ -110,24 +110,19 @@ class SignupSheet(folder.ATFolder):
 
         return result
     
-    def hasCurrentUserSelectedAnySlot(self):
+    def isCurrentUserSignedUpOrWaitingForAnySlot(self):
         username = self.getCurrentUsername()
-        return self.hasUserSelectedAnySlot(username)
+        return self.isUserSignedUpOrWaitingForAnySlot(username)
 
-    def hasUserSelectedAnySlot(self, username):
-        query = {'portal_type':'Person','id':username}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) == 0:
-            return False
-        else:
-            return True
+    def isUserSignedUpOrWaitingForAnySlot(self, username):
+        return self.isUserSignedUpForAnySlot(username) or self.isUserWaitingForAnySlot(username)
 
     def isCurrentUserSignedUpForAnySlot(self):
         username = self.getCurrentUsername()
         return self.isUserSignedUpForAnySlot(username)
     
     def isUserSignedUpForAnySlot(self, username):
-        query = {'portal_type':'Person','id':username,'review_state':'signedup'}
+        query = {'portal_type':'Person', 'id':username, 'review_state':'signedup'}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) == 0:
             return False
@@ -139,7 +134,7 @@ class SignupSheet(folder.ATFolder):
         return self.isUserWaitingForAnySlot(username)
     
     def isUserWaitingForAnySlot(self, username):
-        query = {'portal_type':'Person','id':username,'review_state':'waiting'}
+        query = {'portal_type':'Person', 'id':username, 'review_state':'waiting'}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
         if len(brains) == 0:
             return False
@@ -152,7 +147,7 @@ class SignupSheet(folder.ATFolder):
 
     def getSlotsUserIsSignedUpFor(self, username):
         today = DateTime().earliestTime()
-        query = {'portal_type':'Person','id':username,'review_state':'signedup'}
+        query = {'portal_type':'Person', 'id':username, 'review_state':'signedup'}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
 
         slots = []
@@ -171,7 +166,7 @@ class SignupSheet(folder.ATFolder):
 
     def getSlotsUserIsWaitingFor(self, username):
         today = DateTime().earliestTime()
-        query = {'portal_type':'Person','id':username,'review_state':'waiting'}
+        query = {'portal_type':'Person', 'id':username, 'review_state':'waiting'}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
 
         slots = []
@@ -209,7 +204,7 @@ class SignupSheet(folder.ATFolder):
     def getSignupSheet(self, name):
         query = {'portal_type':'Signup Sheet', 'Title':name}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) != 1:
+        if len(brains) == 0:
             raise ValueError('The signup sheet %s was not found.' % name)
         return brains[0].getObject()
 

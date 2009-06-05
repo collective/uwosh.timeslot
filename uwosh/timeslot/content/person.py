@@ -49,7 +49,7 @@ schemata.finalizeATCTSchema(PersonSchema, moveDiscussion=False)
 class Person(base.ATCTContent):
     implements(IPerson)
 
-    portal_type = "Person"
+    portal_type = 'Person'
     schema = PersonSchema
 
     title = atapi.ATFieldProperty('title')
