@@ -77,9 +77,8 @@
 	        <tal:block tal:repeat="signupSheet context/getSignupSheets">
 		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsedOnLoad">
 
-			<h1 tal:condition="contextIsMasterSignupSheet" style="border-bottom: none">
-		            <dt tal:content="signupSheet/Title" class="collapsibleHeader" />
-			</h1>
+		        <dt tal:condition="contextIsMasterSignupSheet" tal:content="signupSheet/Title"
+			    style="font-size: large"  class="collapsibleHeader" />
 				  
 		        <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
 			  
@@ -161,7 +160,7 @@
 			<label for="classification">Employee Classification Type</label>
 		        <span class="fieldRequired" title="Required">  (Required) </span><br />
 			<select id="classification" size="1" name="classification">
-			    <option value="" selected="selected">Select Classification Type</option>
+			    <option value="" />
 			    <option value="Academic">Academic Staff</option>
 			    <option value="Classified">Classified Staff</option>
 			    <option value="Faculty">Faculty</option>

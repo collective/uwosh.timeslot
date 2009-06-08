@@ -17,9 +17,8 @@
 		
 		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsed OnLoad">
 
-			<h1 tal:condition="contextIsMasterSignupSheet" style="border-bottom: none">
-		            <dt tal:content="signupSheet/Title" class="collapsibleHeader" />
-			</h1>
+			<dt tal:condition="contextIsMasterSignupSheet" tal:content="signupSheet/Title"
+			    style="font-size: large" class="collapsibleHeader" />
 				  
 		        <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
 			    <table class="plain">
