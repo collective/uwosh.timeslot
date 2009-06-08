@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.3beta - 2009-06-08
+------------------
+
+* Added multiple selection of slots
+* Added extra email content field
+* Improved signup results page
+* Improved child/parent signup sheet behavior 
+* Increased test suite coverage
+* Major code refactoring
+* Several minor bugs fixed
+
 1.2.2 - 2009-05-20
 ----------------
 
