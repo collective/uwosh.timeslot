@@ -36,7 +36,6 @@ uwosh.timeslot.egg-info/requires.txt
 uwosh.timeslot.egg-info/top_level.txt
 uwosh/timeslot/.DS_Store
 uwosh/timeslot/README.txt
-uwosh/timeslot/Widget.py
 uwosh/timeslot/__init__.py
 uwosh/timeslot/config.py
 uwosh/timeslot/configure.zcml

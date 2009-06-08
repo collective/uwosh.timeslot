@@ -109,14 +109,6 @@ class TimeSlot(folder.ATFolder):
             people.append(person)
         return people
         
-    def getPerson(self, username):
-        query = {'portal_type':'Person', 'id':username}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) == 0:
-            raise ValueError('The Person %s was not found.' % username)
-        person = brains[0].getObject()
-        return person
-        
     def removeAllPeople(self):
         people = self.getPeople()
         idsToRemove = []

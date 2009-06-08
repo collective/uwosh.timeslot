@@ -146,24 +146,14 @@ class SignupSheet(folder.ATFolder):
         return self.isUserSignedUpForAnySlot(username)
     
     def isUserSignedUpForAnySlot(self, username):
-        query = {'portal_type':'Person', 'id':username, 'review_state':'signedup'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) == 0:
-            return False
-        else:
-            return True
+        return (len(self.getSlotsUserIsSignedUpFor(username)) > 0)
 
     def isCurrentUserWaitingForAnySlot(self):
         username = self.getCurrentUsername()
         return self.isUserWaitingForAnySlot(username)
     
     def isUserWaitingForAnySlot(self, username):
-        query = {'portal_type':'Person', 'id':username, 'review_state':'waiting'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) == 0:
-            return False
-        else:
-            return True
+        return (len(self.getSlotsUserIsWaitingFor(username)) > 0)
 
     def getSlotsCurrentUserIsSignedUpFor(self):
         username = self.getCurrentUsername()

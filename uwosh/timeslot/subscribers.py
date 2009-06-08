@@ -11,9 +11,6 @@ def sendSignupNotificationEmail(obj, event):
         day = timeSlot.aq_parent
         signupSheet = day.aq_parent
 
-        if signupSheet.isContainedInMasterSignupSheet():
-            signupSheet = signupSheet.aq_parent
-
         if isEmail(person.getEmail()) == 1:        
             extraEmailContent = signupSheet.getExtraEmailContent()
             contactInfo = signupSheet.getContactInfo()
@@ -45,12 +42,13 @@ def sendSignupNotificationEmail(obj, event):
 def attemptToFillEmptySpot(obj, event):
     if obj.getReviewState() == 'signedup':
         timeSlot = obj.aq_parent
-        portal_catalog = getToolByName(obj, 'portal_catalog')
-        query = {'portal_type':'Person','review_state':'waiting', 'sort_on':'Date', 'sort_order':'ascending'}
-        brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.absolute_url_path())
-        if len(brains) > 0:
-            person = brains[0].getObject()
-            portal_workflow = getToolByName(obj, 'portal_workflow')
-            portal_workflow.doActionFor(person, 'signup')
-            person.reindexObject()
+        if timeSlot.getNumberOfAvailableSpots() > 0:
+            portal_catalog = getToolByName(obj, 'portal_catalog')
+            query = {'portal_type':'Person','review_state':'waiting', 'sort_on':'Date', 'sort_order':'ascending'}
+            brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.absolute_url_path())
+            if len(brains) > 0:
+                person = brains[0].getObject()
+                portal_workflow = getToolByName(obj, 'portal_workflow')
+                portal_workflow.doActionFor(person, 'signup')
+                person.reindexObject()
         

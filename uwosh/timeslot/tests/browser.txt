@@ -31,6 +31,15 @@ And make ourselves manager::
 
     >>> self.setRoles(['Manager'])
 
+Then we'll set our email address to a fake one so that we can test the email sending code::
+
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> portal_membership = getToolByName(self.portal, 'portal_membership')
+    >>> me = portal_membership.getAuthenticatedMember()
+    >>> me.setProperties(email='email@example.com')
+    >>> me.getProperty('email')
+    'email@example.com'
+
 Let's create a signup sheet::
 
     >>> portalUrl = self.portal.absolute_url()
@@ -38,6 +47,8 @@ Let's create a signup sheet::
     >>> browser.open(portalUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'Test Signup Sheet'
     >>> browser.getControl(name='extraFields:list').value = ('phone',)
+    >>> browser.getControl(name='extraEmailContent:lines').value = 'Let\'s put in this....\ncontent'
+    >>> browser.getControl(name='contactInfo:lines').value= 'Call me at:\n555-1234'
     >>> browser.getControl(name='allowSignupForMultipleSlots:boolean').value = 'on'
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
@@ -285,9 +296,9 @@ Export to a comma sperated value file (csv) should work::
     >>> browser.getLink('Export to CSV').click()
     >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
     True
 
 Clicking on Clone should make as many copies as you want of the original day
@@ -316,6 +327,30 @@ and there should still be only two slots for which our user is signed up for.::
     True
     >>> browser.contents.count('>test_user_1_</a>')
     2
+
+Clone should also work for cloning timeslots::
+
+    >>> timeSlotUrl = dayUrl + '/06-00-pm-07-00-pm'
+    >>> browser.open(timeSlotUrl)
+    >>> browser.getLink('Clone').click()
+    >>> browser.getControl(name='form.numToCreate').value = '3'
+    >>> browser.getControl(name='form.actions.clone').click()
+    >>> 'Cloning successful' in browser.contents
+    True
+
+There should now be three new timeslots in the  'Tuesday, October 13, 2009' day::
+
+    >>> '07:00 PM - 08:00 PM' and '08:00 PM - 09:00 PM' and '09:00 PM - 10:00 PM' in browser.contents
+    True
+
+And they should have the same properties as the original::
+
+    >>> originalTimeSlot = day['06-00-pm-07-00-pm']
+    >>> newTimeSlot = day['07-00-pm-08-00-pm']
+    >>> originalTimeSlot.getMaxCapacity() == newTimeSlot.getMaxCapacity() == 0
+    True
+    >>> originalTimeSlot.getAllowWaitingList() == newTimeSlot.getAllowWaitingList() == True
+    True
 
 After we add contact information to the signup sheet it should show up when viewing it::
 
@@ -353,9 +388,9 @@ And make sure we can view the manager summary and export to csv::
     >>> browser.getLink('Export to CSV').click()
     >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
     True
 
 Let's switch back to being an authenticated user::
@@ -389,6 +424,6 @@ should be no one signed up for anything::
     >>> browser.contents.count('Signed Up')
     0
     >>> browser.contents.count('No one is signed up')
-    15
+    18
 
 The End.

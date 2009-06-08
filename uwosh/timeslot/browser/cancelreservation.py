@@ -17,13 +17,12 @@ class CancelReservation(BrowserView):
     
     def cancelReservation(self):
     	selectedSlots = self.request.get('selectedSlot', None)
-    	
-        if selectedSlots != None:
-            if type(selectedSlots) == list:
-                for slot in selectedSlots:
-                    self.deleteCurrentUserFromSlot(slot)
-            else:
-                self.deleteCurrentUserFromSlot(selectedSlots)
+    	if type(selectedSlots) != list:
+            selectedSlots = [selectedSlots]
+
+        if selectedSlots != [None]:
+            for slot in selectedSlots:
+                self.deleteCurrentUserFromSlot(slot)
 
         self.request.response.redirect(self.context.absolute_url())
 
