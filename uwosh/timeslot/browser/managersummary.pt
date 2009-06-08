@@ -15,7 +15,7 @@
 		<tal:block tal:condition="not:signupSheet/isMasterSignupSheet"
                            tal:define="days signupSheet/getDays">
 		
-		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsed OnLoad">
+		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible collapsed OnLoad">
 
 			<dt tal:condition="contextIsMasterSignupSheet" tal:content="signupSheet/Title"
 			    style="font-size: large" class="collapsibleHeader" />
@@ -81,6 +81,7 @@
 			    <br />
 			</dd>
 		    </dl>
+		    <br />
          	</tal:block>	
             </tal:block>
         </tal:main-macro>
