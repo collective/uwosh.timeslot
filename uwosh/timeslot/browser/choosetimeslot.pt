@@ -75,10 +75,10 @@
 		</p>
 
 	        <tal:block tal:repeat="signupSheet context/getSignupSheets">
-		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible inline collapsedOnLoad">
+		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible collapsedOnLoad">
 
 		        <dt tal:condition="contextIsMasterSignupSheet" tal:content="signupSheet/Title"
-			    style="font-size: large"  class="collapsibleHeader" />
+			    style="font-size: large" class="collapsibleHeader" />
 				  
 		        <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
 			  
@@ -140,7 +140,8 @@
 			    
 			    <br />
 			</dd>
-		    </dl>	
+		    </dl>
+		    <br />
 		</tal:block>
 			
 		<div tal:condition="view/areAnyExtraFieldsRequired" id="extraInfo">
