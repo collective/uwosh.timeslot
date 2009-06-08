@@ -11,7 +11,11 @@ def sendSignupNotificationEmail(obj, event):
         day = timeSlot.aq_parent
         signupSheet = day.aq_parent
 
-        if isEmail(person.getEmail()) == 1:        
+        if isEmail(person.getEmail()) == 1:      
+            url = signupSheet.absolute_url()
+            if signupSheet.isContainedInMasterSignupSheet():
+                url = signupSheet.aq_parent.absolute_url()
+
             extraEmailContent = signupSheet.getExtraEmailContent()
             contactInfo = signupSheet.getContactInfo()
             toEmail = person.getEmail()
@@ -27,7 +31,7 @@ def sendSignupNotificationEmail(obj, event):
                     message += line + '\n'
                 message += '\n'
 
-            message += signupSheet.absolute_url() + '\n\n'
+            message += url + '\n\n'
 
             if contactInfo != ():
                 message += 'If you have any questions please contact:\n'
@@ -43,6 +47,11 @@ def attemptToFillEmptySpot(obj, event):
     if obj.getReviewState() == 'signedup':
         timeSlot = obj.aq_parent
         if timeSlot.getNumberOfAvailableSpots() > 0:
+            portal_membership = getToolByName(obj, 'portal_membership')
+            member = portal_membership.getAuthenticatedMember()
+            username = member.getUser().getName()
+            timeSlot.manage_addLocalRoles(username, ['Manager'])
+
             portal_catalog = getToolByName(obj, 'portal_catalog')
             query = {'portal_type':'Person','review_state':'waiting', 'sort_on':'Date', 'sort_order':'ascending'}
             brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.absolute_url_path())
@@ -51,4 +60,6 @@ def attemptToFillEmptySpot(obj, event):
                 portal_workflow = getToolByName(obj, 'portal_workflow')
                 portal_workflow.doActionFor(person, 'signup')
                 person.reindexObject()
+
+            timeSlot.manage_delLocalRoles([username])
         

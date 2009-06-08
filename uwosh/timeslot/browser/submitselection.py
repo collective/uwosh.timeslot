@@ -139,6 +139,10 @@ class SubmitSelection(BrowserView):
         return isEmail(self.email) == 1
 
     def sendWaitingListConfirmationEmail(self, signupSheet, slotLabel):
+        url = signupSheet.absolute_url()
+        if signupSheet.isContainedInMasterSignupSheet():
+            url = signupSheet.aq_parent.absolute_url()
+
         extraEmailContent = signupSheet.getExtraEmailContent()
         contactInfo = signupSheet.getContactInfo()
         toEmail = self.email
@@ -154,7 +158,7 @@ class SubmitSelection(BrowserView):
                 message += line + '\n'
             message += '\n'
 
-        message += signupSheet.absolute_url() + '\n\n'
+        message += url + '\n\n'
         
         if contactInfo != ():
             message += 'If you have any questions please contact:\n'
