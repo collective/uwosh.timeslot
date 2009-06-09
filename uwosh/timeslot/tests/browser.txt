@@ -48,7 +48,6 @@ Let's create a signup sheet::
     >>> browser.getControl(name='title').value = 'Test Signup Sheet'
     >>> browser.getControl(name='extraFields:list').value = ('phone',)
     >>> browser.getControl(name='extraEmailContent:lines').value = 'Let\'s put in this....\ncontent'
-    >>> browser.getControl(name='contactInfo:lines').value= 'Call me at:\n555-1234'
     >>> browser.getControl(name='allowSignupForMultipleSlots:boolean').value = 'on'
     >>> browser.getControl(name='form_submit').click()
     >>> 'Changes saved.' in browser.contents
@@ -136,7 +135,7 @@ We switch to an Anonymous user and attempt to view the page::
 
     >>> self.setRoles(['Anonymous'])
     >>> browser.open(signupSheetUrl)
-    >>> 'To signup for a spot you will need to <a' and 'login</a> first.'  in browser.contents
+    >>> 'To signup for a spot you will need to' in browser.contents and 'login</a> first.'  in browser.contents
     True
     >>> 'Submit' not in browser.contents
     True
@@ -221,7 +220,7 @@ to cancel the slot reservation::
     >>> browser.open(signupSheetUrl)
     >>> browser.contents.count('Your Slot')
     1
-    >>> 'You are signed up for the following slots:' and 'Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
+    >>> 'You are signed up for the following slots:' in browser.contents and 'Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
     True
     >>> browser.getControl(name='cancelSlots')
     <SubmitControl name='cancelSlots' type='submit'>
@@ -233,7 +232,7 @@ A user should have to fill in all the required fields::
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Failure' in browser.contents
     True
-    >>> 'You did not complete the following fields:' and 'Phone' in browser.contents
+    >>> 'You did not complete the following fields:' in browser.contents and 'Phone' in browser.contents
     True
 
 A user should not be able to even select full slot w/o a waiting list::
@@ -340,7 +339,7 @@ Clone should also work for cloning timeslots::
 
 There should now be three new timeslots in the  'Tuesday, October 13, 2009' day::
 
-    >>> '07:00 PM - 08:00 PM' and '08:00 PM - 09:00 PM' and '09:00 PM - 10:00 PM' in browser.contents
+    >>> '07:00 PM - 08:00 PM' in browser.contents and '08:00 PM - 09:00 PM' in browser.contents and '09:00 PM - 10:00 PM' in browser.contents
     True
 
 And they should have the same properties as the original::
@@ -355,13 +354,13 @@ And they should have the same properties as the original::
 After we add contact information to the signup sheet it should show up when viewing it::
 
     >>> browser.open(signupSheetUrl)
-    >>> 'If you have any questions please contact:' and 'Marshall Scorcio' and 'email@example.com' and '123-456-7890' not in browser.contents
+    >>> 'If you have any questions please contact:' not in browser.contents
     True
     >>> browser.open(signupSheetUrl + '/edit')
     >>> browser.getControl(name='contactInfo:lines').value = 'Marshall Scorcio\nemail@example.com\n123-456-7890'
     >>> browser.getControl(name='form_submit').click()
     >>> browser.open(signupSheetUrl)
-    >>> 'If you have any questions please contact:' and 'Marshall Scorcio' and 'email@example.com' and '123-456-7890' in browser.contents
+    >>> 'If you have any questions please contact:' in browser.contents and 'Marshall Scorcio' in browser.contents and 'email@example.com' in browser.contents and '123-456-7890' in browser.contents
     True
 
 There should be an entry for the ScheduleViewer role on the sharing tab::
