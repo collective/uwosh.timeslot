@@ -61,16 +61,13 @@ class SubmitSelection(BrowserView):
 
     def getListOfEmptyRequiredFields(self):
         context = aq_inner(self.context)
-        fieldNames = self.context.schema['extraFields'].vocabulary
+        fieldNames = dict(self.context.schema['extraFields'].vocabulary)
         emptyRequiredFields = []
     
         requiredExtraFields = context.getExtraFields()
         for field in requiredExtraFields:
-            if len(getattr(self, field)) < 1:
-                for (id, name) in fieldNames:
-                    if id == field:
-                        emptyRequiredFields.append(name)
-                        break
+            if (len(getattr(self, field)) < 1) and (field in fieldNames):
+                emptyRequiredFields.append(fieldNames[field])
 
         return emptyRequiredFields
 
