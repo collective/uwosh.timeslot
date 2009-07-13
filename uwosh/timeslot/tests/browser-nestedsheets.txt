@@ -32,7 +32,7 @@ Let's create a master signup sheet::
     >>> browser.open(url)
     >>> browser.open(url + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'Master Signup Sheet'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
     >>> masterSheet = self.portal['master-signup-sheet']
@@ -42,31 +42,31 @@ And we'll add inner signup sheets to it:
 
     >>> browser.open(masterSheetUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'SheetH'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
     
     >>> browser.open(masterSheetUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'SheetZ'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 
     >>> browser.open(masterSheetUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'SheetA'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 
     >>> browser.open(masterSheetUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'SheetX'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 
     >>> browser.open(masterSheetUrl + '/createObject?type_name=Signup+Sheet')
     >>> browser.getControl(name='title').value = 'SheetG'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 

@@ -5,6 +5,7 @@ Let's import some exceptions we'll need to catch later::
 
     >>> from AccessControl.unauthorized import Unauthorized
     >>> from mechanize._mechanize import LinkNotFoundError
+    >>> from ClientForm import ItemNotFoundError
     
 To create a signup sheet we need to login in as a manager and create several
 different content types.
@@ -13,9 +14,8 @@ We start a test browser::
 
     >>> from Products.Five.testbrowser import Browser
     >>> browser = Browser()
-    >>> browser.handleErrors = False
     >>> browser.addHeader('Accept-Language', 'en-US')
-    >>> self.portal.error_log._ignored_exceptions = ()
+    >>> self.portal.error_log._ignored_exceptions = ('Unauthorized',)
 
 We log in::
 
@@ -49,7 +49,7 @@ Let's create a signup sheet::
     >>> browser.getControl(name='extraFields:list').value = ('phone',)
     >>> browser.getControl(name='extraEmailContent:lines').value = 'Let\'s put in this....\ncontent'
     >>> browser.getControl(name='allowSignupForMultipleSlots:boolean').value = 'on'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
     >>> signupSheet = self.portal['test-signup-sheet']
@@ -61,7 +61,7 @@ We'll add a day to it::
     >>> browser.getControl(name='date_year').value = ['2009',]
     >>> browser.getControl(name='date_month').value = ['10',]
     >>> browser.getControl(name='date_day').value = ['13',]
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
     >>> day = signupSheet['tuesday-october-13-2009']
@@ -80,7 +80,7 @@ One with no waiting list and 3 openings::
     >>> browser.getControl(name='endTime_ampm').value = ['PM',]
     >>> browser.getControl(name='maxCapacity').value = '3'
     >>> browser.getControl(name='allowWaitingList:boolean').value = 'off'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 
@@ -95,7 +95,7 @@ Another one with 0 openings and a waiting list::
     >>> browser.getControl(name='endTime_ampm').value = ['PM',]
     >>> browser.getControl(name='maxCapacity').value = '0'
     >>> browser.getControl(name='allowWaitingList:boolean').value = 'on'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 
@@ -110,7 +110,7 @@ Finally, one with 0 openings and no waiting list::
     >>> browser.getControl(name='endTime_ampm').value = ['PM',]
     >>> browser.getControl(name='maxCapacity').value = '0'
     >>> browser.getControl(name='allowWaitingList:boolean').value = 'off'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
 
@@ -120,7 +120,7 @@ This day shouldn't show up as the date will be before today::
     >>> browser.getControl(name='date_year').value = ['2009',]
     >>> browser.getControl(name='date_month').value = ['04',]
     >>> browser.getControl(name='date_day').value = ['13',]
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
       
@@ -165,45 +165,22 @@ Non-manager users should not have a manager-summary, export-to-csv, clone, or
 remove-all-people tab::
     
     >>> browser.open(signupSheetUrl)
-    >>> try:
-    ...     browser.getLink('Manager Summary')
-    ... except LinkNotFoundError:
-    ...     'manager-summary not found'
-    'manager-summary not found'
-    >>> try:
-    ...     browser.getLink('Export to CSV')
-    ... except LinkNotFoundError:
-    ...     'export-to-csv not found'
-    'export-to-csv not found'
-    >>> try:
-    ...     browser.getLink('Remove All People')
-    ... except LinkNotFoundError:
-    ...     'remove-all-people not found'
-    'remove-all-people not found'
+    >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Manager Summary')
+    >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Export to CSV')
+    >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Remove All People')
 
 Non-managers should not be able to access any of those four directly either.
 An attempt to access them should throw an exception::
 
-    >>> try:
-    ...     browser.open(signupSheetUrl + '/@@manager-summary')
-    ... except: 
-    ...     'user is unauthorized to access manager-summary'
-    'user is unauthorized to access manager-summary'
-    >>> try:
-    ...     browser.open(signupSheetUrl + '/@@export-to-csv')
-    ... except:
-    ...     'user is unauthorized to access export-to-csv'
-    'user is unauthorized to access export-to-csv'
-    >>> try:
-    ...     browser.open(signupSheetUrl + '/@@remove-all-people')
-    ... except:
-    ...     'user is unauthorized to access remove-all-people'
-    'user is unauthorized to access remove-all-people'
-    >>> try:
-    ...     browser.open(dayUrl + '/@@clone')
-    ... except:
-    ...     'user is unauthorized to access clone'
-    'user is unauthorized to access clone'
+    >>> browser.open(signupSheetUrl + '/@@manager-summary')
+    >>> '<h1 class="documentFirstHeading">Insufficient Privileges</h1>' in browser.contents
+    True
+    >>> browser.open(signupSheetUrl + '/@@export-to-csv')
+    >>> '<h1 class="documentFirstHeading">Insufficient Privileges</h1>' in browser.contents
+    True
+    >>> browser.open(signupSheetUrl + '/@@remove-all-people')
+    >>> '<h1 class="documentFirstHeading">Insufficient Privileges</h1>' in browser.contents
+    True
 
 Any authenticated user should be able to sign up for an available slot::
 
@@ -238,11 +215,8 @@ A user should have to fill in all the required fields::
 A user should not be able to even select full slot w/o a waiting list::
 
     >>> browser.open(signupSheetUrl)
-    >>> try:
-    ...     browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 05:00 PM - 06:00 PM',)
-    ... except:
-    ...     'full slot is not selectable'
-    'full slot is not selectable'
+    >>> slotSelectionInput = browser.getControl(name='slotSelection')
+    >>> self.assertRaises(ItemNotFoundError, setattr, slotSelectionInput, 'value', ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 05:00 PM - 06:00 PM',))
 
 But a user should be able to be put on the waiting list even when the slot is 'full'::
 
@@ -358,7 +332,7 @@ After we add contact information to the signup sheet it should show up when view
     True
     >>> browser.open(signupSheetUrl + '/edit')
     >>> browser.getControl(name='contactInfo:lines').value = 'Marshall Scorcio\nemail@example.com\n123-456-7890'
-    >>> browser.getControl(name='form_submit').click()
+    >>> browser.getControl('Save').click()
     >>> browser.open(signupSheetUrl)
     >>> 'If you have any questions please contact:' in browser.contents and 'Marshall Scorcio' in browser.contents and 'email@example.com' in browser.contents and '123-456-7890' in browser.contents
     True
