@@ -4,73 +4,77 @@
       i18n:domain="uwosh.timeslot">
 
 <body>
-    <div metal:fill-slot="main">
-	<tal:main-macro metal:define-macro="main"
-                        tal:define="contextIsMasterSignupSheet context/isMasterSignupSheet">
+  <div metal:fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+                    tal:define="contextIsMasterSignupSheet context/isMasterSignupSheet">
       
-            <h2 tal:content="string:${context/Title} - Manager Summary" />
+      <h2 tal:content="string:${context/Title} - Manager Summary" />
 
-            <tal:block tal:repeat="signupSheet context/getSignupSheets">
+      <tal:block tal:repeat="signupSheet context/getSignupSheets">
 
-		<tal:block tal:condition="not:signupSheet/isMasterSignupSheet"
-                           tal:define="days signupSheet/getDays">
+        <tal:block tal:condition="not:signupSheet/isMasterSignupSheet"
+                   tal:define="days signupSheet/getDays">
 		
-		    <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible collapsed OnLoad">
+          <dl tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsible collapsed OnLoad">
 
-			<dt tal:condition="contextIsMasterSignupSheet" tal:content="signupSheet/Title"
-			    style="font-size: large" class="collapsibleHeader" />
+	    <dt tal:condition="contextIsMasterSignupSheet" tal:content="signupSheet/Title"
+	        style="font-size: large" class="collapsibleHeader" />
 				  
-		        <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
-			    <table class="plain">
-				<tal:block tal:condition="not:days">
-			            <tr style="background-color: #F0F0F0">
-					<th style="border: none">
-				            <h3>No days have been made available for this signup sheet yet.</h3>
-					</th>
-				    </tr>
-				</tal:block>
+	    <dd tal:omit-tag="not:contextIsMasterSignupSheet" class="collapsibleContent">
+	      <table class="plain">
+		<tal:block tal:condition="not:days">
+		  <tr style="background-color: #F0F0F0">
+		    <th style="border: none">
+		      <h3>No days have been made available for this signup sheet yet.</h3>
+		    </th>
+		  </tr>
+		</tal:block>
 
-				<tal:block tal:repeat="day days">
-				  <tal:block tal:repeat="timeSlot day/getTimeSlots">
-				    <tr style="background-color: #F0F0F0" >
-				      <th style="text-align: left" colspan="6">
-					<h4>
-					  <a tal:attributes="href day/absolute_url" tal:content="day/Title" /> @ 
-					  <a tal:attributes="href timeSlot/absolute_url" tal:content="timeSlot/Title" />
-					</h4>
-				      </th>
-				    </tr>
+		<tal:block tal:repeat="day days">
+		  
+		  <tal:block tal:repeat="timeSlot day/getTimeSlots">
+		    <tr style="background-color: #F0F0F0" >
+		      <th style="text-align: left" colspan="6">
+			<h4>
+			  <a tal:attributes="href day/absolute_url" tal:content="day/Title" /> @ 
+			  <a tal:attributes="href timeSlot/absolute_url" tal:content="timeSlot/Title" />
+			</h4>
+		      </th>
+		    </tr>
 
-				    <tr>
-				      <th>Name</th>
-				      <th>Status</th>    
-				      <th>Email</th>
-				      <th>Extra Info (Phone, Class., Dept.)</th>           
-				    </tr>
+		    <tr>
+		      <th>Name</th>
+		      <th>Status</th>    
+		      <th>Email</th>
+		      <th>Extra Info (Phone, Class., Dept.)</th>           
+		    </tr>
 					    
-				    <tal:block tal:define="people timeSlot/getPeople">
-				      <tr tal:condition="not:people">
-					<td colspan="4">No one is signed up yet.</td>
-				      </tr>
-				      <tr tal:repeat="person people">
-					<td>
-					  <a tal:attributes="href person/absolute_url" tal:content="person/Title" />
-					</td>
-					<td tal:content="person/getReviewStateTitle" />
-					<td tal:content="person/getEmail" />
-					<td tal:content="person/getExtraInfo" />
-				      </tr>
-				    </tal:block>	
-				  </tal:block>    
-				</tal:block>
-		            </table>
-			    <br />
-			</dd>
-		    </dl>
-		    <br />
-         	</tal:block>	
-            </tal:block>
-        </tal:main-macro>
-    </div>
+		    <tal:block tal:define="people timeSlot/getPeople">
+		      <tr tal:condition="not:people">
+			<td colspan="4">No one is signed up yet.</td>
+		      </tr>
+		      <tr tal:repeat="person people">
+			<td>
+			  <a tal:attributes="href person/absolute_url" tal:content="person/Title" />
+			</td>
+			<td tal:content="person/getReviewStateTitle" />
+			<td tal:content="person/getEmail" />
+			<td tal:content="person/getExtraInfo" />
+		      </tr>
+		    </tal:block>
+		      
+		  </tal:block>    
+		</tal:block>
+              </table>
+	      <br />
+	      
+	    </dd>
+	  </dl>
+	  <br />
+	  
+	</tal:block>
+      </tal:block>
+    </tal:main-macro>
+  </div>
 </body>
 </html>
