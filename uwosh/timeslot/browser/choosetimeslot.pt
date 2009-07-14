@@ -95,7 +95,10 @@
 		<tal:block tal:repeat="day days">
 		  <tr style="background-color: #F0F0F0">
 		    <th colspan="4" style="text-align: left; border: none">
-		      <h4 tal:content="day/Title" />
+		      <h4 style="float: left" tal:content="day/Title" />
+		      <div style="float: left" tal:condition="view/showEditLinks">
+			&nbsp;<a tal:attributes="href string:${day/absolute_url}/edit">Edit</a>
+		      </div>
 		    </th>
 		  </tr>
 		  
@@ -113,7 +116,12 @@
 		      <td tal:condition="signupSheet/showSlotNames">
 			<strong><span tal:content="timeSlot/name" /></strong>
 		      </td>
-		      <td tal:content="timeSlot/getTimeRange" />
+		      <td>
+			<span tal:content="timeSlot/getTimeRange" />
+			<span tal:condition="view/showEditLinks">
+			  <a tal:attributes="href string:${timeSlot/absolute_url}/edit">Edit</a>
+			</span>
+		      </td>
 		      <td>
 			<span tal:content="timeSlot/getNumberOfAvailableSpots" />
 			<span tal:condition="timeSlot/getAllowWaitingList">

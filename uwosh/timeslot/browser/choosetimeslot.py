@@ -34,3 +34,8 @@ class ChooseTimeSlot(BrowserView):
         portal_membership = getToolByName(self, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
         return 'Anonymous' not in member.getRoles()
+
+    def showEditLinks(self):
+        portal_membership = getToolByName(self, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
+        return 'Manager' in member.getRoles()
