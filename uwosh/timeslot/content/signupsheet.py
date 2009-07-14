@@ -119,7 +119,7 @@ class SignupSheet(folder.ATFolder):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
-        writer.writerow(['SignupSheet', 'Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone - Class. - Dept.)'])  
+        writer.writerow(['SignupSheet', 'Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone, Class., Dept.)'])  
       
         for signupSheet in self.getSignupSheets():
             if not signupSheet.isMasterSignupSheet():

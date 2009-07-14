@@ -45,7 +45,7 @@
                                         <th>Name</th>
 					<th>Status</th>    
 					<th>Email</th>
-					<th>Extra Info (Phone - Class. - Dept.)</th>           
+					<th>Extra Info (Phone, Class., Dept.)</th>           
 			            </tr>
 
 				    <tal:block tal:define="timeSlots day/getTimeSlots">

@@ -46,12 +46,32 @@ class MockMailHost(object):
             raise SMTPRecipientsRefused
         
 
-class UWOshTimeslotTestCase(ptc.PloneTestCase):
+class TestCase(ptc.PloneTestCase):
     """A base class for all the tests in this package."""
     
     def _setup(self):
         ptc.PloneTestCase._setup(self)
         self.portal.MailHost = MockMailHost()
     
-class UWOshTimeslotFunctionalTestCase(UWOshTimeslotTestCase, ptc.FunctionalTestCase):
+    def becomeManager(self):
+        self.setRoles(['Authenticated', 'Member', 'Manager'])
+
+    def createSignupSheet(self, folder, id='test-sheet'):
+        folder.invokeFactory('Signup Sheet', id)
+        return folder[id]
+
+    def createDay(self, folder, id='test-day'):
+        folder.invokeFactory('Day', id)
+        return folder[id]
+
+    def createTimeSlot(self, folder, id='test-timeslot'):
+        folder.invokeFactory('Time Slot', id)
+        return folder[id]
+
+    def createPerson(self, folder, id='test-person'):
+        folder.invokeFactory('Person', id)
+        return folder[id]
+
+
+class FunctionalTestCase(TestCase, ptc.FunctionalTestCase):
     pass

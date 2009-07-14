@@ -267,11 +267,11 @@ After that our test user should be signed up for two slots and waiting on zero::
 Export to a comma sperated value file (csv) should work::
 
     >>> browser.getLink('Export to CSV').click()
-    >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
+    >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,"Extra Info (Phone, Class., Dept.)"' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
 
 Clicking on Clone should make as many copies as you want of the original day
@@ -359,11 +359,11 @@ And make sure we can view the manager summary and export to csv::
     True
 
     >>> browser.getLink('Export to CSV').click()
-    >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,Extra Info (Phone - Class. - Dept.)' in browser.contents
+    >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,"Extra Info (Phone, Class., Dept.)"' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,920-555-1234' in browser.contents
+    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
 
 Let's switch back to being an authenticated user::
