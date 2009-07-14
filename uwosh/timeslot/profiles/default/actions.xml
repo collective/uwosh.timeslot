@@ -8,20 +8,6 @@
  <object name="object" meta_type="CMF Action Category">
   <property name="title"></property>
   
-  <object name="exportcsv" meta_type="CMF Action">
-   <property name="title">Export to CSV</property>
-   <property name="description"></property>
-   <property name="url_expr">string:@@export-to-csv</property>
-   <property name="icon_expr"></property>
-   <property
-      name="available_expr">python:object.getTypeInfo().getId() == 'Signup Sheet'</property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-    <element value="uwosh.timeslot: View Schedule"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-  
   <object name="manager-summary" meta_type="CMF Action">
    <property name="title">Manager Summary</property>
    <property name="description"></property>

@@ -166,7 +166,6 @@ remove-all-people tab::
     
     >>> browser.open(signupSheetUrl)
     >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Manager Summary')
-    >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Export to CSV')
     >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Remove All People')
 
 Non-managers should not be able to access any of those four directly either.
