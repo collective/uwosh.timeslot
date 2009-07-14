@@ -64,7 +64,7 @@ We'll add a day to it::
     >>> browser.getControl('Save').click()
     >>> 'Changes saved.' in browser.contents
     True
-    >>> day = signupSheet['tuesday-october-13-2009']
+    >>> day = signupSheet['tue-oct.-13-2009']
     >>> dayUrl = day.absolute_url()
  
 And to the day we'll add a number of timeslots:
@@ -150,9 +150,9 @@ displaying the correct times and days::
      >>> browser.open(signupSheetUrl)
      >>> 'Test Signup Sheet' in browser.contents
      True
-     >>> 'Monday, April 13, 2009' not in browser.contents
+     >>> 'Mon, Apr. 13, 2009' not in browser.contents
      True
-     >>> 'Tuesday, October 13, 2009' in browser.contents
+     >>> 'Tue, Oct. 13, 2009' in browser.contents
      True
      >>> '12:30 PM - 03:00 PM' in browser.contents
      True
@@ -185,7 +185,7 @@ An attempt to access them should throw an exception::
 Any authenticated user should be able to sign up for an available slot::
 
     >>> browser.open(signupSheetUrl)
-    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM',)
+    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tue, Oct. 13, 2009 @ 12:30 PM - 03:00 PM',)
     >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Success' in browser.contents
@@ -197,7 +197,7 @@ to cancel the slot reservation::
     >>> browser.open(signupSheetUrl)
     >>> browser.contents.count('Your Slot')
     1
-    >>> 'You are signed up for the following slots:' in browser.contents and 'Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
+    >>> 'You are signed up for the following slots:' in browser.contents and 'Test Signup Sheet @ Tue, Oct. 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
     True
     >>> browser.getControl(name='cancelSlots')
     <SubmitControl name='cancelSlots' type='submit'>
@@ -205,7 +205,7 @@ to cancel the slot reservation::
 A user should have to fill in all the required fields::
 
     >>> browser.open(signupSheetUrl)
-    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
+    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tue, Oct. 13, 2009 @ 04:00 PM - 05:00 PM',)
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'Failure' in browser.contents
     True
@@ -216,12 +216,12 @@ A user should not be able to even select full slot w/o a waiting list::
 
     >>> browser.open(signupSheetUrl)
     >>> slotSelectionInput = browser.getControl(name='slotSelection')
-    >>> self.assertRaises(ItemNotFoundError, setattr, slotSelectionInput, 'value', ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 05:00 PM - 06:00 PM',))
+    >>> self.assertRaises(ItemNotFoundError, setattr, slotSelectionInput, 'value', ('Test Signup Sheet @ Tue, Oct. 13, 2009 @ 05:00 PM - 06:00 PM',))
 
 But a user should be able to be put on the waiting list even when the slot is 'full'::
 
     >>> browser.open(signupSheetUrl)
-    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tuesday, October 13, 2009 @ 04:00 PM - 05:00 PM',)
+    >>> browser.getControl(name='slotSelection').value = ('Test Signup Sheet @ Tue, Oct. 13, 2009 @ 04:00 PM - 05:00 PM',)
     >>> browser.getControl(name='phone').value = '920-555-1234'
     >>> browser.getControl(name='form.button.submit').click()
     >>> 'successfully added to the waiting list for:' in browser.contents
@@ -237,7 +237,7 @@ Now let's make sure that a manager can access the manager summary page::
     >>> browser.getLink('Manager Summary').click()
     >>> 'Test Signup Sheet - Manager Summary' in browser.contents
     True
-    >>> 'Tuesday, October 13, 2009' in browser.contents
+    >>> 'Tue, Oct. 13, 2009' in browser.contents
     True
     >>> '12:30 PM - 03:00 PM' in browser.contents
     True
@@ -254,7 +254,7 @@ And it should show that our test user is signed up for two slots. One waiting on
 Now we'll bump our test user from the waiting list to be actually signed up.
 After that our test user should be signed up for two slots and waiting on zero::
 
-    >>> person = signupSheet['tuesday-october-13-2009']['04-00-pm-05-00-pm']['test_user_1_']
+    >>> person = signupSheet['tue-oct.-13-2009']['04-00-pm-05-00-pm']['test_user_1_']
     >>> portal_workflow.doActionFor(person, 'signup')
     >>> browser.open(signupSheetUrl + '/@@manager-summary')
     >>> browser.contents.count('>test_user_1_</a>')
@@ -269,15 +269,15 @@ Export to a comma sperated value file (csv) should work::
     >>> browser.getLink('Export to CSV').click()
     >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,"Extra Info (Phone, Class., Dept.)"' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
+    >>> '"Tue, Oct. 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
+    >>> '"Tue, Oct. 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
 
 Clicking on Clone should make as many copies as you want of the original day
 after stripping out all the currently signed up users::
     
-    >>> browser.open(signupSheetUrl + '/tuesday-october-13-2009')
+    >>> browser.open(signupSheetUrl + '/tue-oct.-13-2009')
     >>> browser.getLink('Clone').click()
     >>> browser.getControl(name='form.numToCreate').value = '4'
     >>> browser.getControl(name='form.actions.clone').click()
@@ -288,15 +288,15 @@ Since we made four copies there should be a total of five days, by default it sh
 and there should still be only two slots for which our user is signed up for.::
     
     >>> browser.open(signupSheetUrl + '/@@manager-summary')
-    >>> 'Tuesday, October 13, 2009' in browser.contents
+    >>> 'Tue, Oct. 13, 2009' in browser.contents
     True
-    >>> 'Wednesday, October 14, 2009' in browser.contents
+    >>> 'Wed, Oct. 14, 2009' in browser.contents
     True
-    >>> 'Thursday, October 15, 2009' in browser.contents
+    >>> 'Thu, Oct. 15, 2009' in browser.contents
     True
-    >>> 'Friday, October 16, 2009' in browser.contents
+    >>> 'Fri, Oct. 16, 2009' in browser.contents
     True
-    >>> 'Monday, October 19, 2009' in browser.contents
+    >>> 'Mon, Oct. 19, 2009' in browser.contents
     True
     >>> browser.contents.count('>test_user_1_</a>')
     2
@@ -353,7 +353,7 @@ And make sure we can view the manager summary and export to csv::
     >>> browser.getLink('Manager Summary').click()
     >>> 'Test Signup Sheet - Manager Summary' in browser.contents
     True
-    >>> 'Tuesday, October 13, 2009' in browser.contents
+    >>> 'Tue, Oct. 13, 2009' in browser.contents
     True
     >>> '12:30 PM - 03:00 PM' in browser.contents
     True
@@ -361,9 +361,9 @@ And make sure we can view the manager summary and export to csv::
     >>> browser.getLink('Export to CSV').click()
     >>> 'SignupSheet,Day,TimeSlot,Name,Status,Email,"Extra Info (Phone, Class., Dept.)"' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
+    >>> '"Tue, Oct. 13, 2009",04:00 PM - 05:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
-    >>> '"Tuesday, October 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
+    >>> '"Tue, Oct. 13, 2009",12:30 PM - 03:00 PM,test_user_1_,Signed Up,email@example.com,Phone: 920-555-1234' in browser.contents
     True
 
 Let's switch back to being an authenticated user::
@@ -374,7 +374,7 @@ The "Cancel Selected Slots" button should let our happy users cancel any slot th
 they have reserved::
 
      >>> browser.open(signupSheetUrl)
-     >>> browser.getControl(name='selectedSlot').value = ['Test Signup Sheet @ Tuesday, October 13, 2009 @ 12:30 PM - 03:00 PM',]
+     >>> browser.getControl(name='selectedSlot').value = ['Test Signup Sheet @ Tue, Oct. 13, 2009 @ 12:30 PM - 03:00 PM',]
      >>> browser.getControl(name='cancelSlots').click()
      >>> browser.open(signupSheetUrl)
      >>> browser.contents.count('Your Slot')

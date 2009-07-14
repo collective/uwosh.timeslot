@@ -46,10 +46,13 @@ def sendSignupNotificationEmail(obj, event):
 def attemptToFillEmptySpot(obj, event):
     if obj.getReviewState() == 'signedup':
         timeSlot = obj.aq_parent
-        if timeSlot.getNumberOfAvailableSpots() > 0:
-            portal_membership = getToolByName(obj, 'portal_membership')
-            member = portal_membership.getAuthenticatedMember()
-            username = member.getUser().getName()
+
+        portal_membership = getToolByName(obj, 'portal_membership')
+        member = portal_membership.getAuthenticatedMember()
+        user = member.getUser()
+
+        if timeSlot.getNumberOfAvailableSpots() > 0 and hasattr(user, 'getName'):
+            username = user.getName()
             timeSlot.manage_addLocalRoles(username, ['Manager'])
 
             portal_catalog = getToolByName(obj, 'portal_catalog')

@@ -38,7 +38,13 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
     atapi.BooleanField('allowSignupForMultipleSlots',
         storage=atapi.AnnotationStorage(),
         widget=atapi.BooleanWidget(label=_(u'Allow Signup For Multiple Slots'),
-                                 description=_(u'Allow the user to signup for more than one slot.'))
+                                   description=_(u'Allow the user to signup for more than one slot.'))
+    ),
+
+    atapi.StringField('showSlotNames',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.BooleanWidget(label=_(u'Show Individual Time Slot Names'),
+                                   description=_(u'Whether or not to show individual slot names.'))
     ),
 ))
 
@@ -60,6 +66,7 @@ class SignupSheet(folder.ATFolder):
     contactInfo = atapi.ATFieldProperty('contactInfo')
     extraEmailContent = atapi.ATFieldProperty('extraEmailContent')
     allowSignupForMultipleSlots = atapi.ATFieldProperty('allowSignupForMultipleSlots')
+    showSlotNames = atapi.ATFieldProperty('showSlotNames')
 
     def getExtraEmailContent(self):
         if self.isContainedInMasterSignupSheet():

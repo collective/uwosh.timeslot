@@ -93,23 +93,26 @@
 
 				<tal:block tal:repeat="day days">
 				    <tr style="background-color: #F0F0F0">
-					<th style="border: none">
-					    <h3 tal:content="day/Title" />
+					<th colspan="4" style="text-align: left; border: none">
+					    <h4 tal:content="day/Title" />
 					</th>
-					<th style="border: none" colspan="2"/>
 				    </tr>
 
 				    <tr>
+				        <th tal:condition="signupSheet/showSlotNames">Name</th>
 					<th>Time</th>
 					<th>Available Spots</th>
 					<th>Select</th>
 				    </tr>
 				    <tal:block tal:define="timeSlots day/getTimeSlots">
 					<tr tal:condition="not:timeSlots">
-					    <td colspan="3">No slots have been made available for this day yet.</td>
+					    <td colspan="4">No slots have been made available for this day yet.</td>
 					</tr>
 					<tr tal:repeat="timeSlot timeSlots">
-					    <td tal:content="timeSlot/Title" />
+					    <td tal:condition="signupSheet/showSlotNames">
+					        <strong><span tal:content="timeSlot/name" /></strong>
+					    </td>
+					    <td tal:content="timeSlot/getTimeRange" />
 					    <td>
 						<span tal:content="timeSlot/getNumberOfAvailableSpots" />
 						<span tal:condition="timeSlot/getAllowWaitingList">

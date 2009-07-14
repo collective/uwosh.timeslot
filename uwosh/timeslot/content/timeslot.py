@@ -26,6 +26,12 @@ TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
                           format='%I:%M %p')
     ),
 
+    atapi.StringField('name',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.StringWidget(label=_('Name'),
+                            description=_(u'Optional name'))
+    ),
+
     atapi.IntegerField('maxCapacity',
         storage=atapi.AnnotationStorage(),
         default=1,
@@ -63,15 +69,22 @@ class TimeSlot(folder.ATFolder):
     allowWaitingList = atapi.ATFieldProperty('allowWaitingList')
     startTime = atapi.ATFieldProperty('startTime')
     endTime = atapi.ATFieldProperty('endTime')
+    name = atapi.ATFieldProperty('name')
 
     def Title(self):
-    	startTime = self.getStartTime()
-    	endTime = self.getEndTime()
-    	
-    	if startTime == None or endTime == None:
-    		return ''
-    	else:
-    	    return startTime.strftime('%I:%M %p') + ' - ' + endTime.strftime('%I:%M %p')
+        title = ''
+        if self.name is not '':
+            title += self.name + ': '
+        title = title + self.getTimeRange()
+        if title is '':
+            title = self.id
+        return title
+
+    def getTimeRange(self):
+        if self.startTime is None or self.endTime is None:
+            return ''
+        else:
+            return self.startTime.strftime('%I:%M %p') + ' - ' + self.endTime.strftime('%I:%M %p')
 
     def getLabel(self):
         date = self.aq_parent
