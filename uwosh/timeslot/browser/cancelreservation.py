@@ -24,7 +24,7 @@ class CancelReservation(BrowserView):
             for slot in selectedSlots:
                 self.deleteCurrentUserFromSlot(slot)
 
-        self.request.response.redirect(self.context.absolute_url())
+        self.request.response.redirect(self.context.absolute_url() + '/@@show-reservations')
 
     def deleteCurrentUserFromSlot(self, slot):
         username = self.getCurrentUsername()

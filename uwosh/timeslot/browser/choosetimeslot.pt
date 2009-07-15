@@ -13,45 +13,7 @@
       
       <h2 tal:content="context/Title" />
       
-      <tal:block tal:condition="context/isCurrentUserSignedUpOrWaitingForAnySlot">
-        <div style="border: 1px solid #CCCCCC; padding: 10px">
-	  <p>To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
-	  <form method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
-	    <table class="plain">
-	      <tal:block tal:condition="context/isCurrentUserSignedUpForAnySlot">
-	        <tr>
-		  <th colspan="2">You are signed up for the following slots:</th>
-		</tr>
-		<tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
-		  <tal:block tal:define="label slot/getLabel">
-		    <td tal:content="label" />
-		    <td>
-		      <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
-		    </td>
-		  </tal:block>
-		</tr>
-              </tal:block>
-	      <tal:block tal:condition="context/isCurrentUserWaitingForAnySlot">
-		<tr>
-		  <th colspan="2">You are on a waiting list for the following slots:</th>
-		</tr>
-		<tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
-		  <tal:block tal:define="label slot/getLabel">
-		    <td style="border-right: none" tal:content="label" />
-		    <td style="border-left: none">
-		      <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
-		    </td>
-		  </tal:block>
-		</tr>
-	      </tal:block>
-	    </table>
-	    <br />
-
-	    <input type="submit" name="cancelSlots" value="Cancel Selected Slots" />
-	  </form>
-        </div>
-	<br />
-      </tal:block>
+      <p><a tal:attributes="href string:${context/absolute_url}/@@show-reservations">View My Reservations</a></p>
       
       <tal:block tal:condition="not:isCurrentUserLoggedIn">
 	<p>To signup for a spot you will need to

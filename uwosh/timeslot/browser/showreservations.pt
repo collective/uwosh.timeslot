@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="uwosh.timeslot">
+
+<body>
+  <div metal:fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+      
+      <h2 tal:content="context/Title" />
+      
+      <div style="border: 1px solid #CCCCCC; padding: 10px">
+	<p>To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
+	<form method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
+	  
+	  <table class="plain">
+	      
+	    <tr>
+	      <th colspan="2">You are signed up for the following slots:</th>
+	    </tr>
+	    <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
+	      <tal:block tal:define="label slot/getLabel">
+	        <td tal:content="label" />
+	        <td>
+		  <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
+		</td>
+	      </tal:block>
+	    </tr>
+	    <tr tal:condition="not:context/isCurrentUserSignedUpForAnySlot">
+	      <td colspan="2">None</td>
+	    </tr>
+	      
+	    <tr>
+	      <th colspan="2">You are on a waiting list for the following slots:</th>
+	    </tr>
+	    <tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
+	      <tal:block tal:define="label slot/getLabel">
+	        <td style="border-right: none" tal:content="label" />
+		<td style="border-left: none">
+		  <input type="checkbox" name="selectedSlot" tal:attributes="value label" />
+		</td>
+	      </tal:block>
+	    </tr>
+	    <tr tal:condition="not:context/isCurrentUserWaitingForAnySlot">
+	      <td colspan="2">None</td>
+	    </tr>
+	    
+	  </table>
+	  <br />
+
+	  <input type="submit" name="cancelSlots" value="Cancel Selected Slots" />
+	</form>
+      </div>
+      
+    </tal:main-macro>
+  </div>
+</body>
+</html>

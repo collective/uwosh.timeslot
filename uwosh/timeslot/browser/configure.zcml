@@ -39,6 +39,14 @@
 
     <browser:page
       for="..interfaces.ISignupSheet"
+      name="show-reservations"
+      template="showreservations.pt"
+      class=".showreservations.ShowReservations"
+      permission="zope2.View"
+      />
+
+    <browser:page
+      for="..interfaces.ISignupSheet"
       name="cancel-reservation"
       class=".cancelreservation.CancelReservation"
       attribute="cancelReservation"

@@ -140,6 +140,14 @@ We switch to an Anonymous user and attempt to view the page::
     >>> 'Submit' not in browser.contents
     True
 
+It should contain a link to 'View My Reservations' even though we're not logged in::
+  
+    >>> 'View My Reservations' in browser.contents
+    True
+    >>> browser.getLink('View My Reservations').click()
+    >>> 'Please log in' in browser.contents
+    True
+
 Now we make ourselves an Authenticated user::
 
     >>> self.setRoles(['Authenticated'])
@@ -190,12 +198,14 @@ Any authenticated user should be able to sign up for an available slot::
     >>> 'Success' in browser.contents
     True
 
-Because the user is now signed up for 1 slot, they should see "Your Slot" once and an option
-to cancel the slot reservation::
+Because the user is now signed up for 1 slot, they should see "Your Slot" once::
 
     >>> browser.open(signupSheetUrl)
     >>> browser.contents.count('Your Slot')
     1
+
+And once we click on "View My Reservations" there should be a link to cancel it::
+    >>> browser.getLink('View My Reservations').click()
     >>> 'You are signed up for the following slots:' in browser.contents and 'Test Signup Sheet @ Tue, Oct. 13, 2009 @ 12:30 PM - 03:00 PM' in browser.contents
     True
     >>> browser.getControl(name='cancelSlots')
@@ -372,7 +382,7 @@ Let's switch back to being an authenticated user::
 The "Cancel Selected Slots" button should let our happy users cancel any slot that
 they have reserved::
 
-     >>> browser.open(signupSheetUrl)
+     >>> browser.open(signupSheetUrl + '/@@show-reservations')
      >>> browser.getControl(name='selectedSlot').value = ['Test Signup Sheet @ Tue, Oct. 13, 2009 @ 12:30 PM - 03:00 PM',]
      >>> browser.getControl(name='cancelSlots').click()
      >>> browser.open(signupSheetUrl)
