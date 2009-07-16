@@ -10,6 +10,11 @@
       file="uwosh_timeslot_custom.css"
       />
 
+    <browser:resource
+      name="collapsiblelists.js"
+      file="collapsiblelists.js"
+      />
+
     <browser:page
       for="..interfaces.ISignupSheet"
       name="manager-summary"

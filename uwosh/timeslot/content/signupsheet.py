@@ -108,11 +108,11 @@ class SignupSheet(folder.ATFolder):
 
         if len(brains) != 0:
             today = DateTime().earliestTime()
-            startIndex = 0
-            while (startIndex < len(brains)) and (brains[startIndex]['getDate'] < today):
-                startIndex += 1
+            indexOfFirstUsefulObject = 0
+            while (indexOfFirstUsefulObject < len(brains)) and (brains[indexOfFirstUsefulObject]['getDate'] < today):
+                indexOfFirstUsefulObject += 1
 
-            for i in range(startIndex, len(brains)):
+            for i in range(indexOfFirstUsefulObject, len(brains)):
                 day = brains[i].getObject()
                 days.append(day)
     

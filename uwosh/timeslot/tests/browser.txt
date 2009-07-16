@@ -251,7 +251,7 @@ Now let's make sure that a manager can access the manager summary page::
 
 And it should show that our test user is signed up for two slots. One waiting one regular::
     
-    >>> browser.contents.count('>test_user_1_</a>')
+    >>> browser.contents.count('>test_user_1_ &lt;email@example.com&gt;</a>')
     2
     >>> browser.contents.count('Waiting List')
     1
@@ -264,7 +264,7 @@ After that our test user should be signed up for two slots and waiting on zero::
     >>> person = signupSheet['tue-oct.-13-2009']['04-00-pm-05-00-pm']['test_user_1_']
     >>> portal_workflow.doActionFor(person, 'signup')
     >>> browser.open(signupSheetUrl + '/@@manager-summary')
-    >>> browser.contents.count('>test_user_1_</a>')
+    >>> browser.contents.count('>test_user_1_ &lt;email@example.com&gt;</a>')
     2
     >>> browser.contents.count('Waiting List')
     0
@@ -305,7 +305,7 @@ and there should still be only two slots for which our user is signed up for.::
     True
     >>> 'Mon, Oct. 19, 2009' in browser.contents
     True
-    >>> browser.contents.count('>test_user_1_</a>')
+    >>> browser.contents.count('>test_user_1_ &lt;email@example.com&gt;</a>')
     2
 
 Clone should also work for cloning timeslots::
@@ -397,13 +397,13 @@ should be no one signed up for anything::
     >>> browser.open(signupSheetUrl + '/@@remove-all-people')
     >>> browser.getControl(name='form.actions.52656d6f766520416c6c2050656f706c65').click()
     >>> browser.open(signupSheetUrl + '/@@manager-summary')
-    >>> browser.contents.count('>test_user_1_</a>')
+    >>> browser.contents.count('>test_user_1_ &lt;email@example.com&gt;</a>')
     0
     >>> browser.contents.count('Waiting List')
     0
     >>> browser.contents.count('Signed Up')
     0
-    >>> browser.contents.count('No one is signed up')
+    >>> browser.contents.count('No one is signed up for this slot.')
     18
 
 The End.

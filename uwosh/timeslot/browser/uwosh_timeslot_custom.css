@@ -8,3 +8,28 @@
 {
     display: none;
 }
+
+ul.collapsibleList.expanded
+{
+    display: block;
+}
+
+ul.collapsibleList.collapsed
+{
+    display: none;
+}
+
+li.collapsibleListHeader:hover
+{
+    cursor: pointer;
+}
+
+li.collapsibleListHeader.collapsed
+{
+    list-style: url(treeCollapsed.gif);
+}
+
+li.collapsibleListHeader.expanded
+{
+    list-style: url(treeExpanded.gif);
+}
