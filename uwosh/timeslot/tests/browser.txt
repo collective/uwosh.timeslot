@@ -169,12 +169,10 @@ displaying the correct times and days::
      >>> '6:00 PM - 07:00 PM' in browser.contents
      True
 
-Non-manager users should not have a manager-summary, export-to-csv, clone, or
-remove-all-people tab::
+Non-manager users should not have a manager-summary tab::
     
     >>> browser.open(signupSheetUrl)
     >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Manager Summary')
-    >>> self.assertRaises(LinkNotFoundError, browser.getLink, 'Remove All People')
 
 Non-managers should not be able to access any of those four directly either.
 An attempt to access them should throw an exception::

@@ -5,7 +5,7 @@ from Products.ATContentTypes.content import folder
 from Products.ATContentTypes.content import schemata
 
 from uwosh.timeslot import timeslotMessageFactory as _
-from uwosh.timeslot.interfaces import ISignupSheet, IContainsPeople
+from uwosh.timeslot.interfaces import ISignupSheet
 from uwosh.timeslot.config import PROJECTNAME
 
 import csv
@@ -55,7 +55,7 @@ SignupSheetSchema['description'].widget.visible = {'view':'invisible', 'edit':'i
 schemata.finalizeATCTSchema(SignupSheetSchema, folderish=True, moveDiscussion=False)
 
 class SignupSheet(folder.ATFolder):
-    implements(ISignupSheet, IContainsPeople)
+    implements(ISignupSheet)
 
     portal_type = 'Signup Sheet'
     schema = SignupSheetSchema

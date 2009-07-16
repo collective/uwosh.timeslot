@@ -22,20 +22,6 @@
    <property name="visible">True</property>
   </object>
   
-  <object name="remove-all-people" meta_type="CMF Action">
-   <property name="title">Remove All People</property>
-   <property name="description"></property>
-   <property name="url_expr">string:@@remove-all-people</property>
-   <property name="icon_expr"></property>
-   <property
-      name="available_expr">python:object.Type() in ['Signup Sheet', 'Day', 'Time Slot']</property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-    <element value="uwosh.timeslot: Manage Schedule"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-  
   <object name="clone" meta_type="CMF Action">
    <property name="title">Clone</property>
    <property name="description"></property>

@@ -1,0 +1,10 @@
+
+/*
+ * Hides some unnecessary things from the signupsheet view
+ */
+
+#contentview-contentrules, #contentview-local_roles, #contentview-folderContents,
+#plone-contentmenu-display
+{
+    display: none;
+}

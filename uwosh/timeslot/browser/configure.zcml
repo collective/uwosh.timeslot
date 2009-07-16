@@ -5,6 +5,11 @@
 
     <include package="plone.app.contentmenu" />
 
+    <browser:resource
+      name="uwosh_timeslot_custom.css"
+      file="uwosh_timeslot_custom.css"
+      />
+
     <browser:page
       for="..interfaces.ISignupSheet"
       name="manager-summary"
@@ -22,7 +27,7 @@
       />
     
     <browser:page
-        for="..interfaces.IContainsPeople"
+        for="..interfaces.ISignupSheet"
         name="remove-all-people"
         class=".removeallpeople.RemoveAllPeopleForm"
         permission="uwosh.timeslot.ManageSchedule"

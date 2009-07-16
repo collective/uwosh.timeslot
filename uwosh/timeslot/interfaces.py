@@ -18,10 +18,6 @@ class IDay(Interface):
 
 class ISignupSheet(Interface):
     pass
-
-class IContainsPeople(Interface):
-    def removeAllPeople():
-        """Should remove all signedup/waitinglist people from the object and its children"""
         
 class ICloneable(Interface):
     pass
