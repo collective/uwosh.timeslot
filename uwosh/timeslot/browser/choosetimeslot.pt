@@ -105,17 +105,14 @@
         <div tal:condition="view/areAnyExtraFieldsRequired" id="extraInfo">
 	  <br />
 	  <h3>Required Extra Information</h3>
-	  <br />
 	  
-	  <div tal:condition="python: view.isFieldRequired('phone')">
+	  <div tal:condition="python: view.isFieldRequired('phone')" class="field">
 	    <label for="phone">Campus Phone</label>
 	    <span class="fieldRequired" title="Required">  (Required) </span><br />
 	    <input type="text" id="phone" name="phone" />
-	    <br />
-	    <br />
 	  </div>
 	  
-	  <div tal:condition="python: view.isFieldRequired('classification')">
+	  <div tal:condition="python: view.isFieldRequired('classification')" class="field">
 	    <label for="classification">Employee Classification Type</label>
 	    <span class="fieldRequired" title="Required">  (Required) </span><br />
 	    <select id="classification" size="1" name="classification">
@@ -128,17 +125,14 @@
 	      <option value="Spouse - Faculty">Spouse - Faculty</option>
 	      <option value="Student">Student</option>
 	    </select>
-	    <br />
-	    <br />
 	  </div>
        
-	  <div tal:condition="python: view.isFieldRequired('department')">
+	  <div tal:condition="python: view.isFieldRequired('department')" class="field">
 	    <label for="department">Department</label>
 	    <span class="fieldRequired" title="Required">  (Required) </span><br />
 	    <input type="text" id="department" name="department" />
-	    <br />
-	    <br />
 	  </div>
+	  
 	</div>
 	  
 	<div tal:condition="isCurrentUserLoggedIn">

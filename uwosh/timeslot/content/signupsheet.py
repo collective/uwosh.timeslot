@@ -14,27 +14,6 @@ from DateTime import DateTime
 
 SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
-    atapi.LinesField('extraEmailContent',
-        storage=atapi.AnnotationStorage(),
-        widget=atapi.LinesWidget(label=_(u'Extra Email Content'),
-                                 description=_(u'Any additional information that you want included in the notification emails. \
-                                                 Note: Contact info., sheet, day, time, and a url are included by default.'))
-    ),
-
-    atapi.LinesField('contactInfo',
-        storage=atapi.AnnotationStorage(),
-        widget=atapi.LinesWidget(label=_(u'Contact Information'),
-                                 description=_(u'Contact information for the manager of the signup sheet.'))
-    ),
-
-    atapi.LinesField('extraFields',
-        storage=atapi.AnnotationStorage(),
-        vocabulary=[('phone','Phone'), ('department','Department'), ('classification','Employee Classification')],
-        widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
-                                          description=_(u'Information you want to collect from users besides just name and email.'),
-                                          format=_(u'checkbox'))
-    ),
-
     atapi.BooleanField('allowSignupForMultipleSlots',
         storage=atapi.AnnotationStorage(),
         widget=atapi.BooleanWidget(label=_(u'Allow Signup For Multiple Slots'),
@@ -46,6 +25,28 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
         widget=atapi.BooleanWidget(label=_(u'Show Individual Time Slot Names'),
                                    description=_(u'Whether or not to show individual slot names.'))
     ),
+
+    atapi.LinesField('extraFields',
+        storage=atapi.AnnotationStorage(),
+        vocabulary=[('phone','Phone'), ('department','Department'), ('classification','Employee Classification')],
+        widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
+                                          description=_(u'Information you want to collect from users besides just name and email.'),
+                                          format=_(u'checkbox'))
+    ),
+
+    atapi.LinesField('contactInfo',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.LinesWidget(label=_(u'Contact Information'),
+                                 description=_(u'Contact information for the manager of the signup sheet.'))
+    ),
+
+    atapi.LinesField('extraEmailContent',
+        storage=atapi.AnnotationStorage(),
+        widget=atapi.LinesWidget(label=_(u'Extra Email Content'),
+                                 description=_(u'Any additional information that you want included in the notification emails. \
+                                                 Note: Contact info., sheet, day, time, and a url are included by default.'))
+    ),
+
 ))
 
 SignupSheetSchema['title'].storage = atapi.AnnotationStorage()
