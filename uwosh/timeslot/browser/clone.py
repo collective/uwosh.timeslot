@@ -90,7 +90,7 @@ class CloneForm(formbase.PageForm):
             i += 1        
                 
     def createNewDay(self, date, contents):
-        id = date.strftime('%B-%d-%Y').lower()
+        id = date.strftime('%a-%b.-%d-%Y').lower()
         self.parent.invokeFactory('Day', id, date=date)            
         newDay = self.parent[id]
         newDay.manage_pasteObjects(contents)
@@ -100,6 +100,7 @@ class CloneForm(formbase.PageForm):
     def cloneTimeSlot(self):
         origStartTime = self.context.getStartTime()
         origEndTime = self.context.getEndTime()
+        name = self.context.getName()
         slotLength = (float(origEndTime) - float(origStartTime)) / 60 / 60 / 24
         maxCapacity = self.context.getMaxCapacity()
         allowWaiting = self.context.getAllowWaitingList()
@@ -109,19 +110,21 @@ class CloneForm(formbase.PageForm):
         while numCreated < self.numToCreate:
             newStartTime = origStartTime + (slotLength * (numCreated + 1))
             newEndTime = origEndTime + (slotLength *  (numCreated + 1))
-            newTimeSlot = self.createNewTimeSlot(newStartTime, newEndTime, maxCapacity, allowWaiting)
+            newTimeSlot = self.createNewTimeSlot(newStartTime, newEndTime, maxCapacity, allowWaiting, name)
             numCreated += 1
 
-    def createNewTimeSlot(self, startTime, endTime, maxCapacity, allowWaiting):
+    def createNewTimeSlot(self, startTime, endTime, maxCapacity, allowWaiting, name):
         id = (startTime.strftime('%I-%M-%p') + '-' + endTime.strftime('%I-%M-%p')).lower()
-        
+        if name is not '':
+            id = name.lower().replace(' ', '-') + '-' + id
+
         try:
-            self.parent.invokeFactory('Time Slot', id, startTime=startTime, endTime=endTime,
+            self.parent.invokeFactory('Time Slot', id, startTime=startTime, endTime=endTime, name=name,
                                       maxCapacity=maxCapacity, allowWaitingList=allowWaiting)
         except BadRequest:
             self.success = False
             self.errors.append("An object already exists with id: %s" % id)
             return None
             
-        newTimeSlot = self.parent[id]     
-        return newTimeSlot        
+        newTimeSlot = self.parent[id]
+        return newTimeSlot

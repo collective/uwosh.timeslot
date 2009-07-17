@@ -75,7 +75,7 @@ class TimeSlot(folder.ATFolder):
         title = ''
         if self.name is not '':
             title += self.name + ': '
-        title = title + self.getTimeRange()
+        title += self.getTimeRange()
         if title is '':
             title = self.id
         return title
