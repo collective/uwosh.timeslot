@@ -13,8 +13,6 @@
 	<li><a tal:attributes="href string:${context/absolute_url}/@@export-to-csv">Export to CSV</a></li>
 	<li><a tal:attributes="href string:${context/absolute_url}/@@remove-all-people">Remove all people</a></li>
       </ul>
-
-      <hr>
       
       <h3 tal:condition="not:context/getDays">There are no upcoming days for this signup sheet.</h3>
 

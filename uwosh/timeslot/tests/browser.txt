@@ -140,7 +140,7 @@ We switch to an Anonymous user and attempt to view the page::
     >>> 'Submit' not in browser.contents
     True
 
-It should contain a link to 'View My Reservations' even though we're not logged in::
+It should contain a link to 'View My Reservations' even though we're not logged in and a 'Please log in' link::
   
     >>> 'View My Reservations' in browser.contents
     True
