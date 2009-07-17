@@ -5,8 +5,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.validation import validation
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 
-from Acquisition import aq_inner
-
 from uwosh.timeslot import timeslotMessageFactory as _
 
 class ISubmitSelection(Interface):
@@ -60,11 +58,10 @@ class SubmitSelection(BrowserView):
         return len(self.getListOfEmptyRequiredFields()) > 0
 
     def getListOfEmptyRequiredFields(self):
-        context = aq_inner(self.context)
         fieldNames = dict(self.context.schema['extraFields'].vocabulary)
         emptyRequiredFields = []
     
-        requiredExtraFields = context.getExtraFields()
+        requiredExtraFields = self.context.getExtraFields()
         for field in requiredExtraFields:
             if (len(getattr(self, field)) < 1) and (field in fieldNames):
                 emptyRequiredFields.append(fieldNames[field])
@@ -76,17 +73,15 @@ class SubmitSelection(BrowserView):
         waiting = True
         error = ''
 
-        context = aq_inner(self.context)
-        allowSignupForMultipleSlots = context.getAllowSignupForMultipleSlots()
+        allowSignupForMultipleSlots = self.context.getAllowSignupForMultipleSlots()
 
-        (signupSheetTitle, date, time) = slotLabel.split(' @ ')
-        signupSheet = self.context.getSignupSheet(signupSheetTitle)
-        day = signupSheet.getDay(date)
+        (date, time) = slotLabel.split(' @ ')
+        day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time)
         allowWaitingList = timeSlot.getAllowWaitingList()
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
         
-        if (not allowSignupForMultipleSlots) and signupSheet.isCurrentUserSignedUpOrWaitingForAnySlot():
+        if (not allowSignupForMultipleSlots) and self.context.isCurrentUserSignedUpOrWaitingForAnySlot():
             success = False
             error = 'You are already signed up for a slot in this signup sheet.'
 
@@ -101,7 +96,7 @@ class SubmitSelection(BrowserView):
                 self.signupPerson(person)
                 waiting = False
             elif self.isEmailValid():
-                self.sendWaitingListConfirmationEmail(signupSheet, slotLabel)
+                self.sendWaitingListConfirmationEmail(self.context, slotLabel)
                     
             success = True
             
@@ -137,8 +132,6 @@ class SubmitSelection(BrowserView):
 
     def sendWaitingListConfirmationEmail(self, signupSheet, slotLabel):
         url = signupSheet.absolute_url()
-        if signupSheet.isContainedInMasterSignupSheet():
-            url = signupSheet.aq_parent.absolute_url()
 
         extraEmailContent = signupSheet.getExtraEmailContent()
         contactInfo = signupSheet.getContactInfo()

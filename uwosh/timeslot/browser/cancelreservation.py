@@ -29,8 +29,7 @@ class CancelReservation(BrowserView):
     def deleteCurrentUserFromSlot(self, slot):
         username = self.getCurrentUsername()
 
-        (signupSheet, date, time) = slot.split(' @ ')
-        signupSheet = self.context.getSignupSheet(signupSheet)
-        day = signupSheet.getDay(date)
+        (date, time) = slot.split(' @ ')
+        day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time)
         timeSlot.manage_delObjects([username,])

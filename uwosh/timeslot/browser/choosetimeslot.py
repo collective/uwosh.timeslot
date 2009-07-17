@@ -3,8 +3,6 @@ from zope.interface import implements, Interface
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 
-from Acquisition import aq_inner
-
 from uwosh.timeslot import timeslotMessageFactory as _
 
 class IChooseTimeSlot(Interface):
@@ -19,12 +17,10 @@ class ChooseTimeSlot(BrowserView):
         self.request = request
 
     def areAnyExtraFieldsRequired(self):
-        context = aq_inner(self.context)
-        return len(context.getExtraFields()) > 0
+        return len(self.context.getExtraFields()) > 0
 
     def isFieldRequired(self, field):
-        context = aq_inner(self.context)
-    	extraFields = context.getExtraFields()
+    	extraFields = self.context.getExtraFields()
         if field in extraFields:
             return True
         else:

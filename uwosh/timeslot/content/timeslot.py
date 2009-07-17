@@ -88,8 +88,7 @@ class TimeSlot(folder.ATFolder):
 
     def getLabel(self):
         date = self.aq_parent
-        signupSheet = date.aq_parent
-        return signupSheet.Title() + ' @ ' + date.Title() + ' @ ' + self.Title()
+        return date.Title() + ' @ ' + self.Title()
 
     def getNumberOfAvailableSpots(self):
         query = {'portal_type':'Person', 'review_state':'signedup'}

@@ -4,8 +4,6 @@ from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 
-from Acquisition import aq_inner
-
 from uwosh.timeslot import timeslotMessageFactory as _
 
 class IShowReservations(Interface):

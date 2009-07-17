@@ -16,7 +16,7 @@
 
       <hr>
       
-      <h3 tal:condition="not:context/getDays">No there are no upcoming days for this signup sheet.</h3>
+      <h3 tal:condition="not:context/getDays">There are no upcoming days for this signup sheet.</h3>
 
       <ul>
 	<div tal:repeat="day context/getDays">

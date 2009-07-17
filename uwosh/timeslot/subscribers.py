@@ -13,8 +13,6 @@ def sendSignupNotificationEmail(obj, event):
 
         if isEmail(person.getEmail()) == 1:      
             url = signupSheet.absolute_url()
-            if signupSheet.isContainedInMasterSignupSheet():
-                url = signupSheet.aq_parent.absolute_url()
 
             extraEmailContent = signupSheet.getExtraEmailContent()
             contactInfo = signupSheet.getContactInfo()

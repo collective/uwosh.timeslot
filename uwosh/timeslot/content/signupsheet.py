@@ -68,30 +68,6 @@ class SignupSheet(folder.ATFolder):
     allowSignupForMultipleSlots = atapi.ATFieldProperty('allowSignupForMultipleSlots')
     showSlotNames = atapi.ATFieldProperty('showSlotNames')
 
-    def getExtraEmailContent(self):
-        if self.isContainedInMasterSignupSheet():
-            return self.aq_parent.getExtraEmailContent()
-        else:
-            return self.extraEmailContent
-
-    def getContactInfo(self):
-        if self.isContainedInMasterSignupSheet():
-            return self.aq_parent.getContactInfo()
-        else:
-            return self.contactInfo
-
-    def getExtraFields(self):
-        if self.isContainedInMasterSignupSheet():
-            return self.aq_parent.getExtraFields()
-        else:
-            return self.extraFields
-
-    def getAllowSignupForMultipleSlots(self):
-        if self.isContainedInMasterSignupSheet():
-            return self.aq_parent.getAllowSignupForMultipleSlots()
-        else:
-            return self.allowSignupForMultipleSlots
-
     def getDay(self, date):
         query = {'portal_type':'Day', 'Title':date}
         brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
@@ -126,16 +102,15 @@ class SignupSheet(folder.ATFolder):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
-        writer.writerow(['SignupSheet', 'Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone, Class., Dept.)'])  
-      
-        for signupSheet in self.getSignupSheets():
-            if not signupSheet.isMasterSignupSheet():
-                for day in signupSheet.getDays():
-                    for timeSlot in day.getTimeSlots():
-                        for person in timeSlot.getPeople():
-                            writer.writerow([signupSheet.Title(), day.Title(), timeSlot.Title(), person.Title(),
-                                             person.getReviewStateTitle(), person.getEmail(), person.getExtraInfo()])
-
+        writer.writerow(['Day', 'TimeSlot', 'Name', 'Status', 'Email', 'Extra Info (Phone, Class., Dept.)'])  
+        
+        for day in self.getDays():
+            for timeSlot in day.getTimeSlots():
+                for person in timeSlot.getPeople():
+                    writer.writerow([day.Title(), timeSlot.Title(), person.Title(), 
+                                     person.getReviewStateTitle(), person.getEmail(),
+                                     person.getExtraInfo()])
+                    
         result = buffer.getvalue()
         buffer.close()
 
@@ -205,41 +180,5 @@ class SignupSheet(folder.ATFolder):
         username = member.getUserName()
         return username
 
-    def getSignupSheets(self):
-        if self.isMasterSignupSheet():
-            return self.getContainedSignupSheets()
-        else:
-            return [self]
-
-    def getContainedSignupSheets(self):
-        query = {'portal_type':'Signup Sheet'}
-        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery, sort_on='sortable_title', sort_order='ascending')
-        sheets = []
-
-        for brain in brains:
-            sheet = brain.getObject()
-            sheets.append(sheet)
-        return sheets
-    
-    def getSignupSheet(self, name):
-        query = {'portal_type':'Signup Sheet', 'Title':name}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) == 0:
-            raise ValueError('The signup sheet %s was not found.' % name)
-        return brains[0].getObject()
-
-    def isMasterSignupSheet(self):
-        query = {'portal_type':'Signup Sheet'}
-        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery)
-        if len(brains) != 0:
-            return True
-        else:
-            return False
-        
-    def isContainedInMasterSignupSheet(self):
-        parent = self.aq_parent
-        return ISignupSheet.providedBy(parent)
 
 atapi.registerType(SignupSheet, PROJECTNAME)
