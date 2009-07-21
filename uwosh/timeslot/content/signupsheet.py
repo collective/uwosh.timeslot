@@ -86,6 +86,7 @@ class SignupSheet(folder.ATFolder):
         if len(brains) != 0:
             today = DateTime().earliestTime()
             indexOfFirstUsefulObject = 0
+
             while (indexOfFirstUsefulObject < len(brains)) and (brains[indexOfFirstUsefulObject]['getDate'] < today):
                 indexOfFirstUsefulObject += 1
 

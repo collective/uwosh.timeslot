@@ -51,12 +51,16 @@ uwosh/timeslot/browser/choosetimeslot.pt
 uwosh/timeslot/browser/choosetimeslot.py
 uwosh/timeslot/browser/clone.py
 uwosh/timeslot/browser/cloning-results.pt
+uwosh/timeslot/browser/collapsiblelists.js
 uwosh/timeslot/browser/configure.zcml
 uwosh/timeslot/browser/exporttocsv.py
 uwosh/timeslot/browser/managersummary.pt
 uwosh/timeslot/browser/removeallpeople.py
+uwosh/timeslot/browser/showreservations.pt
+uwosh/timeslot/browser/showreservations.py
 uwosh/timeslot/browser/signupresults.pt
 uwosh/timeslot/browser/submitselection.py
+uwosh/timeslot/browser/uwosh_timeslot_custom.css
 uwosh/timeslot/content/__init__.py
 uwosh/timeslot/content/configure.zcml
 uwosh/timeslot/content/day.py
@@ -66,7 +70,9 @@ uwosh/timeslot/content/timeslot.py
 uwosh/timeslot/profiles/.DS_Store
 uwosh/timeslot/profiles/default/actions.xml
 uwosh/timeslot/profiles/default/catalog.xml
+uwosh/timeslot/profiles/default/cssregistry.xml
 uwosh/timeslot/profiles/default/factorytool.xml
+uwosh/timeslot/profiles/default/jsregistry.xml
 uwosh/timeslot/profiles/default/metadata.xml
 uwosh/timeslot/profiles/default/portlets.xml
 uwosh/timeslot/profiles/default/rolemap.xml
@@ -80,6 +86,7 @@ uwosh/timeslot/profiles/default/workflows/uwosh_timeslot_hidden_workflow/definit
 uwosh/timeslot/profiles/default/workflows/uwosh_timeslot_person_workflow/definition.xml
 uwosh/timeslot/tests/__init__.py
 uwosh/timeslot/tests/base.py
-uwosh/timeslot/tests/browser-nestedsheets.txt
 uwosh/timeslot/tests/browser.txt
 uwosh/timeslot/tests/test_doctest.py
+uwosh/timeslot/tests/test_person.py
+uwosh/timeslot/tests/test_timeslot.py
