@@ -72,27 +72,26 @@ class TimeSlot(folder.ATFolder):
     name = atapi.ATFieldProperty('name')
 
     def Title(self):
-        title = ''
-        if self.name is not '':
-            title += self.name + ': '
-        title += self.getTimeRange()
-        if title is '':
-            title = self.id
-        return title
+        if self.name != '':
+            return '%s: %s' % (self.name, self.getTimeRange())
+        elif self.getTimeRange() != '':
+            return self.getTimeRange()
+        else:
+            return self.id
 
     def getTimeRange(self):
         if self.startTime is None or self.endTime is None:
             return ''
         else:
-            return self.startTime.strftime('%I:%M %p') + ' - ' + self.endTime.strftime('%I:%M %p')
+            return '%s - %s' % (self.startTime.strftime('%I:%M %p'), self.endTime.strftime('%I:%M %p'))
 
     def getLabel(self):
-        date = self.aq_parent
-        return date.Title() + ' @ ' + self.Title()
+        parentDay = self.aq_parent
+        return '%s @ %s' % (parentDay.Title(), self.Title())
 
     def getNumberOfAvailableSpots(self):
-        query = {'portal_type':'Person', 'review_state':'signedup'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', review_state='signedup', 
+                                                               path=self.absolute_url_path())
         numberOfPeopleSignedUp = len(brains)
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
@@ -102,30 +101,21 @@ class TimeSlot(folder.ATFolder):
         return self.isUserSignedUpForThisSlot(username)
 
     def isUserSignedUpForThisSlot(self, username):
-        query = {'portal_type':'Person', 'id':username}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        if len(brains) == 0:
-            return False
-        else:
-            return True
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', id=username, 
+                                                               path=self.absolute_url_path())
+        return len(brains) != 0
 
     def isFull(self):
         return (self.getNumberOfAvailableSpots() == 0 and not self.allowWaitingList)
 
     def getPeople(self):
-        query = {'portal_type':'Person'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
-        people = []
-        for brain in brains:
-            person = brain.getObject()
-            people.append(person)
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', path=self.absolute_url_path(), 
+                                                               depth=1)
+        people = [brain.getObject() for brain in brains]
         return people
         
     def removeAllPeople(self):
-        people = self.getPeople()
-        idsToRemove = []
-        for person in people:
-            idsToRemove.append(person.id)
+        idsToRemove = [person.id for person in self.getPeople()]
         self.manage_delObjects(idsToRemove)
         
 atapi.registerType(TimeSlot, PROJECTNAME)

@@ -40,27 +40,20 @@ class Day(folder.ATFolder):
     description = atapi.ATFieldProperty('description')
     
     def Title(self):
-    	date = self.getDate()
-    	
-    	if date == None:
+    	if self.date is None:
             return self.id
     	else:
-    	    return date.strftime('%a, %b. %d, %Y')
+    	    return self.date.strftime('%a, %b. %d, %Y')
     
     def getTimeSlots(self):
-        query = {'portal_type':'Time Slot'}
-        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery,
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', path=self.absolute_url_path(), depth=1,
                                                                sort_on='getStartTime', sort_order='ascending')
-        timeSlots = []
-        for brain in brains:
-            timeSlot = brain.getObject()
-            timeSlots.append(timeSlot)
+        timeSlots = [brain.getObject() for brain in brains]
         return timeSlots
         
     def getTimeSlot(self, title):
-        query = {'portal_type':'Time Slot', 'Title':title}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', Title=title, 
+                                                               path=self.absolute_url_path(), depth=1)
         if len(brains) == 0:
             raise ValueError('The TimeSlot %s was not found.' % title)
         timeSlot = brains[0].getObject()

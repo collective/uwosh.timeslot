@@ -115,7 +115,7 @@ class CloneForm(formbase.PageForm):
 
     def createNewTimeSlot(self, startTime, endTime, maxCapacity, allowWaiting, name):
         id = (startTime.strftime('%I-%M-%p') + '-' + endTime.strftime('%I-%M-%p')).lower()
-        if name is not '':
+        if name != '':
             id = name.lower().replace(' ', '-') + '-' + id
 
         try:

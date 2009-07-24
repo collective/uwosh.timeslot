@@ -59,22 +59,20 @@ class Person(base.ATCTContent):
     classification = atapi.ATFieldProperty('classification')
     
     def getReviewState(self):
-        status = self.portal_workflow.getStatusOf('uwosh_timeslot_person_workflow', self)
-        reviewState = status['review_state']
-        return reviewState
+        portal_workflow = getToolByName(self, 'portal_workflow')
+        return portal_workflow.getInfoFor(self, 'review_state')
     
     def getReviewStateTitle(self):
     	reviewState = self.getReviewState()
-    	reviewStateTitle = self.portal_workflow.getTitleForStateOnType(reviewState, 'Person')
-        return reviewStateTitle
+    	return self.portal_workflow.getTitleForStateOnType(reviewState, 'Person')
     
     def getExtraInfo(self):
         extraInfo = []
-        if self.phone is not '':
+        if self.phone != '':
             extraInfo.append('Phone: ' + self.phone)
-        if self.classification is not '':
+        if self.classification != '':
             extraInfo.append('Class: ' + self.classification)
-        if self.department is not '':
+        if self.department != '':
             extraInfo.append('Dept: ' + self.department)
         return ', '.join(extraInfo)
     

@@ -70,31 +70,25 @@ class SignupSheet(folder.ATFolder):
     showSlotNames = atapi.ATFieldProperty('showSlotNames')
 
     def getDay(self, date):
-        query = {'portal_type':'Day', 'Title':date}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(path=self.absolute_url_path(), portal_type='Day', Title=date)
         if len(brains) == 0:
             raise ValueError('The date %s was not found.' % date)
         return brains[0].getObject()
         
     def getDays(self):
-        query = {'portal_type':'Day'}
-        pathQuery = {'query':self.absolute_url_path(), 'depth':1}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=pathQuery,
-                                                               sort_on='getDate', sort_order='ascending')
-        days = []
-
-        if len(brains) != 0:
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Day', path=self.absolute_url_path(),
+                                                               depth=1, sort_on='getDate', sort_order='ascending')
+        if len(brains) == 0:
+            return []
+        else:
             today = DateTime().earliestTime()
             indexOfFirstUsefulObject = 0
 
             while (indexOfFirstUsefulObject < len(brains)) and (brains[indexOfFirstUsefulObject]['getDate'] < today):
                 indexOfFirstUsefulObject += 1
 
-            for i in range(indexOfFirstUsefulObject, len(brains)):
-                day = brains[i].getObject()
-                days.append(day)
-    
-        return days
+            return [brains[i].getObject() for i in range(indexOfFirstUsefulObject, len(brains))]
+
 
     def removeAllPeople(self):
         for (id, obj) in self.contentItems():
@@ -123,7 +117,7 @@ class SignupSheet(folder.ATFolder):
         return self.isUserSignedUpOrWaitingForAnySlot(username)
 
     def isUserSignedUpOrWaitingForAnySlot(self, username):
-        return self.isUserSignedUpForAnySlot(username) or self.isUserWaitingForAnySlot(username)
+        return (self.isUserSignedUpForAnySlot(username) or self.isUserWaitingForAnySlot(username))
 
     def isCurrentUserSignedUpForAnySlot(self):
         username = self.getCurrentUsername()
@@ -145,8 +139,8 @@ class SignupSheet(folder.ATFolder):
 
     def getSlotsUserIsSignedUpFor(self, username):
         today = DateTime().earliestTime()
-        query = {'portal_type':'Person', 'id':username, 'review_state':'signedup'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', id=username, review_state='signedup', 
+                                                               path=self.absolute_url_path())
 
         slots = []
         for brain in brains:
@@ -164,8 +158,8 @@ class SignupSheet(folder.ATFolder):
 
     def getSlotsUserIsWaitingFor(self, username):
         today = DateTime().earliestTime()
-        query = {'portal_type':'Person', 'id':username, 'review_state':'waiting'}
-        brains = self.portal_catalog.unrestrictedSearchResults(query, path=self.absolute_url_path())
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', id=username, review_state='waiting',
+                                                               path=self.absolute_url_path())
 
         slots = []
         for brain in brains:
