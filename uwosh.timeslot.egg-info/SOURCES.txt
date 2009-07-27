@@ -4,7 +4,6 @@ MANIFEST.in
 README.txt
 setup.cfg
 setup.py
-docs/HISTORY.txt
 docs/INSTALL.txt
 docs/LICENSE.GPL
 docs/LICENSE.txt
@@ -35,7 +34,6 @@ uwosh.timeslot.egg-info/paster_plugins.txt
 uwosh.timeslot.egg-info/requires.txt
 uwosh.timeslot.egg-info/top_level.txt
 uwosh/timeslot/.DS_Store
-uwosh/timeslot/README.txt
 uwosh/timeslot/__init__.py
 uwosh/timeslot/config.py
 uwosh/timeslot/configure.zcml
