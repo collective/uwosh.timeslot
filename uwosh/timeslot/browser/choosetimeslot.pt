@@ -36,7 +36,7 @@
 	  
 	  <tr tal:condition="not:days" style="background-color: #F0F0F0">
 	    <th style="border: none">
-	      <h3>No days have been made available for this signup sheet yet.</h3>
+	      <h3>There are no upcoming days for this signup sheet.</h3>
 	    </th>
 	  </tr>
 

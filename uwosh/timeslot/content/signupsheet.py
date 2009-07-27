@@ -86,7 +86,7 @@ class SignupSheet(folder.ATFolder):
 
             while (indexOfFirstUsefulObject < len(brains)) and (brains[indexOfFirstUsefulObject]['getDate'] < today):
                 indexOfFirstUsefulObject += 1
-
+            
             return [brains[i].getObject() for i in range(indexOfFirstUsefulObject, len(brains))]
 
 

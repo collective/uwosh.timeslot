@@ -31,7 +31,7 @@ class TestTimeSlot(TestCase):
         self.timeSlot.setStartTime(DateTime('2:00 PM'))
         self.timeSlot.setEndTime(DateTime('4:00 PM'))
         self.assertEqual(self.timeSlot.Title(), '02:00 PM - 04:00 PM')
-
+        
 
 def test_suite():
     suite = unittest.TestSuite()

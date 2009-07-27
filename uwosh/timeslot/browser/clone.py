@@ -8,6 +8,9 @@ from zExceptions import BadRequest
 from DateTime import DateTime
 from uwosh.timeslot.interfaces import *
 
+from zope.component import queryUtility
+from plone.i18n.normalizer.interfaces import IURLNormalizer
+
 # Begin ugly hack. It works around a ContentProviderLookupError: plone.htmlhead error caused by Zope 2 permissions.
 #
 # Source: http://athenageek.wordpress.com/2008/01/08/contentproviderlookuperror-plonehtmlhead/
@@ -90,7 +93,8 @@ class CloneForm(formbase.PageForm):
             i += 1        
                 
     def createNewDay(self, date, contents):
-        id = date.strftime('%a-%b.-%d-%Y').lower()
+        id = date.strftime('%a-%b.-%d-%Y')
+        id = queryUtility(IURLNormalizer).normalize(id)
         self.parent.invokeFactory('Day', id, date=date)            
         newDay = self.parent[id]
         newDay.manage_pasteObjects(contents)
@@ -106,7 +110,6 @@ class CloneForm(formbase.PageForm):
         allowWaiting = self.context.getAllowWaitingList()
         
         numCreated = 0
-
         while numCreated < self.numToCreate:
             newStartTime = origStartTime + (slotLength * (numCreated + 1))
             newEndTime = origEndTime + (slotLength *  (numCreated + 1))
@@ -116,7 +119,8 @@ class CloneForm(formbase.PageForm):
     def createNewTimeSlot(self, startTime, endTime, maxCapacity, allowWaiting, name):
         id = (startTime.strftime('%I-%M-%p') + '-' + endTime.strftime('%I-%M-%p')).lower()
         if name != '':
-            id = name.lower().replace(' ', '-') + '-' + id
+            id = name + '-' + id
+        id = queryUtility(IURLNormalizer).normalize(id)
 
         try:
             self.parent.invokeFactory('Time Slot', id, startTime=startTime, endTime=endTime, name=name,
