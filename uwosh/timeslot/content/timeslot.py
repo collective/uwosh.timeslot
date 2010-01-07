@@ -91,7 +91,7 @@ class TimeSlot(folder.ATFolder):
 
     def getNumberOfAvailableSpots(self):
         brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', review_state='signedup', 
-                                                               path=self.absolute_url_path())
+                                                               path=self.getPath())
         numberOfPeopleSignedUp = len(brains)
         return max(0, self.maxCapacity - numberOfPeopleSignedUp)
 
@@ -102,14 +102,14 @@ class TimeSlot(folder.ATFolder):
 
     def isUserSignedUpForThisSlot(self, username):
         brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', id=username, 
-                                                               path=self.absolute_url_path())
+                                                               path=self.getPath())
         return len(brains) != 0
 
     def isFull(self):
         return (self.getNumberOfAvailableSpots() == 0 and not self.allowWaitingList)
 
     def getPeople(self):
-        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', path=self.absolute_url_path(), 
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', path=self.getPath(), 
                                                                depth=1)
         people = [brain.getObject() for brain in brains]
         return people
@@ -117,5 +117,11 @@ class TimeSlot(folder.ATFolder):
     def removeAllPeople(self):
         idsToRemove = [person.id for person in self.getPeople()]
         self.manage_delObjects(idsToRemove)
+
+    # Return a path that is correct even when we are using virutual hosts
+    def getPath(self):
+        path = self.getPhysicalPath()
+        return '/'.join(path)
         
+
 atapi.registerType(TimeSlot, PROJECTNAME)

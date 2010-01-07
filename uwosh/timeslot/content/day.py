@@ -46,14 +46,14 @@ class Day(folder.ATFolder):
     	    return self.date.strftime('%a, %b. %d, %Y')
     
     def getTimeSlots(self):
-        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', path=self.absolute_url_path(), depth=1,
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', path=self.getPath(), depth=1,
                                                                sort_on='getStartTime', sort_order='ascending')
         timeSlots = [brain.getObject() for brain in brains]
         return timeSlots
         
     def getTimeSlot(self, title):
         brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', Title=title, 
-                                                               path=self.absolute_url_path(), depth=1)
+                                                               path=self.getPath(), depth=1)
         if len(brains) == 0:
             raise ValueError('The TimeSlot %s was not found.' % title)
         timeSlot = brains[0].getObject()
@@ -63,5 +63,11 @@ class Day(folder.ATFolder):
         timeSlots = self.getTimeSlots()
         for timeSlot in timeSlots:
             timeSlot.removeAllPeople()
+
+    # Return a path that is correct even when we are using virutual hosts
+    def getPath(self):
+        path = self.getPhysicalPath()
+        return '/'.join(path)
+        
 
 atapi.registerType(Day, PROJECTNAME)

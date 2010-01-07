@@ -55,7 +55,7 @@ def attemptToFillEmptySpot(obj, event):
 
             portal_catalog = getToolByName(obj, 'portal_catalog')
             query = {'portal_type':'Person','review_state':'waiting', 'sort_on':'Date', 'sort_order':'ascending'}
-            brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.absolute_url_path())
+            brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.getPath())
             if len(brains) > 0:
                 person = brains[0].getObject()
                 portal_workflow = getToolByName(obj, 'portal_workflow')

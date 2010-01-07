@@ -70,13 +70,13 @@ class SignupSheet(folder.ATFolder):
     showSlotNames = atapi.ATFieldProperty('showSlotNames')
 
     def getDay(self, date):
-        brains = self.portal_catalog.unrestrictedSearchResults(path=self.absolute_url_path(), portal_type='Day', Title=date)
+        brains = self.portal_catalog.unrestrictedSearchResults(path=self.getPath(), portal_type='Day', Title=date)
         if len(brains) == 0:
             raise ValueError('The date %s was not found.' % date)
         return brains[0].getObject()
         
     def getDays(self):
-        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Day', path=self.absolute_url_path(),
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Day', path=self.getPath(),
                                                                depth=1, sort_on='getDate', sort_order='ascending')
         if len(brains) == 0:
             return []
@@ -140,7 +140,7 @@ class SignupSheet(folder.ATFolder):
     def getSlotsUserIsSignedUpFor(self, username):
         today = DateTime().earliestTime()
         brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', id=username, review_state='signedup', 
-                                                               path=self.absolute_url_path())
+                                                               path=self.getPath())
 
         slots = []
         for brain in brains:
@@ -159,7 +159,7 @@ class SignupSheet(folder.ATFolder):
     def getSlotsUserIsWaitingFor(self, username):
         today = DateTime().earliestTime()
         brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Person', id=username, review_state='waiting',
-                                                               path=self.absolute_url_path())
+                                                               path=self.getPath())
 
         slots = []
         for brain in brains:
@@ -175,6 +175,11 @@ class SignupSheet(folder.ATFolder):
         member = self.portal_membership.getAuthenticatedMember()
         username = member.getUserName()
         return username
+
+    # Return a path that is correct even when we are using virutual hosts
+    def getPath(self):
+        path = self.getPhysicalPath()
+        return '/'.join(path)
 
 
 atapi.registerType(SignupSheet, PROJECTNAME)
