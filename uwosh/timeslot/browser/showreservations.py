@@ -28,4 +28,4 @@ class ShowReservations(BrowserView):
     def isCurrentUserLoggedIn(self):
         portal_membership = getToolByName(self, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
-        return 'Anonymous' not in member.getRoles()
+        return 'Authenticated' in member.getRoles()
