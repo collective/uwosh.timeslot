@@ -133,9 +133,9 @@ and Authenticated users can signup on it::
     >>> portal_workflow = getToolByName(self.portal, 'portal_workflow')
     >>> portal_workflow.doActionFor(signupSheet, 'publish')
 
-We switch to an Anonymous user and attempt to view the page::
+We will logout and attempt to view the page::
 
-    >>> self.setRoles(['Anonymous'])
+    >>> browser.open(portal.absolute_url() + '/logout')
     >>> browser.open(signupSheetUrl)
     >>> 'To signup for a spot you will need to' in browser.contents and 'login</a> first.'  in browser.contents
     True
@@ -150,9 +150,17 @@ It should contain a link to 'View My Reservations' even though we're not logged 
     >>> 'Please log in' in browser.contents
     True
 
-Now we make ourselves an Authenticated user::
+We now log back in::
 
-    >>> self.setRoles(['Authenticated'])
+    >>> browser.open(portal.absolute_url() + '/login_form')
+    >>> browser.getLink('Log in').click()
+    >>> browser.getControl(name='__ac_name').value = 'test_user_1_'
+    >>> browser.getControl(name='__ac_password').value = 'secret'
+    >>> browser.getControl(name='submit').click()
+    >>> 'You are now logged in' in browser.contents
+    True
+
+    >>> self.setRoles(['Authenticated',])
 
 Lets make sure the sheet is accessible by authenticated users, and that it is
 displaying the correct times and days::
