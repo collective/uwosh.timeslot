@@ -18,16 +18,19 @@
    <permission-role>Member</permission-role>               
    <permission-role>Manager</permission-role>
    <permission-role>uwosh_timeslot_ScheduleViewer</permission-role>
+   <permission-role>uwosh_timeslot_ScheduleManager</permission-role>
   </permission-map>
   <permission-map name="Modify portal content"
                   acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>uwosh_timeslot_ScheduleManager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Owner</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>uwosh_timeslot_ScheduleViewer</permission-role>
+   <permission-role>uwosh_timeslot_ScheduleManager</permission-role>
   </permission-map>
  </state>
  
@@ -41,6 +44,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Member</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>uwosh_timeslot_ScheduleManager</permission-role>
   </permission-map>
   <permission-map name="Modify portal content"
                   acquired="False">
@@ -51,6 +55,7 @@
    <permission-role>Owner</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>uwosh_timeslot_ScheduleViewer</permission-role>
+   <permission-role>uwosh_timeslot_ScheduleManager</permission-role>
   </permission-map>
  </state>
  

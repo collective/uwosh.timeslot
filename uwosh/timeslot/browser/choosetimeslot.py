@@ -37,6 +37,9 @@ class ChooseTimeSlot(BrowserView):
 
     @instance.memoize
     def showEditLinks(self):
-        portal_membership = getToolByName(self, 'portal_membership')
-        member = portal_membership.getAuthenticatedMember()
-        return 'Manager' in member.getRoles()
+        if self.isCurrentUserLoggedIn():
+            portal_membership = getToolByName(self, 'portal_membership')
+            member = portal_membership.getAuthenticatedMember()
+            return member.checkPermission("uwosh.timeslot: Manage Schedule", self.context)
+        else:
+            return False

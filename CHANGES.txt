@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.4.3 - 2010-01-14
+----------------
+
+* Added "uwosh.timeslot: ScheduleManager" role so that users do not
+  need to be Managers to add/edit signup sheets.
+
 1.4.2 - 2010-01-13
 ----------------
 
