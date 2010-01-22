@@ -15,17 +15,17 @@
 	<li><a tal:attributes="href string:${context/absolute_url}/@@show-reservations">View My Reservations</a></li>
       </ul>
 
-      <p tal:condition="not:view/isCurrentUserLoggedIn">
-        To signup for a spot you will need to
+      <div style="font-size: 115%;" tal:condition="not:view/isCurrentUserLoggedIn">
+        <strong>To signup for a spot you will need to
 	<a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view">
-	login</a> first.
-      </p>
+	login</a> first.</strong><br /><br />
+      </div>
 
       <div tal:condition="context/contactInfo" id="contactInfo">
-	<h3>If you have any questions please contact:</h3>
+	If you have any questions please contact:<br />
 	
 	<tal:block tal:repeat="line context/contactInfo">
-	  <span tal:content="line" /><br />
+          <span tal:content="line" /><br />
 	</tal:block>
 	
 	<br />
@@ -136,6 +136,12 @@
 	  <input tal:attributes="value member" type="hidden" name="memberToAssign" />
 	</div>
 
+	<div style="font-size: 115%;" tal:condition="not:view/isCurrentUserLoggedIn">
+	  <br />
+	  <strong>To signup for a spot you will need to
+	  <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view">
+	  login</a> first.</strong>
+        </div>
       </form>
 
     </tal:main-macro>
