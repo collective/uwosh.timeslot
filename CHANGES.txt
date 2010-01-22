@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.4.4 - 2010-01-22
+----------------
+
+* A few ui changes that Michelle requested.
+
 1.4.3 - 2010-01-14
 ----------------
 
