@@ -5,7 +5,7 @@
   <property name="title" i18n:translate="">Signup Sheet</property>
   <property name="description"
     i18n:translate="">Description of the Example Type</property>
-  <property name="content_meta_type">Signup Sheet</property>
+  <property name="content_meta_type">SignupSheet</property>
   <property name="content_icon">folder_icon.gif</property>
   <property name="product">uwosh.timeslot</property>
   <property name="factory">addSignupSheet</property>
