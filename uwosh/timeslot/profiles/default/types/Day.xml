@@ -4,7 +4,7 @@
    i18n:domain="uwosh.timeslot" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <property name="title" i18n:translate="">Day</property>
   <property name="description"
-    i18n:translate="">Description of the Example Type</property>
+    i18n:translate="">Contains timeslots.  Is contained by a signup sheet.</property>
   <property name="content_meta_type">Day</property>
   <property name="content_icon">folder_icon.gif</property>
   <property name="product">uwosh.timeslot</property>

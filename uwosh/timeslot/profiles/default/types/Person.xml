@@ -4,7 +4,7 @@
    i18n:domain="uwosh.timeslot" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <property name="title" i18n:translate="">Person</property>
   <property name="description"
-    i18n:translate="">Description of the Example Type</property>
+    i18n:translate="">Someone who can sign up for a timeslot</property>
   <property name="content_meta_type">Person</property>
   <property name="content_icon">document_icon.gif</property>
   <property name="product">uwosh.timeslot</property>
