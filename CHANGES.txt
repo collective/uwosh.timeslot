@@ -1,10 +1,10 @@
 Changelog
 =========
 
-1.4.6 - Unreleased
+1.4.6 - 2010-02-09
 ------------------
 
-* Fix signing up for time slots whose labels have parentheses in theme.
+* Fix signing up for time slots whose labels have parentheses in them.
 
 1.4.5 - 2010-01-22
 ------------------
