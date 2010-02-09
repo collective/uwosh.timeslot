@@ -52,10 +52,14 @@ class Day(folder.ATFolder):
         return timeSlots
         
     def getTimeSlot(self, title):
-        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', Title=title, 
+        clean_title = title.replace(')', '').replace('(', '')
+        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', Title=clean_title, 
                                                                path=self.getPath(), depth=1)
+
+        brains = [slot for slot in brains if slot.Title == title]
         if len(brains) == 0:
             raise ValueError('The TimeSlot %s was not found.' % title)
+
         timeSlot = brains[0].getObject()
         return timeSlot
 
