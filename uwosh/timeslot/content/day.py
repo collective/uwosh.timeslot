@@ -52,11 +52,9 @@ class Day(folder.ATFolder):
         return timeSlots
         
     def getTimeSlot(self, title):
-        clean_title = title.replace(')', '').replace('(', '')
+        clean_title = '"' + title + '"'
         brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', Title=clean_title, 
                                                                path=self.getPath(), depth=1)
-
-        brains = [slot for slot in brains if slot.Title == title]
         if len(brains) == 0:
             raise ValueError('The TimeSlot %s was not found.' % title)
 
@@ -68,7 +66,7 @@ class Day(folder.ATFolder):
         for timeSlot in timeSlots:
             timeSlot.removeAllPeople()
 
-    # Return a path that is correct even when we are using virutual hosts
+    # Return a path that is correct even when we are using virtual hosts
     def getPath(self):
         path = self.getPhysicalPath()
         return '/'.join(path)
