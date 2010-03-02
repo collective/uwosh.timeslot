@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.4.7 - 2010-03-02
+------------------
+
+* Split data into more columns for .csv export as requested by Michelle.
+
 1.4.6 - 2010-02-09
 ------------------
 
