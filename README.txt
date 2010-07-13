@@ -5,7 +5,7 @@ uwosh.timeslot offers a simple way to allow users of a Plone site to
 register for events (for example: training sessions).
 
 To get started, add a SignupSheet object to your site and add Day and
-TimeSlot object to it corresponding the days and times that you
+TimeSlot object to it corresponding to the days and times that you
 would like to allow users to register for.
 
 Once the SignupSheet is published any logged in user can view it and signup for
