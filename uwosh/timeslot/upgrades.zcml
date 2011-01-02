@@ -1,0 +1,16 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  xmlns:i18n="http://namespaces.zope.org/i18n"
+  i18n_domain="uwosh.timeslot">
+        
+  <genericsetup:upgradeStep
+    title="Upgrade uwosh.timeslot to 1.5.0"
+    description="uwosh.timeslot upgrade step"
+    source="*"
+    destination="1.5.0"
+    handler=".upgrades.from_1_4_8_to_1_5_0"
+    profile="uwosh.timeslot:default" 
+    />
+    
+</configure>

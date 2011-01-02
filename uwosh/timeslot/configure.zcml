@@ -46,4 +46,7 @@
     <!-- Add the custom roles to the sharing tab -->
     <utility name="uwosh_timeslot_ScheduleViewer" factory=".sharing.ScheduleViewerRole"/>
     <utility name="uwosh_timeslot_ScheduleManager" factory=".sharing.ScheduleManagerRole"/>
+    
+    <include file="upgrades.zcml" />
+    
 </configure>

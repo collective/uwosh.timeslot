@@ -4,6 +4,7 @@ from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.validation import validation
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
+from plone.memoize import instance
 
 from uwosh.timeslot import timeslotMessageFactory as _
 
@@ -20,6 +21,10 @@ class SubmitSelection(BrowserView):
         self.context = context
         self.request = request
     
+    @instance.memoize
+    def extra_fields(self):
+        return self.context.getExtraFieldsVocabulary()
+    
     def submitUserSelection(self):
         self.results = list()
 
@@ -33,7 +38,7 @@ class SubmitSelection(BrowserView):
         return self.resultTemplate()
 
     def getUserInput(self):
-        for (field, _) in self.context.schema['extraFields'].vocabulary:
+        for (field, _) in self.extra_fields():
             setattr(self, field, self.request.get(field, ''))
 
         self.selectedSlots = self.request.get('slotSelection', None)
@@ -58,7 +63,7 @@ class SubmitSelection(BrowserView):
         return len(self.getListOfEmptyRequiredFields()) > 0
 
     def getListOfEmptyRequiredFields(self):
-        fieldNames = dict(self.context.schema['extraFields'].vocabulary)
+        fieldNames = dict(self.extra_fields())
         emptyRequiredFields = []
     
         requiredExtraFields = self.context.getExtraFields()
@@ -116,7 +121,7 @@ class SubmitSelection(BrowserView):
         newPerson = container[self.username]
         newPerson.setEmail(self.email)
         newPerson.setTitle(self.fullname)
-        for (field, _) in self.context.schema['extraFields'].vocabulary:
+        for (field, _) in self.extra_fields():
             setattr(newPerson, field, getattr(self, field))
         newPerson.reindexObject()
         return newPerson

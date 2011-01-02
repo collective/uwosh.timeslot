@@ -100,40 +100,27 @@
 	  <br />
 	  <h3>Required Extra Information</h3>
 	  
-	  <div tal:condition="python: view.isFieldRequired('phone')" class="field">
-	    <label for="phone">Campus Phone</label>
-	    <span class="fieldRequired" title="Required">  (Required) </span><br />
-	    <input type="text" id="phone" name="phone" />
-	  </div>
-	  
-	  <div tal:condition="python: view.isFieldRequired('classification')" class="field">
-	    <label for="classification">Employee Classification Type</label>
-	    <span class="fieldRequired" title="Required">  (Required) </span><br />
-	    <select id="classification" size="1" name="classification">
-	      <option value="" />
-	      <option value="Academic">Academic Staff</option>
-	      <option value="Classified">Classified Staff</option>
-	      <option value="Faculty">Faculty</option>
-	      <option value="LTE">Limited Term Employee</option>
-	      <option value="Other">Other</option>
-	      <option value="Spouse - Faculty">Spouse - Faculty</option>
-	      <option value="Student">Student</option>
-	    </select>
-	  </div>
-       
-	  <div tal:condition="python: view.isFieldRequired('department')" class="field">
-	    <label for="department">Department</label>
-	    <span class="fieldRequired" title="Required">  (Required) </span><br />
-	    <input type="text" id="department" name="department" />
-	  </div>
-	  
+	  <tal:extraFields tal:repeat="field view/extra_fields">
+  	  <div tal:condition="python: view.isFieldRequired(field['name'])" class="field">
+  	    <label tal:attributes="for field/name" tal:content="field/label">Field Label</label>
+  	    <span class="fieldRequired" title="Required">  (Required) </span><br />
+  	    <input type="text" tal:attributes="id field/name; name field/name" tal:condition="python: not view.hasVocabulary(field)" />
+  	    <select tal:attributes="id field/name; name field/name" tal:condition="python: view.hasVocabulary(field)">
+  	      <option value="" />
+  	      <tal:vocab tal:repeat="item field/vocabulary">
+  	        <option tal:attributes="value item/value" tal:content="item/label">Label</option>
+  	      </tal:vocab>
+  	    </select>
+  	  </div>
+  	</tal:extraFields>
+	  	  
 	</div>
 	  
 	<div tal:condition="view/isCurrentUserLoggedIn">
 	  <br />
 	  <input type="submit" name="form.button.submit" value="Submit" />
 	  <input type="hidden" name="form.submitted" value="1" />
-	  <input tal:attributes="value member" type="hidden" name="memberToAssign" />
+	  <input tal:attributes="value context/@@plone_portal_state/member|member|nothing" type="hidden" name="memberToAssign" />
 	</div>
 
 	<div style="font-size: 115%;" tal:condition="not:view/isCurrentUserLoggedIn">

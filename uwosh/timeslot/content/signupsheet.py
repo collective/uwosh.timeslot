@@ -7,6 +7,7 @@ from Products.ATContentTypes.content import schemata
 from uwosh.timeslot import timeslotMessageFactory as _
 from uwosh.timeslot.interfaces import ISignupSheet
 from uwosh.timeslot.config import PROJECTNAME
+from uwosh.timeslot.utilities import getAllExtraFields
 
 import csv
 from StringIO import StringIO
@@ -28,7 +29,7 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.LinesField('extraFields',
         storage=atapi.AnnotationStorage(),
-        vocabulary=[('phone','Phone'), ('department','Department'), ('classification','Employee Classification')],
+        vocabulary="getExtraFieldsVocabulary",
         widget=atapi.MultiSelectionWidget(label=_(u'Extra Fields'),
                                           description=_(u'Information you want to collect from users besides just name and email.'),
                                           format=_(u'checkbox'))
@@ -182,5 +183,13 @@ class SignupSheet(folder.ATFolder):
         path = self.getPhysicalPath()
         return '/'.join(path)
 
+    def getExtraFieldsVocabulary(self):
+        extra_fields = getAllExtraFields(self)
+        vocab = []
+        for field in extra_fields:
+            vocab.append((field['name'], field['label']))
+            
+        return vocab
+        
 
 atapi.registerType(SignupSheet, PROJECTNAME)

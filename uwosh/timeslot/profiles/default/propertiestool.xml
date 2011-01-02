@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object name="portal_properties" meta_type="Plone Properties Tool">
+  <object name="site_properties" meta_type="Plone Property Sheet">
+    <property name="timeslot_extra_fields" type="lines">
+      <element value="phone|Phone"/>
+      <element value="department|Department"/>
+      <element value="classification|Employee Classification|Academic&lt;Academic Staff&gt;,Classified&lt;Classified Staff&gt;,Faculty,LTE&lt;Limited Term Employee&gt;,Other,Spouse - Faculty,Student" />
+    </property>
+  </object>
+</object>

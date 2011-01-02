@@ -16,3 +16,20 @@ are signed up for and cancel their registration if they wish.
 Each SignupSheet has a Manager Summary tab which allows site managers
 to see who is registered for which times and export the registration
 list to a .csv file.
+
+
+Extra Fields
+------------
+To customize the extra fields selection on the SignupSheet, go to ZMI ->
+portal_properties -> site_properties and customize the timeslot_extra_fields
+value.
+
+One field per line and each field must be formatted as follows:
+
+  fieldname|fieldlabel
+  
+If you want your field value to be selectable from a list, do:
+
+  fieldname|fieldname|value1<value label 1>,value2<value label 2>
+  
+You must format the fields correctly otherwise they'll just get ignored.

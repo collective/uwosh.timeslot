@@ -3,6 +3,7 @@ from zope.interface import implements, Interface
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from plone.memoize import instance
+from uwosh.timeslot.utilities import getAllExtraFields
 
 from uwosh.timeslot import timeslotMessageFactory as _
 
@@ -16,6 +17,17 @@ class ChooseTimeSlot(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+
+    def hasVocabulary(self, field):
+        vocab = field.get('vocabulary', None)
+        if vocab is None:
+            return False
+        else:
+            return True
+
+    @property
+    def extra_fields(self):
+        return getAllExtraFields(self.context)
 
     @instance.memoize
     def areAnyExtraFieldsRequired(self):
