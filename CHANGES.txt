@@ -17,7 +17,14 @@ Changelog
   [vangheem]
 
 
-1.4.8 - 2010-12-13
+1.4.9 - 2011-05-19
+----------------
+
+* Corrected a problem in view template that would not render in Plone
+  4 if logged in as a Zope user
+
+
+ 1.4.8 - 2010-12-13
 ------------------
 
 * Corrected a permissions problem that cleared out "Add portal

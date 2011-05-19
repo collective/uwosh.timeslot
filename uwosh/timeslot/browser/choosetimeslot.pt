@@ -120,7 +120,8 @@
 	  <br />
 	  <input type="submit" name="form.button.submit" value="Submit" />
 	  <input type="hidden" name="form.submitted" value="1" />
-	  <input tal:attributes="value context/@@plone_portal_state/member|member|nothing" type="hidden" name="memberToAssign" />
+	  <!-- <input tal:attributes="value context/@@plone_portal_state/member|member|nothing" type="hidden" name="memberToAssign" /> -->
+	  <input tal:attributes="value context/@@plone_portal_state/member|nothing" type="hidden" name="memberToAssign" />
 	</div>
 
 	<div style="font-size: 115%;" tal:condition="not:view/isCurrentUserLoggedIn">
