@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.5.0 ~ unreleased
+1.5.0 - 2011-05-19
 ------------------
 
 * remove paster definitions from setup.py
