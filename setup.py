@@ -20,7 +20,7 @@ tests_require=['zope.testing']
 
 setup(name='uwosh.timeslot',
       version=version,
-      description="A Plone 3.x scheduling product",
+      description="A Plone scheduling product that lets you make easy signup sheets for office hours and class registrations",
       long_description=long_description,
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
