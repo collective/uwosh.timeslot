@@ -52,7 +52,6 @@ SignupSheetSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
 SignupSheetSchema['title'].storage = atapi.AnnotationStorage()
 SignupSheetSchema['description'].storage = atapi.AnnotationStorage()
-SignupSheetSchema['description'].widget.visible = {'view':'invisible', 'edit':'invisible'}
 
 schemata.finalizeATCTSchema(SignupSheetSchema, folderish=True, moveDiscussion=False)
 
