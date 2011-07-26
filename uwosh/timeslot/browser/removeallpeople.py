@@ -2,8 +2,10 @@ from zope import schema
 from zope.interface import Interface
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
-from five.formlib import formbase
-
+try:
+    from five.formlib import formbase
+except:
+    from Products.Five.formlib import formbase
 from uwosh.timeslot.interfaces import *
 
 # Begin ugly hack. It works around a ContentProviderLookupError: plone.htmlhead error caused by Zope 2 permissions.

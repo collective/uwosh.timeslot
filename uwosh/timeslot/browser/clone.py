@@ -2,7 +2,10 @@ from zope import schema
 from zope.interface import Interface
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
-from five.formlib import formbase
+try:
+    from five.formlib import formbase
+except:
+    from Products.Five.formlib import formbase
 from zExceptions import BadRequest
 
 from DateTime import DateTime
