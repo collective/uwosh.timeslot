@@ -34,7 +34,12 @@
 		<li tal:condition="not:timeSlot/getPeople">No one is signed up for this slot.</li>
 		
 		<li tal:repeat="person timeSlot/getPeople">
-		  <span><a tal:attributes="href person/absolute_url" tal:content="string:${person/Title} &lt;${person/email}&gt;" /> - </span>
+		  <span>
+		    <a tal:define="email person/email|nothing;
+		                   title person/Title|nothing;"
+		       tal:attributes="href person/absolute_url" 
+		       tal:content="string:${title} &lt;${email}&gt;" /> -
+		  </span>
 	          <span tal:content="person/getReviewStateTitle" />
 		</li>
 	      </ul>
