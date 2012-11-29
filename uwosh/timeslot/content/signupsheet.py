@@ -99,14 +99,17 @@ class SignupSheet(folder.ATFolder):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
-        writer.writerow(['Day', 'TimeSlotName', 'TimeSlotTime', 'Name', 'Status', 'Email', 'Phone', 'Class', 'Dept'])  
+        writer.writerow(('Day', 'TimeSlotName', 'TimeSlotTime', 'Name', 'Status', 'Email') + self.extraFields)
         
         for day in self.getDays():
             for timeSlot in day.getTimeSlots():
                 for person in timeSlot.getPeople():
-                    writer.writerow([day.Title(), timeSlot.getName(), timeSlot.getTimeRange(), person.Title(), 
-                                     person.getReviewStateTitle(), person.getEmail(),
-                                     person.getPhone(), person.getClassification(), person.getDepartment()])
+                    row = [day.Title(), timeSlot.getName(), timeSlot.getTimeRange(), person.Title(), 
+                           person.getReviewStateTitle(), person.getEmail(),
+                          ]
+                    for field in self.extraFields:
+                            row.append(getattr(person, field))
+                    writer.writerow(row)
                     
         result = buffer.getvalue()
         buffer.close()
