@@ -19,17 +19,18 @@
       </div>
 		
       <div style="font-size: 115%;" tal:condition="not:view/isCurrentUserLoggedIn">
-	<strong>To signup for a spot you will need to
-	<a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view">
-	login</a> first.</strong>
+	<strong i18n:translate="">To signup for a spot you will need to
+	<a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view"
+	   >login</a> first.</strong>
       </div>
 
       <ul>
-	<li><a tal:attributes="href string:${context/absolute_url}/@@show-reservations">View My Reservations</a></li>
+	<li><a tal:attributes="href string:${context/absolute_url}/@@show-reservations"
+               i18n:translate="">View My Reservations</a></li>
       </ul>
 
       <div tal:condition="context/contactInfo" id="contactInfo">
-	If you have any questions please contact:<br />
+	<span i18n:translate="">If you have any questions please contact:</span><br />
 	
 	<tal:block tal:repeat="line context/contactInfo">
           <span tal:content="structure line" /><br />
@@ -43,7 +44,7 @@
 	  
 	  <tr tal:condition="not:days" style="background-color: #F0F0F0">
 	    <th style="border: none">
-	      <h3>There are no upcoming days for this signup sheet.</h3>
+	      <h3 i18n:translate="">There are no upcoming days for this signup sheet.</h3>
 	    </th>
 	  </tr>
 
@@ -59,14 +60,14 @@
 		  
 	    <tr>
 	      <th tal:condition="showSlotNames">Name</th>
-	      <th>Time</th>
-	      <th>Available</th>
-	      <th>Select</th>
+	      <th i18n:translate="">Time</th>
+	      <th i18n:translate="">Available</th>
+	      <th i18n:translate="">Select</th>
 	    </tr>
 	    
 	    <tal:block tal:define="timeSlots day/getTimeSlots">
 	      <tr tal:condition="not:timeSlots">
-		<td colspan="4">No slots have been made available for this day yet.</td>
+		<td colspan="4" i18n:translate="">No slots have been made available for this day yet.</td>
 	      </tr>
 	      <tr tal:repeat="timeSlot timeSlots">
 		<td tal:condition="showSlotNames">
@@ -75,17 +76,17 @@
 		<td>
 		  <span tal:content="timeSlot/getTimeRange" />
 		  <span tal:condition="view/showEditLinks">
-		    <a tal:attributes="href string:${timeSlot/absolute_url}/edit">Edit</a>
+		    <a tal:attributes="href string:${timeSlot/absolute_url}/edit" i18n:translate="">Edit</a>
 		  </span>
 		</td>
 		<td>
 		  <span tal:content="timeSlot/getNumberOfAvailableSpots" />
-		  <span tal:condition="timeSlot/getAllowWaitingList"> + Waiting List</span>
+		  <span tal:condition="timeSlot/getAllowWaitingList"> + <span i18n:translate="">Waiting List</span></span>
 		</td>
 		<td align="center" tal:define="userAlreadySignedup timeSlot/isCurrentUserSignedUpForThisSlot;
 		                               full timeSlot/isFull">
 		  <tal:block tal:condition="userAlreadySignedup">
-		    <em><strong >&rarr; Your Slot &larr;</strong></em>
+		    <em><strong >&rarr; <span i18n:translate="">Your Slot</span> &larr;</strong></em>
 		  </tal:block>
 		  
 		  <tal:block tal:condition="not:userAlreadySignedup">
@@ -95,7 +96,7 @@
 		      <input tal:condition="not:allowSignupForMultipleSlots" type="radio" name="slotSelection"
 		      	     tal:attributes="value timeSlot/getLabel" />
 		    </tal:block>
-		    <span tal:condition="full">Full</span>
+		    <span tal:condition="full" i18n:translate="">Full</span>
 		  </tal:block>
 	        </td>
 	      </tr>
@@ -105,12 +106,12 @@
 			   
         <div tal:condition="view/areAnyExtraFieldsRequired" id="extraInfo">
 	  <br />
-	  <h3>Required Extra Information</h3>
+	  <h3 i18n:translate="">Required Extra Information</h3>
 	  
 	  <tal:extraFields tal:repeat="field view/extra_fields">
   	  <div tal:condition="python: view.isFieldRequired(field['name'])" class="field">
   	    <label tal:attributes="for field/name" tal:content="field/label">Field Label</label>
-  	    <span class="fieldRequired" title="Required">  (Required) </span><br />
+  	    <span class="fieldRequired" title="Required">  (<span i18n:translate="">Required</span>) </span><br />
   	    <input type="text" tal:attributes="id field/name; name field/name" tal:condition="python: not view.hasVocabulary(field)" />
   	    <select tal:attributes="id field/name; name field/name" tal:condition="python: view.hasVocabulary(field)">
   	      <option value="" />
@@ -133,9 +134,10 @@
 
 	<div style="font-size: 115%;" tal:condition="not:view/isCurrentUserLoggedIn">
 	  <br />
-	  <strong>To signup for a spot you will need to
-	  <a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view">
-	  login</a> first.</strong>
+	  <strong i18n:translate="">To signup for a spot you will need to
+	  <span i18n:name="login"
+		><a tal:attributes="href string:${context/absolute_url}/login_form?came_from=${context/absolute_url}/@@choose-timeslot-view"
+		    i18n:translate="">login</a></span> first.</strong>
         </div>
       </form>
 

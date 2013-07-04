@@ -6,11 +6,13 @@
  <action-provider name="portal_actions"/>
  
  <object name="object" meta_type="CMF Action Category">
-  <property name="title"></property>
+  <property name="title" i18n:translate=""></property>
   
   <object name="manager-summary" meta_type="CMF Action">
-   <property name="title">Manager Summary</property>
-   <property name="description"></property>
+   <property name="title"
+	     i18n:translate="">Manager Summary</property>
+   <property name="description"
+	     i18n:translate=""></property>
    <property name="url_expr">string:@@manager-summary</property>
    <property name="icon_expr"></property>
    <property
@@ -23,8 +25,8 @@
   </object>
   
   <object name="clone" meta_type="CMF Action">
-   <property name="title">Clone</property>
-   <property name="description"></property>
+   <property name="title" i18n:translate="">Clone</property>
+   <property name="description" i18n:translate=""></property>
    <property name="url_expr">string:@@clone</property>
    <property name="icon_expr"></property>
    <property

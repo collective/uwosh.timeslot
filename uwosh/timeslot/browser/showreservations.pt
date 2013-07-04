@@ -10,13 +10,18 @@
       <h2 tal:content="context/Title" />
       
       <div style="border: 1px solid #CCCCCC; padding: 10px">
-	<p>To cancel, select one or more of your reserved slots and click the "Cancel Selected Slots" button.</p>
+	<p i18n:translate="">To cancel, select one or more of your
+	reserved slots and click the "<span
+	i18n:name="cancel-slots-button-text"><span
+	i18n:translate="">Cancel Selected Slots</span></span>"
+	button.</p>
 	<form method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
 	  
 	  <table class="plain">
 	      
 	    <tr>
-	      <th colspan="2">You are signed up for the following slots:</th>
+	      <th colspan="2"
+		  i18n:translate="">You are signed up for the following slots:</th>
 	    </tr>
 	    <tr tal:repeat="slot context/getSlotsCurrentUserIsSignedUpFor">
 	      <tal:block tal:define="label slot/getLabel">
@@ -27,11 +32,13 @@
 	      </tal:block>
 	    </tr>
 	    <tr tal:condition="not:context/isCurrentUserSignedUpForAnySlot">
-	      <td colspan="2">None</td>
+	      <td colspan="2"
+		  i18n:translate="">None</td>
 	    </tr>
 	      
 	    <tr>
-	      <th colspan="2">You are on a waiting list for the following slots:</th>
+	      <th colspan="2"
+		  i18n:translate="">You are on a waiting list for the following slots:</th>
 	    </tr>
 	    <tr tal:repeat="slot context/getSlotsCurrentUserIsWaitingFor">
 	      <tal:block tal:define="label slot/getLabel">
@@ -42,13 +49,16 @@
 	      </tal:block>
 	    </tr>
 	    <tr tal:condition="not:context/isCurrentUserWaitingForAnySlot">
-	      <td colspan="2">None</td>
+              <td colspan="2"
+		  i18n:translate="">None</td>
 	    </tr>
 	    
 	  </table>
 	  <br />
 
-	  <input type="submit" name="cancelSlots" value="Cancel Selected Slots" />
+	  <input type="submit" name="cancelSlots"
+		 i18n:attributes="value"
+		 value="Cancel Selected Slots" />
 	</form>
       </div>
       

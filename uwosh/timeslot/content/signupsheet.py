@@ -73,7 +73,7 @@ class SignupSheet(folder.ATFolder):
         clean_date = '"' + date + '"'
         brains = self.portal_catalog.unrestrictedSearchResults(path=self.getPath(), portal_type='Day', Title=clean_date)
         if len(brains) == 0:
-            raise ValueError('The date %s was not found.' % date)
+            raise ValueError(_('The date %s was not found.' % date))
         return brains[0].getObject()
         
     def getDays(self):
