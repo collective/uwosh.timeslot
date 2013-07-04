@@ -1,0 +1,12 @@
+# Editing artifacts
+*~
+*.sw[op]
+
+# Python artifacts
+*.py[co]
+
+# Distutils/setuptools/etc.
+/build
+/dist
+/*.egg
+/*.egg-info
