@@ -15,15 +15,12 @@ TimeSlotSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
     atapi.DateTimeField('startTime',
         storage=atapi.AnnotationStorage(),
-        widget=TimeWidget(label=_('Start Time'),
-                          format='%I:%M %p')
+        widget=TimeWidget(label=_('Start Time'))
     ),
     
     atapi.DateTimeField('endTime',
         storage=atapi.AnnotationStorage(),
-        widget=TimeWidget(label=_('End Time'),
-                          show_ymd=False,
-                          format='%I:%M %p')
+        widget=TimeWidget(label=_('End Time'))
     ),
 
     atapi.StringField('name',
