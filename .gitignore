@@ -17,3 +17,6 @@
 /develop-eggs
 /parts
 /var
+
+# Gettext
+*.mo
