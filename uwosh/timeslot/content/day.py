@@ -14,8 +14,7 @@ DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
         storage=atapi.AnnotationStorage(),
         required=True,
         widget=atapi.CalendarWidget(label=_('Date'),
-                                    show_hm=False,
-                                    starting_year=2009)
+                                    show_hm=False)
     ),
 
 ))
