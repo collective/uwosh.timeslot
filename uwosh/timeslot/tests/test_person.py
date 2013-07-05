@@ -1,10 +1,7 @@
 import unittest
-from Testing import ZopeTestCase as ztc
 from Products.CMFCore.utils import getToolByName
 
 from base import TestCase
-
-from DateTime import DateTime
 
 
 class TestPerson(TestCase):

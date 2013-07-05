@@ -9,7 +9,7 @@ def parseVocabulary(vocab):
     split = vocab.split(',')
     if len(split) == 0:
         return None
-    
+
     results = []
     for item in split:
         value = item
@@ -19,10 +19,10 @@ def parseVocabulary(vocab):
             if len(itemsplit) == 2:
                 value = itemsplit[0]
                 label = itemsplit[1].strip('>')
-        results.append({'value' : value, 'label' : label})
-        
+        results.append({'value': value, 'label': label})
+
     return results
-        
+
 
 def parseField(field):
     split = field.split('|')
@@ -31,25 +31,26 @@ def parseField(field):
 
     name = split[0]
     label = split[1]
-    
+
     if len(split) == 2:
         vocabulary = None
     elif len(split) == 3:
         vocabulary = parseVocabulary(split[2])
-    
+
     return {
-        'name' : name,
-        'label' : label,
-        'vocabulary' : vocabulary
+        'name': name,
+        'label': label,
+        'vocabulary': vocabulary
     }
-    
+
+
 def getAllExtraFields(context=None):
     from uwosh.timeslot.config import DefaultExtraFields
     if context is None:
         context = getSite()
     pprops = getToolByName(context, 'portal_properties')
     site_props = pprops.site_properties
-    
+
     extra_fields = site_props.getProperty('timeslot_extra_fields', None)
     if not extra_fields:
         extra_fields = DefaultExtraFields
@@ -62,5 +63,5 @@ def getAllExtraFields(context=None):
         except:
             # just log it.
             logger.info("Error parsing the extra field value %s" % field)
-    
+
     return result

@@ -5,7 +5,6 @@ from Products.CMFCore.utils import getToolByName
 from plone.memoize import instance
 from uwosh.timeslot.utilities import getAllExtraFields
 
-from uwosh.timeslot import timeslotMessageFactory as _
 
 class IChooseTimeSlot(Interface):
     pass
@@ -35,12 +34,12 @@ class ChooseTimeSlot(BrowserView):
 
     @instance.memoize
     def isFieldRequired(self, field):
-    	extraFields = self.context.getExtraFields()
+        extraFields = self.context.getExtraFields()
         if field in extraFields:
             return True
         else:
             return False
-    
+
     @instance.memoize
     def isCurrentUserLoggedIn(self):
         portal_membership = getToolByName(self, 'portal_membership')
@@ -52,6 +51,7 @@ class ChooseTimeSlot(BrowserView):
         if self.isCurrentUserLoggedIn():
             portal_membership = getToolByName(self, 'portal_membership')
             member = portal_membership.getAuthenticatedMember()
-            return member.checkPermission("uwosh.timeslot: Manage Schedule", self.context)
+            return member.checkPermission("uwosh.timeslot: Manage Schedule",
+                                          self.context)
         else:
             return False

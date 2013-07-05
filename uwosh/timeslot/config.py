@@ -12,7 +12,7 @@ ADD_PERMISSIONS = {
 
 
 DefaultExtraFields = [
-    'phone|Phone', 
+    'phone|Phone',
     'department|Department',
     'classification|Employee Classification|Academic<Academic Staff>,Classified<Classified Staff>,Faculty,LTE<Limited Term Employee>,Other,Spouse - Faculty,Student'
 ]
