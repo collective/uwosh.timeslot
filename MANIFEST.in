@@ -1,2 +1,4 @@
+include *.txt
+recursive-include docs *
 recursive-include uwosh *
-global-exclude *pyc
+global-exclude *pyc *~
