@@ -107,9 +107,9 @@ class SubmitSelection(BrowserView):
         elif (not allowSignupForMultipleSlots) \
            and self.context.isCurrentUserSignedUpOrWaitingForAnySlot():
             status = 'error'
-            message = 'You are on at least one wait list, ' \
-                      'unsubscribe from all wait lists then ' \
-                      'try signing up again.'
+            message = 'You are already on some wait list(s), ' \
+                      'remove yourself from all wait list(s) ' \
+                      'and then try signing up again.'
 
         elif timeSlot.isCurrentUserSignedUpForThisSlot():
             status = 'error'

@@ -26,7 +26,7 @@
 
       <ul>
 	<li><a tal:attributes="href string:${context/absolute_url}/@@show-reservations"
-               i18n:translate="">View My Reservations</a></li>
+               i18n:translate="">View/Cancel reservations</a></li>
       </ul>
 
       <div tal:condition="context/contactInfo" id="contactInfo">

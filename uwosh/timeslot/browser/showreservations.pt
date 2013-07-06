@@ -15,6 +15,11 @@
 	i18n:name="cancel-slots-button-text"><span
 	i18n:translate="">Cancel Selected Slots</span></span>"
 	button.</p>
+	<p tal:condition="not:context/isCurrentUserSignedUpForAnySlot"
+	   i18n:translate="">You are not subscribed to any slot,
+	<a href=".."
+	   tal:attributes="href context/absolute_url">go and subscribe
+	to a slot</a>.</p>
 	<form method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
 	  
 	  <table class="plain">
