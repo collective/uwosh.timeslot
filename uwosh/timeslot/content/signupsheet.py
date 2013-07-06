@@ -171,6 +171,22 @@ class SignupSheet(folder.ATFolder):
         username = self.getCurrentUsername()
         return self.getSlotsUserIsSignedUpFor(username)
 
+    def anyTimeslotHasWaitingList(self):
+        query = {
+            'portal_type': 'Time Slot',
+            'path': self.getPath(),
+            }
+        today = DateTime().earliestTime()
+        for o in map(lambda b: b.getObject(),
+                     self.portal_catalog.unrestrictedSearchResults(**query)):
+            day = o.aq_parent
+            if day.getDate() < today:
+                # Ignore past days
+                continue
+            if o.allowWaitingList:
+                return True
+        return False
+
     def getSlotsUserIsSignedUpFor(self, username):
         today = DateTime().earliestTime()
         brains = self.portal_catalog.unrestrictedSearchResults(

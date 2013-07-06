@@ -36,7 +36,7 @@
 		  i18n:translate="">None</td>
 	    </tr>
 	      
-	    <tr>
+	    <tal:condition tal:condition="context/anyTimeslotHasWaitingList"><tr>
 	      <th colspan="2"
 		  i18n:translate="">You are on a waiting list for the following slots:</th>
 	    </tr>
@@ -51,7 +51,7 @@
 	    <tr tal:condition="not:context/isCurrentUserWaitingForAnySlot">
               <td colspan="2"
 		  i18n:translate="">None</td>
-	    </tr>
+	    </tr></tal:condition>
 	    
 	  </table>
 	  <br />
