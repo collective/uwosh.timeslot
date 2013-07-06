@@ -6,7 +6,6 @@ from Products.validation import validation
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from plone.memoize import instance
 
-from uwosh.timeslot import timeslotMessageFactory as _
 
 class ISubmitSelection(Interface):
     pass
@@ -20,18 +19,19 @@ class SubmitSelection(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-    
+
     @instance.memoize
     def extra_fields(self):
         return self.context.getExtraFieldsVocabulary()
-    
+
     def submitUserSelection(self):
         self.results = list()
 
-    	self.getUserInput()
-    	self.getMemberInfo()
-        
-        if not self.areAnyRequiredFieldsEmpty() and self.isAtLeastOneSlotSelected():
+        self.getUserInput()
+        self.getMemberInfo()
+
+        if not self.areAnyRequiredFieldsEmpty() \
+           and self.isAtLeastOneSlotSelected():
             for slotLabel in self.selectedSlots:
                 self.getSlotAndSignUserUpForIt(slotLabel)
 
@@ -45,7 +45,7 @@ class SubmitSelection(BrowserView):
 
         if type(self.selectedSlots) != list:
             self.selectedSlots = [self.selectedSlots]
-		
+
     def getMemberInfo(self):
         portal_membership = getToolByName(self, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
@@ -65,7 +65,7 @@ class SubmitSelection(BrowserView):
     def getListOfEmptyRequiredFields(self):
         fieldNames = dict(self.extra_fields())
         emptyRequiredFields = []
-    
+
         requiredExtraFields = self.context.getExtraFields()
         for field in requiredExtraFields:
             if (len(getattr(self, field)) < 1) and (field in fieldNames):
@@ -85,8 +85,9 @@ class SubmitSelection(BrowserView):
         timeSlot = day.getTimeSlot(time)
         allowWaitingList = timeSlot.getAllowWaitingList()
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
-        
-        if (not allowSignupForMultipleSlots) and self.context.isCurrentUserSignedUpOrWaitingForAnySlot():
+
+        if (not allowSignupForMultipleSlots) \
+           and self.context.isCurrentUserSignedUpOrWaitingForAnySlot():
             success = False
             error = 'You are already signed up for a slot in this signup sheet.'
 
@@ -96,15 +97,15 @@ class SubmitSelection(BrowserView):
 
         elif allowWaitingList or numberOfAvailableSpots > 0:
             person = self.createPersonObject(timeSlot)
-                
+
             if numberOfAvailableSpots > 0:
                 self.signupPerson(person)
                 waiting = False
             elif self.isEmailValid():
                 self.sendWaitingListConfirmationEmail(self.context, slotLabel)
-                    
+
             success = True
-            
+
         else:
             success = False
             error = 'The slot you selected is already full. Please select a different one'
@@ -130,7 +131,7 @@ class SubmitSelection(BrowserView):
         portal_workflow = getToolByName(self, 'portal_workflow')
         portal_workflow.doActionFor(person, 'signup')
         person.reindexObject()
-  
+
     def isEmailValid(self):
         isEmail = validation.validatorFor('isEmail')
         return isEmail(self.email) == 1
@@ -141,9 +142,10 @@ class SubmitSelection(BrowserView):
         extraEmailContent = signupSheet.getExtraEmailContent()
         contactInfo = signupSheet.getContactInfo()
         toEmail = self.email
-        fromEmail = "%s <%s>" % (self.context.email_from_name, self.context.email_from_address)
+        fromEmail = "%s <%s>" % (self.context.email_from_name,
+                                 self.context.email_from_address)
         subject = signupSheet.Title() + ' - Waiting List Confirmation'
-        
+
         message = 'Hi ' + self.fullname + ',\n\n'
         message += 'This message is to confirm that you have been added to the waiting list for:\n'
         message += slotLabel + '\n\n'
@@ -154,7 +156,7 @@ class SubmitSelection(BrowserView):
             message += '\n'
 
         message += url + '\n\n'
-        
+
         if contactInfo != ():
             message += 'If you have any questions please contact:\n'
             for line in contactInfo:

@@ -4,7 +4,7 @@
    i18n:domain="uwosh.timeslot" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <property name="title" i18n:translate="">Day</property>
   <property name="description"
-    i18n:translate="">Contains timeslots.  Is contained by a signup sheet.</property>
+    i18n:translate="">Contains timeslots. Is contained by a signup sheet.</property>
   <property name="content_meta_type">Day</property>
   <property name="content_icon">folder_icon.gif</property>
   <property name="product">uwosh.timeslot</property>
@@ -25,10 +25,12 @@
   <alias from="sharing" to="@@sharing" />
   <alias from="view" to="(selected layout)" />
   <action title="View" action_id="view" category="object" condition_expr=""
+    i18n:attributes="title"
     url_expr="string:${folder_url}/" visible="True">
     <permission value="View" />
   </action>
   <action title="Edit" action_id="edit" category="object" condition_expr=""
+    i18n:attributes="title"
     url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content" />
   </action>

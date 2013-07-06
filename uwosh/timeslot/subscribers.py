@@ -2,16 +2,17 @@
 from Products.validation import validation
 from Products.CMFCore.utils import getToolByName
 
+
 def sendSignupNotificationEmail(obj, event):
     isEmail = validation.validatorFor('isEmail')
-    
+
     if event.transition and event.transition.id == 'signup':
         person = obj
         timeSlot = person.aq_parent
         day = timeSlot.aq_parent
         signupSheet = day.aq_parent
 
-        if isEmail(person.getEmail()) == 1:      
+        if isEmail(person.getEmail()) == 1:
             url = signupSheet.absolute_url()
 
             extraEmailContent = signupSheet.getExtraEmailContent()
@@ -36,9 +37,9 @@ def sendSignupNotificationEmail(obj, event):
                 for line in contactInfo:
                     message += line + '\n'
                 message += '\n'
-            
+
             mailHost = obj.MailHost
-            mailHost.secureSend(message, toEmail, fromEmail, subject)          
+            mailHost.secureSend(message, toEmail, fromEmail, subject)
 
 
 def attemptToFillEmptySpot(obj, event):
@@ -49,13 +50,21 @@ def attemptToFillEmptySpot(obj, event):
         member = portal_membership.getAuthenticatedMember()
         user = member.getUser()
 
-        if timeSlot.getNumberOfAvailableSpots() > 0 and hasattr(user, 'getName'):
+        if timeSlot.getNumberOfAvailableSpots() > 0 \
+           and hasattr(user, 'getName'):
             username = user.getName()
             timeSlot.manage_addLocalRoles(username, ['Manager'])
 
             portal_catalog = getToolByName(obj, 'portal_catalog')
-            query = {'portal_type':'Person','review_state':'waiting', 'sort_on':'Date', 'sort_order':'ascending'}
-            brains = portal_catalog.unrestrictedSearchResults(query, path=timeSlot.getPath())
+            query = {
+                'portal_type': 'Person',
+                'review_state': 'waiting',
+                'sort_on': 'Date',
+                'sort_order': 'ascending',
+            }
+            brains = portal_catalog.unrestrictedSearchResults(
+                query,
+                path=timeSlot.getPath())
             if len(brains) > 0:
                 person = brains[0].getObject()
                 portal_workflow = getToolByName(obj, 'portal_workflow')
@@ -63,4 +72,3 @@ def attemptToFillEmptySpot(obj, event):
                 person.reindexObject()
 
             timeSlot.manage_delLocalRoles([username])
-        

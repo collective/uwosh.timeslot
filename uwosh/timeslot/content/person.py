@@ -12,29 +12,37 @@ from Products.CMFCore.utils import getToolByName
 
 PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
-    atapi.StringField('email',
+    atapi.StringField(
+        'email',
         storage=atapi.AnnotationStorage(),
-        widget=atapi.StringWidget(label=_(u'E-Mail'),
-                                  description=_(u'Your email address')),
-        validators = ('isEmail')
+        widget=atapi.StringWidget(
+            label=_(u'E-Mail'),
+            description=_(u'Your email address')),
+        validators=('isEmail')
     ),
 
-    atapi.StringField('phone',
+    atapi.StringField(
+        'phone',
         storage=atapi.AnnotationStorage(),
-        widget=atapi.StringWidget(label=_(u'Phone'),
-                                  description=_(u'Your phone number'))
+        widget=atapi.StringWidget(
+            label=_(u'Phone'),
+            description=_(u'Your phone number'))
     ),
 
-    atapi.StringField('department',
+    atapi.StringField(
+        'department',
         storage=atapi.AnnotationStorage(),
-        widget=atapi.StringWidget(label=_(u'Department'),
-                                  description=_(u'Your department'))
+        widget=atapi.StringWidget(
+            label=_(u'Department'),
+            description=_(u'Your department'))
     ),
 
-    atapi.StringField('classification',
+    atapi.StringField(
+        'classification',
         storage=atapi.AnnotationStorage(),
-        widget=atapi.StringWidget(label=_(u'Classification'),
-                                  description=_(u'Your staff type'))
+        widget=atapi.StringWidget(
+            label=_(u'Classification'),
+            description=_(u'Your staff type'))
     ),
 
 ))
@@ -42,9 +50,13 @@ PersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 PersonSchema['title'].storage = atapi.AnnotationStorage()
 PersonSchema['title'].widget.label = _(u'Name')
 PersonSchema['description'].storage = atapi.AnnotationStorage()
-PersonSchema['description'].widget.visible = {'view':'invisible', 'edit':'invisible'}
+PersonSchema['description'].widget.visible = {
+    'view': 'invisible',
+    'edit': 'invisible',
+}
 
 schemata.finalizeATCTSchema(PersonSchema, moveDiscussion=False)
+
 
 class Person(base.ATCTContent):
     implements(IPerson)
@@ -57,15 +69,16 @@ class Person(base.ATCTContent):
     phone = atapi.ATFieldProperty('phone')
     department = atapi.ATFieldProperty('department')
     classification = atapi.ATFieldProperty('classification')
-    
+
     def getReviewState(self):
         portal_workflow = getToolByName(self, 'portal_workflow')
         return portal_workflow.getInfoFor(self, 'review_state')
-    
+
     def getReviewStateTitle(self):
-    	reviewState = self.getReviewState()
-    	return self.portal_workflow.getTitleForStateOnType(reviewState, 'Person')
-    
+        reviewState = self.getReviewState()
+        return self.portal_workflow.getTitleForStateOnType(reviewState,
+                                                           'Person')
+
     def getExtraInfo(self):
         extraInfo = []
         if self.phone != '':
@@ -75,5 +88,5 @@ class Person(base.ATCTContent):
         if self.department != '':
             extraInfo.append('Dept: ' + self.department)
         return ', '.join(extraInfo)
-    
+
 atapi.registerType(Person, PROJECTNAME)

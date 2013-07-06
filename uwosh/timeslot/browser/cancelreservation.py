@@ -1,7 +1,6 @@
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 
-from uwosh.timeslot import timeslotMessageFactory as _
 
 class CancelReservation(BrowserView):
 
@@ -14,17 +13,18 @@ class CancelReservation(BrowserView):
         member = portal_membership.getAuthenticatedMember()
         username = member.getUserName()
         return username
-    
+
     def cancelReservation(self):
-    	selectedSlots = self.request.get('selectedSlot', None)
-    	if type(selectedSlots) != list:
+        selectedSlots = self.request.get('selectedSlot', None)
+        if type(selectedSlots) != list:
             selectedSlots = [selectedSlots]
 
         if selectedSlots != [None]:
             for slot in selectedSlots:
                 self.deleteCurrentUserFromSlot(slot)
 
-        self.request.response.redirect(self.context.absolute_url() + '/@@show-reservations')
+        location = self.context.absolute_url() + '/@@show-reservations'
+        self.request.response.redirect(location)
 
     def deleteCurrentUserFromSlot(self, slot):
         username = self.getCurrentUsername()
@@ -32,4 +32,4 @@ class CancelReservation(BrowserView):
         (date, time) = slot.split(' @ ')
         day = self.context.getDay(date)
         timeSlot = day.getTimeSlot(time)
-        timeSlot.manage_delObjects([username,])
+        timeSlot.manage_delObjects([username, ])

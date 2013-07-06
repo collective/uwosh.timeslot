@@ -6,16 +6,19 @@
 <body>
   <div metal:fill-slot="main">
     <tal:main-macro metal:define-macro="main">
-      <h2 tal:content="string:${context/Title} - Sign Up Results" />
+      <h2 i18n:translate=""
+	  ><span tal:replace="string:${context/Title}"
+	  i18n:name="title" /> -
+      Sign Up Results</h2>
     
       <div tal:condition="python: view.areAnyRequiredFieldsEmpty() or not view.isAtLeastOneSlotSelected()">
-	<h3>Failure</h3>
+	<h3 i18n:translate="">Failure</h3>
 	<ul>
 	  <li tal:condition="not:view/isAtLeastOneSlotSelected">
-	    <p>You need to select at least one slot.</p>
+	    <p i18n:translate="">You need to select at least one slot.</p>
 	  </li>
 	  <li tal:condition="view/areAnyRequiredFieldsEmpty">
-	    <p>You did not complete the following fields:</p>
+	    <p i18n:translate="">You did not complete the following fields:</p>
 	    <ul>
 	      <li tal:repeat="field view/getListOfEmptyRequiredFields">
 	        <strong tal:content="field" />
@@ -28,29 +31,32 @@
       <div tal:repeat="result view/results">
 	<tal:block tal:condition="python: result['success']">
 	  <tal:block tal:condition="not:result/waiting">
-	    <h3>Success</h3>
-	    <p>You have been successfully signed up for:<br />
+	    <h3 i18n:translate="">Success</h3>
+	    <p><span i18n:translate="">You have been successfully signed up for:</span><br />
 	       <span tal:content="result/slotLabel" /></p>
-	    <p tal:condition="view/isEmailValid">A confirmation email has been sent to you.</p>
+	    <p tal:condition="view/isEmailValid"
+               i18n:translate="">A confirmation email has been sent to you.</p>
 	  </tal:block>
                     
 	  <tal:block tal:condition="result/waiting">
-	    <h3>Success</h3>
-	    <p>You have been successfully added to the waiting list for:<br />
+	    <h3 i18n:translate="">Success</h3>
+	    <p><span i18n:translate="">You have been successfully added to the waiting list for:</span><br />
 	      <span tal:content="result/slotLabel" /></p>
-	    <p tal:condition="view/isEmailValid">You will receive a confirmation email now and second one when a spot opens up.</p>
+	    <p tal:condition="view/isEmailValid"
+	       i18n:translate="">You will receive a confirmation email now and second one when a spot opens up.</p>
 	  </tal:block>
 	</tal:block>
                 
 	<tal:block tal:condition="not:result/success">
-	  <h3>Failure</h3>
-	  <p>The system was unable to register you for:<br />
+	  <h3 i18n:translate="">Failure</h3>
+	  <p><span i18n:translate="">The system was unable to register you for:</span><br />
 	    <span tal:content="result/slotLabel" /></p>
 	  <p tal:content="result/error" />
 	</tal:block>
      </div>
 
-      <a tal:attributes="href string:${context/absolute_url};">Return to the signup sheet</a>
+      <a tal:attributes="href string:${context/absolute_url};"
+         i18n:translate="">Return to the signup sheet</a>
     </tal:main-macro>
   </div>
 </body>

@@ -1,13 +1,14 @@
 from Products.Archetypes.Widget import CalendarWidget
 
+
 class TimeWidget(CalendarWidget):
     _properties = CalendarWidget._properties.copy()
     _properties.update({
-        'show_ymd' : False,
-        'show_hm' : True,
-        'format' : '%I:%M %p'
-        })
-    
+        'show_ymd': False,
+        'show_hm': True,
+        'format': '%I:%M %p'
+    })
+
     def process_form(self, instance, field, form, empty_marker=None,
                      emptyReturnsMarker=False, validating=True):
         """Basic impl for form processing in a widget"""

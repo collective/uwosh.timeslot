@@ -1,0 +1,299 @@
+##############################################################################
+#
+# Copyright (c) 2003-2004 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: Fri Jul  5 14:22:06 2013\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:109
+msgid "Required Extra Information"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:114
+msgid "Required"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:138
+msgid "To signup for a spot you will need to ${login} first."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:139
+msgid "login"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:23
+msgid "To signup for a spot you will need to <a href=\"${DYNAMIC_CONTENT}\">login</a> first."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:28
+msgid "View My Reservations"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:33
+msgid "If you have any questions please contact:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:47
+#: uwosh.timeslot:/browser/managersummary.pt:19
+msgid "There are no upcoming days for this signup sheet."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:63
+msgid "Time"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:64
+msgid "Available"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:65
+msgid "Select"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:70
+msgid "No slots have been made available for this day yet."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:79
+msgid "Edit"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:84
+msgid "Waiting List"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:89
+msgid "Your Slot"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:99
+msgid "Full"
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:13
+msgid "Export to CSV"
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:15
+msgid "Remove all people"
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:29
+msgid "No timeslots are available for this day."
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:38
+msgid "No one is signed up for this slot."
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:14
+msgid "To cancel, select one or more of your reserved slots and click the \"${cancel-slots-button-text}\" button."
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:15
+#: uwosh.timeslot:/browser/showreservations.pt:59
+msgid "Cancel Selected Slots"
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:23
+msgid "You are signed up for the following slots:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:35
+#: uwosh.timeslot:/browser/showreservations.pt:52
+msgid "None"
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:40
+msgid "You are on a waiting list for the following slots:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:10
+msgid "${title} - Sign Up Results"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:15
+#: uwosh.timeslot:/browser/signupresults.pt:51
+msgid "Failure"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:18
+msgid "You need to select at least one slot."
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:21
+msgid "You did not complete the following fields:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:34
+#: uwosh.timeslot:/browser/signupresults.pt:42
+msgid "Success"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:35
+msgid "You have been successfully signed up for:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:37
+msgid "A confirmation email has been sent to you."
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:43
+msgid "You have been successfully added to the waiting list for:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:45
+msgid "You will receive a confirmation email now and second one when a spot opens up."
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:52
+msgid "The system was unable to register you for:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:58
+msgid "Return to the signup sheet"
+msgstr ""
+
+#: uwosh.timeslot:/content/day.py:17
+msgid "Date"
+msgstr ""
+
+#: uwosh.timeslot:/content/day.py:74
+msgid "The TimeSlot %s was not found."
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:19
+msgid "E-Mail"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:20
+msgid "Your email address"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:28
+msgid "Phone"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:29
+msgid "Your phone number"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:36
+msgid "Department"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:37
+msgid "Your department"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:44
+msgid "Classification"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:45
+msgid "Your staff type"
+msgstr ""
+
+#: uwosh.timeslot:/content/person.py:51
+#: uwosh.timeslot:/content/timeslot.py:33
+msgid "Name"
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:22
+msgid "Allow Signup For Multiple Slots"
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:23
+msgid "Allow the user to signup for more than one slot."
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:30
+msgid "Show Individual Time Slot Names"
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:31
+msgid "Whether or not to show individual slot names."
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:39
+msgid "Extra Fields"
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:40
+msgid "Information you want to collect from users besides just name and email."
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:49
+msgid "Contact Information"
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:50
+msgid "Contact information for the manager of the signup sheet."
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:58
+msgid "Extra Email Content"
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:59
+msgid "Any additional information that you want included in the notification emails. Note: Contact info., sheet, day, time, and a url are included by default."
+msgstr ""
+
+#: uwosh.timeslot:/content/signupsheet.py:95
+msgid "The date %s was not found."
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:19
+msgid "Start Time"
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:26
+msgid "End Time"
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:34
+msgid "Optional name"
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:43
+msgid "Max Capacity"
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:44
+msgid "The max number of people"
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:51
+msgid "Allow Waiting List"
+msgstr ""
+
+#: uwosh.timeslot:/content/timeslot.py:52
+msgid "Check if you want to allow signups to waiting list once max capacity is reached"
+msgstr ""
+
+#: uwosh.timeslot:/sharing.py:14
+msgid "uwosh.timeslot: Can manage schedule"
+msgstr ""
+
+#: uwosh.timeslot:/sharing.py:8
+msgid "uwosh.timeslot: Can view schedule"
+msgstr ""
+

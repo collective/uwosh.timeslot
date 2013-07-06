@@ -1,0 +1,478 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: uwosh.timeslot\n"
+"POT-Creation-Date: Fri Jul  5 14:22:06 2013\n"
+"PO-Revision-Date: 2013-07-05 14:56-0400\n"
+"Last-Translator: UniCMS-Team <unicms-support@uni-koblenz-landau.de>\n"
+"Language-Team: UniCMS-Team <unicms-support@uni-koblenz-landau.de>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: de\n"
+"Language-Name: Deutsch\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: uwosh.timeslot\n"
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:109
+msgid "Required Extra Information"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:114
+msgid "Required"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:138
+msgid "To signup for a spot you will need to ${login} first."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:139
+msgid "login"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:23
+msgid ""
+"To signup for a spot you will need to <a href=\"${DYNAMIC_CONTENT}\">login</"
+"a> first."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:28
+msgid "View My Reservations"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:33
+msgid "If you have any questions please contact:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:47
+#: uwosh.timeslot:/browser/managersummary.pt:19
+msgid "There are no upcoming days for this signup sheet."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:63
+msgid "Time"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:64
+msgid "Available"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:65
+msgid "Select"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:70
+msgid "No slots have been made available for this day yet."
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:79
+msgid "Edit"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:84
+msgid "Waiting List"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:89
+msgid "Your Slot"
+msgstr ""
+
+#: uwosh.timeslot:/browser/choosetimeslot.pt:99
+msgid "Full"
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:13
+msgid "Export to CSV"
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:15
+msgid "Remove all people"
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:29
+msgid "No timeslots are available for this day."
+msgstr ""
+
+#: uwosh.timeslot:/browser/managersummary.pt:38
+msgid "No one is signed up for this slot."
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:14
+msgid ""
+"To cancel, select one or more of your reserved slots and click the "
+"\"${cancel-slots-button-text}\" button."
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:15
+#: uwosh.timeslot:/browser/showreservations.pt:59
+msgid "Cancel Selected Slots"
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:23
+msgid "You are signed up for the following slots:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:35
+#: uwosh.timeslot:/browser/showreservations.pt:52
+msgid "None"
+msgstr ""
+
+#: uwosh.timeslot:/browser/showreservations.pt:40
+msgid "You are on a waiting list for the following slots:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:10
+msgid "${title} - Sign Up Results"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:15
+#: uwosh.timeslot:/browser/signupresults.pt:51
+msgid "Failure"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:18
+msgid "You need to select at least one slot."
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:21
+msgid "You did not complete the following fields:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:34
+#: uwosh.timeslot:/browser/signupresults.pt:42
+msgid "Success"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:35
+msgid "You have been successfully signed up for:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:37
+msgid "A confirmation email has been sent to you."
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:43
+msgid "You have been successfully added to the waiting list for:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:45
+msgid ""
+"You will receive a confirmation email now and second one when a spot opens "
+"up."
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:52
+msgid "The system was unable to register you for:"
+msgstr ""
+
+#: uwosh.timeslot:/browser/signupresults.pt:58
+msgid "Return to the signup sheet"
+msgstr ""
+
+# "uwosh.timeslot: Can manage schedule"
+# /content/day.py
+#: uwosh.timeslot:/content/day.py:17
+msgid "Date"
+msgstr "Datum"
+
+#: uwosh.timeslot:/content/day.py:74
+msgid "The TimeSlot %s was not found."
+msgstr "Die Sprechstunde %s wurde nicht gefunden."
+
+# /content/person.py
+#: uwosh.timeslot:/content/person.py:19
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: uwosh.timeslot:/content/person.py:20
+msgid "Your email address"
+msgstr "Ihre E-Mail-Adresse"
+
+#: uwosh.timeslot:/content/person.py:28
+msgid "Phone"
+msgstr "Telefon"
+
+#: uwosh.timeslot:/content/person.py:29
+msgid "Your phone number"
+msgstr "Ihre Telefonnummer"
+
+#: uwosh.timeslot:/content/person.py:36
+msgid "Department"
+msgstr "Fachbereich"
+
+#: uwosh.timeslot:/content/person.py:37
+msgid "Your department"
+msgstr "Ihr Fachbereich"
+
+#: uwosh.timeslot:/content/person.py:44
+msgid "Classification"
+msgstr "Klassifizierung"
+
+# TODO check
+#: uwosh.timeslot:/content/person.py:45
+msgid "Your staff type"
+msgstr "Ihr Mitarbeitertyp"
+
+# TODO check
+#: uwosh.timeslot:/content/person.py:51 uwosh.timeslot:/content/timeslot.py:33
+msgid "Name"
+msgstr "Name"
+
+# /content/signupsheet.py
+#: uwosh.timeslot:/content/signupsheet.py:22
+msgid "Allow Signup For Multiple Slots"
+msgstr "Erlaube Anmeldung für mehrere Sprechstunden"
+
+#: uwosh.timeslot:/content/signupsheet.py:23
+msgid "Allow the user to signup for more than one slot."
+msgstr "Erlaube dem User sich für mehr als einen Platz anzumelden."
+
+#: uwosh.timeslot:/content/signupsheet.py:30
+msgid "Show Individual Time Slot Names"
+msgstr "Zeige individuelle Zeitfensternamen"
+
+#: uwosh.timeslot:/content/signupsheet.py:31
+msgid "Whether or not to show individual slot names."
+msgstr "Anzeigen oder Ausblenden von individuellen Zeitfensternamen."
+
+#: uwosh.timeslot:/content/signupsheet.py:39
+msgid "Extra Fields"
+msgstr "Zusätzliche Felder"
+
+#: uwosh.timeslot:/content/signupsheet.py:40
+msgid "Information you want to collect from users besides just name and email."
+msgstr ""
+"Informationen, die Sie von Benutzern neben Name und E-Mail erheben möchten."
+
+#: uwosh.timeslot:/content/signupsheet.py:49
+msgid "Contact Information"
+msgstr "Kontaktinformationen"
+
+#: uwosh.timeslot:/content/signupsheet.py:50
+msgid "Contact information for the manager of the signup sheet."
+msgstr "Kontaktinformationen für den Verwalter des Anmeldeformulars"
+
+#: uwosh.timeslot:/content/signupsheet.py:58
+msgid "Extra Email Content"
+msgstr "Zusätzlicher E-Mail-Inhalt"
+
+#: uwosh.timeslot:/content/signupsheet.py:59
+msgid ""
+"Any additional information that you want included in the notification "
+"emails. Note: Contact info., sheet, day, time, and a url are included by "
+"default."
+msgstr ""
+"Jegliche zusätzliche Informationen, die Sie in Benachrichtigungs-E-Mails "
+"hinzufügen wollen. Anmerkung: Kontaktinformationen, Formular, Tag, Zeit und "
+"eine URL sind standardmäßig enthalten"
+
+#: uwosh.timeslot:/content/signupsheet.py:95
+msgid "The date %s was not found."
+msgstr "Das Datum %s konnte nicht gefunden werden."
+
+# /content/timeslot.py
+#: uwosh.timeslot:/content/timeslot.py:19
+msgid "Start Time"
+msgstr "Beginn"
+
+#: uwosh.timeslot:/content/timeslot.py:26
+msgid "End Time"
+msgstr "Ende"
+
+#: uwosh.timeslot:/content/timeslot.py:34
+msgid "Optional name"
+msgstr "Optionaler Name"
+
+#: uwosh.timeslot:/content/timeslot.py:43
+msgid "Max Capacity"
+msgstr "Maximale Anzahl"
+
+#: uwosh.timeslot:/content/timeslot.py:44
+msgid "The max number of people"
+msgstr "Die Maximale Anzahl an Personen"
+
+#: uwosh.timeslot:/content/timeslot.py:51
+msgid "Allow Waiting List"
+msgstr "Erlaube Warteliste"
+
+#: uwosh.timeslot:/content/timeslot.py:52
+msgid ""
+"Check if you want to allow signups to waiting list once max capacity is "
+"reached"
+msgstr ""
+"Prüfe ob Sie Anmeldungen zur Warteliste erlauben möchten, wenn die maximale "
+"Anzahl an Personen ausgelastet ist"
+
+#: uwosh.timeslot:/sharing.py:14
+msgid "uwosh.timeslot: Can manage schedule"
+msgstr "uwosh.timeslot: Zeitplan verwaltbar"
+
+#: uwosh.timeslot:/sharing.py:8
+msgid "uwosh.timeslot: Can view schedule"
+msgstr "uwosh.timeslot: Zeitplan anzeigbar"
+
+# sharing.py
+#~ msgid "title_can_view_schedule"
+#~ msgstr ""
+
+# "uwosh.timeslot: Can view schedule"
+#~ msgid "title_can_manage_schedule"
+#~ msgstr ""
+
+# /browser/choosetimeslot.pt
+#~ msgid "timeslot_label_toSignUpYouNeed"
+#~ msgstr ""
+#~ "Um sich für eine Sprechstunde anmelden zu können, müssen Sie sich zuerst"
+
+#~ msgid "timeslot_label_login"
+#~ msgstr "anmelden"
+
+#~ msgid "timeslot_label_viewReservations"
+#~ msgstr "Meine Anmeldungen anzeigen"
+
+#~ msgid "timeslot_label_questionsThenContact"
+#~ msgstr "Sollten Sie Fragen haben, wenden Sie sich bitte an:"
+
+#~ msgid "timeslot_label_noUpcomingDays"
+#~ msgstr "Für dieses Anmeldeformular stehen keine freien Tage an."
+
+#~ msgid "timeslot_label_time"
+#~ msgstr "Zeit"
+
+#~ msgid "timeslot_label_available"
+#~ msgstr "Verfügbarkeit"
+
+#~ msgid "timeslot_label_select"
+#~ msgstr "Ausgewählt"
+
+#~ msgid "timeslot_label_noSlotsForThisDayYet"
+#~ msgstr "Es gibt noch keine Sprechstunden für diesen Tag."
+
+#~ msgid "timeslot_label_edit"
+#~ msgstr "Bearbeiten"
+
+#~ msgid "timeslot_label_waitingList"
+#~ msgstr "Warteliste"
+
+#~ msgid "timeslot_label_yourSlot"
+#~ msgstr "Ihre Sprechstunde"
+
+#~ msgid "timeslot_label_full"
+#~ msgstr "voll"
+
+#~ msgid "timeslot_label_extraInformation"
+#~ msgstr "Benötigte Zusatzinformationen"
+
+#~ msgid "timeslot_label_required"
+#~ msgstr "benötigt"
+
+# /browser/managersummary.pt
+#~ msgid "timeslot_label_export2Csv"
+#~ msgstr "In CSV-Datei exportieren"
+
+#~ msgid "timeslot_label_removeAllPeople"
+#~ msgstr "Alle Personen entfernen"
+
+#~ msgid "timeslot_label_noTimeslotsAvailableToday"
+#~ msgstr "Es sind keine Sprechstunden für diesen Tag verfügbar."
+
+#~ msgid "timeslot_label_noOneSignedUp"
+#~ msgstr "Für diese Sprechstunde ist niemand angemeldet."
+
+# /browser/showreservations.pt
+#~ msgid "timeslot_label_cancelling"
+#~ msgstr ""
+#~ "Um abzusagen, wählen Sie eine oder mehrere bereits angemeldete "
+#~ "Sprechstunde und klicken Sie auf \"Ausgewählte Sprechstunden absagen\""
+
+#~ msgid "timeslot_label_signedUp4Following"
+#~ msgstr "Sie wurden für die folgenden Sprechstunden angemeldet:"
+
+#~ msgid "timeslot_label_notSignedUp4AnySlot"
+#~ msgstr "Keine"
+
+#~ msgid "timeslot_label_onTheWaitingList4"
+#~ msgstr "Sie sind auf den folgenden Wartelisten eingetragen:"
+
+#~ msgid "timeslot_label_notWaiting4AnySlot"
+#~ msgstr "Keine"
+
+#~ msgid "timeslot_label_cancelSelectedSlots"
+#~ msgstr "Ausgewählte Sprechstunden absagen"
+
+# /browser/signupresults.pt
+#~ msgid "timeslot_label_signUpResults"
+#~ msgstr "%s Anmeldeergebnisse"
+
+#~ msgid "%s - Sign Up Results"
+#~ msgstr "%s - Anmeldeergebnisse"
+
+#~ msgid "timeslot_message_noTimeSlotSelected"
+#~ msgstr "Fehler"
+
+#~ msgid "timeslot_message_selectMin1Slot"
+#~ msgstr "Sie müssen mindestens eine Sprechstunde auswählen."
+
+#~ msgid "timeslot_label_notCompletedFollowingFields"
+#~ msgstr "Sie haben folgende Felder nicht ausgefüllt:"
+
+#~ msgid "timeslot_message_success"
+#~ msgstr "Erfolg"
+
+#~ msgid "timeslot_message_successfullySigendUp"
+#~ msgstr "Sie haben sich erfolgreich angemeldet für:"
+
+#~ msgid "timeslot_message_confirmationEmailSent"
+#~ msgstr ""
+#~ "Es wurde eine Bestätigungs-E-Mail an Ihre E-Mail-Adresse verschickt."
+
+#~ msgid "timeslot_message_added2WaitingList"
+#~ msgstr "Sie wurden erfolgreich auf die folgenden Wartelisten eingetragen:"
+
+#~ msgid "timeslot_message_emailsNowAndWhenOpening"
+#~ msgstr ""
+#~ "Eine Bestätigungs-E-Mail wurde versendet. Eine weitere wird verschickt, "
+#~ "sobald ein neuer Platz frei geworden ist."
+
+#~ msgid "timeslot_message_failure"
+#~ msgstr "Fehler"
+
+#~ msgid "timeslot_message_unable2Register"
+#~ msgstr "Das System konnte Sie nicht anmelden für:"
+
+#~ msgid "timeslot_label_return2SignupSheet"
+#~ msgstr "Zurück zum Anmeldeformular"
+
+# /profiles/default/actions.xml
+#~ msgid "timeslot_managerSummary_title"
+#~ msgstr "Verwaltungsübersicht"
+
+# /profiles/default/types/Day.xml
+#~ msgid "timeslot_day_title"
+#~ msgstr "Tag"
+
+#~ msgid "timeslot_day_desc"
+#~ msgstr "Enthält Sprechstunden. Ist in Anmeldeformular enthalten."
+
+# /profiles/default/types/Signup_Sheet.xml
+#~ msgid "timeslot_signupSheet_title"
+#~ msgstr "Anmeldeformular"
+
+#~ msgid "timeslot_signupSheet_desc"
+#~ msgstr "Ein Anmeldeformular das Tag- und Sprechstundenobjekte enthält"
+
+# /profiles/default/types/Time_Slot.xml
+#~ msgid "timeslot_timeslot_title"
+#~ msgstr "Sprechstunde"
+
+#~ msgid "timeslot_timeslot_desc"
+#~ msgstr ""
+#~ "Enthalten in einem Anmeldeformular und enthält selbst Sprechstundenobjekte"
+
+# /profiles/default/types/TimeslotPerson.xml
+#~ msgid "timeslot_timeslotPerson_title"
+#~ msgstr "Person"
+
+#~ msgid "timeslot_timeslotPerson_desc"
+#~ msgstr "Jemand, der sich für eine Sprechstunde anmelden kann"

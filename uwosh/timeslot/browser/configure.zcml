@@ -84,6 +84,7 @@
       title="Choose TimeSlot View"
       action="choose-timeslot-view"
       description="The default user visible view of a Signup Sheet"
+      i18n:attributes="title;description"
       />
         
 </configure>

@@ -10,24 +10,30 @@ from uwosh.timeslot.config import PROJECTNAME
 
 DaySchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
-    atapi.DateTimeField('date',
+    atapi.DateTimeField(
+        'date',
         storage=atapi.AnnotationStorage(),
         required=True,
         widget=atapi.CalendarWidget(label=_('Date'),
-                                    show_hm=False,
-                                    format='%a, %b. %d, %Y',
-                                    starting_year=2009)
+                                    show_hm=False)
     ),
 
 ))
 
 DaySchema['title'].required = False
-DaySchema['title'].widget.visible = {'view':'invisible', 'edit':'invisible'}
+DaySchema['title'].widget.visible = {
+    'view': 'invisible',
+    'edit': 'invisible',
+}
 DaySchema['title'].storage = atapi.AnnotationStorage()
-DaySchema['description'].widget.visible = {'view':'invisible', 'edit':'invisible'}
+DaySchema['description'].widget.visible = {
+    'view': 'invisible',
+    'edit': 'invisible',
+}
 DaySchema['description'].storage = atapi.AnnotationStorage()
 
 schemata.finalizeATCTSchema(DaySchema, folderish=True, moveDiscussion=False)
+
 
 class Day(folder.ATFolder):
     implements(IDay, ICloneable)
@@ -38,25 +44,34 @@ class Day(folder.ATFolder):
     title = atapi.ATFieldProperty('title')
     date = atapi.ATFieldProperty('date')
     description = atapi.ATFieldProperty('description')
-    
+
     def Title(self):
-    	if self.date is None:
+        if self.date is None:
             return self.id
-    	else:
-    	    return self.date.strftime('%a, %b. %d, %Y')
-    
+        else:
+            return self.toLocalizedTime(self.getDate())
+
     def getTimeSlots(self):
-        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', path=self.getPath(), depth=1,
-                                                               sort_on='getStartTime', sort_order='ascending')
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='Time Slot',
+            path=self.getPath(),
+            depth=1,
+            sort_on='getStartTime',
+            sort_order='ascending',
+        )
         timeSlots = [brain.getObject() for brain in brains]
         return timeSlots
-        
+
     def getTimeSlot(self, title):
         clean_title = '"' + title + '"'
-        brains = self.portal_catalog.unrestrictedSearchResults(portal_type='Time Slot', Title=clean_title, 
-                                                               path=self.getPath(), depth=1)
+        brains = self.portal_catalog.unrestrictedSearchResults(
+            portal_type='Time Slot',
+            Title=clean_title,
+            path=self.getPath(),
+            depth=1,
+        )
         if len(brains) == 0:
-            raise ValueError('The TimeSlot %s was not found.' % title)
+            raise ValueError(_('The TimeSlot %s was not found.' % title))
 
         timeSlot = brains[0].getObject()
         return timeSlot
@@ -70,6 +85,5 @@ class Day(folder.ATFolder):
     def getPath(self):
         path = self.getPhysicalPath()
         return '/'.join(path)
-        
 
 atapi.registerType(Day, PROJECTNAME)
