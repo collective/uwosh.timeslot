@@ -29,7 +29,7 @@
       </div>
       
       <div tal:repeat="result view/results">
-	<tal:block tal:condition="python: result['success']">
+	<tal:block tal:condition="python: result['status'] == 'success'">
 	  <tal:block tal:condition="not:result/waiting">
 	    <h3 i18n:translate="">Success</h3>
 	    <p><span i18n:translate="">You have been successfully signed up for:</span><br />
@@ -47,11 +47,11 @@
 	  </tal:block>
 	</tal:block>
                 
-	<tal:block tal:condition="not:result/success">
+	<tal:block tal:condition="python: result['status'] == 'error'">
 	  <h3 i18n:translate="">Failure</h3>
 	  <p><span i18n:translate="">The system was unable to register you for:</span><br />
 	    <span tal:content="result/slotLabel" /></p>
-	  <p tal:content="result/error" />
+	  <p tal:content="result/message" />
 	</tal:block>
      </div>
 
