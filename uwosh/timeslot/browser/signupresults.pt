@@ -29,6 +29,29 @@
       </div>
       
       <div tal:repeat="result view/results">
+	<tal:block tal:condition="python: result['status'] == 'confirm'">
+	<form action="" method="post">
+	  <p i18n:translate="">You are about to change your signed up
+	    time slot from
+	    <em class="timeslot"
+		tal:content="result/message"
+		i18n:name="current_timeslot" />
+	    to <em class="timeslot"
+	           tal:content="result/slotLabel"
+		   i18n:name="new_timeslot"
+		   />.</p>
+
+	  <input type="submit" name="form.button.submit"
+		 value="Yes, change my subscription"
+		 i18n:attributes="value"
+		 />
+	  <input type="hidden" name="form.submitted" value="1" />
+	  <input type="hidden" name="confirmation" value="1" />
+	  <input type="hidden" name="slotSelection"
+		 tal:attributes="value result/slotLabel" />
+	</form>
+	</tal:block>
+
 	<tal:block tal:condition="python: result['status'] == 'success'">
 	  <tal:block tal:condition="not:result/waiting">
 	    <h3 i18n:translate="">Success</h3>
