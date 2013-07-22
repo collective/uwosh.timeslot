@@ -60,6 +60,9 @@
 		 i18n:attributes="value"
 		 value="Cancel Selected Slots" />
 	</form>
+
+	<p><a tal:attributes="href string:${context/absolute_url};"
+              i18n:translate="">Return to the signup sheet</a></p>
       </div>
       
     </tal:main-macro>
