@@ -78,8 +78,8 @@
 	</tal:block>
      </div>
 
-      <a tal:attributes="href string:${context/absolute_url};"
-         i18n:translate="">Return to the signup sheet</a>
+     <p><a tal:attributes="href string:${context/absolute_url};"
+           i18n:translate="">Return to the signup sheet</a></p>
     </tal:main-macro>
   </div>
 </body>
