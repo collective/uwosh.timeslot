@@ -33,3 +33,12 @@ li.collapsibleListHeader.expanded
 {
     list-style: url(treeExpanded.gif);
 }
+
+/*
+ * Styles
+ */
+
+body.portaltype-signup-sheet #content p
+{
+    margin-top: 1em;
+}

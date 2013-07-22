@@ -29,7 +29,30 @@
       </div>
       
       <div tal:repeat="result view/results">
-	<tal:block tal:condition="python: result['success']">
+	<tal:block tal:condition="python: result['status'] == 'confirm'">
+	<form action="" method="post">
+	  <p i18n:translate="">You are about to change your signed up
+	    time slot from
+	    <em class="timeslot"
+		tal:content="result/message"
+		i18n:name="current_timeslot" />
+	    to <em class="timeslot"
+	           tal:content="result/slotLabel"
+		   i18n:name="new_timeslot"
+		   />.</p>
+
+	  <input type="submit" name="form.button.submit"
+		 value="Yes, change my subscription"
+		 i18n:attributes="value"
+		 />
+	  <input type="hidden" name="form.submitted" value="1" />
+	  <input type="hidden" name="confirmation" value="1" />
+	  <input type="hidden" name="slotSelection"
+		 tal:attributes="value result/slotLabel" />
+	</form>
+	</tal:block>
+
+	<tal:block tal:condition="python: result['status'] == 'success'">
 	  <tal:block tal:condition="not:result/waiting">
 	    <h3 i18n:translate="">Success</h3>
 	    <p><span i18n:translate="">You have been successfully signed up for:</span><br />
@@ -47,16 +70,16 @@
 	  </tal:block>
 	</tal:block>
                 
-	<tal:block tal:condition="not:result/success">
+	<tal:block tal:condition="python: result['status'] == 'error'">
 	  <h3 i18n:translate="">Failure</h3>
 	  <p><span i18n:translate="">The system was unable to register you for:</span><br />
 	    <span tal:content="result/slotLabel" /></p>
-	  <p tal:content="result/error" />
+	  <p tal:content="result/message" />
 	</tal:block>
      </div>
 
-      <a tal:attributes="href string:${context/absolute_url};"
-         i18n:translate="">Return to the signup sheet</a>
+     <p><a tal:attributes="href string:${context/absolute_url};"
+           i18n:translate="">Return to the signup sheet</a></p>
     </tal:main-macro>
   </div>
 </body>

@@ -49,6 +49,7 @@ def attemptToFillEmptySpot(obj, event):
         portal_membership = getToolByName(obj, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
         user = member.getUser()
+        allowSignupForMultipleSlots = timeSlot.getAllowSignupForMultipleSlots()
 
         if timeSlot.getNumberOfAvailableSpots() > 0 \
            and hasattr(user, 'getName'):
@@ -65,10 +66,14 @@ def attemptToFillEmptySpot(obj, event):
             brains = portal_catalog.unrestrictedSearchResults(
                 query,
                 path=timeSlot.getPath())
-            if len(brains) > 0:
+            for brain in brains:
+                if (not allowSignupForMultipleSlots) \
+                   and timeSlot.isUserSignedUpForAnySlot(brain.getId()):
+                    continue
                 person = brains[0].getObject()
                 portal_workflow = getToolByName(obj, 'portal_workflow')
                 portal_workflow.doActionFor(person, 'signup')
                 person.reindexObject()
+                break
 
             timeSlot.manage_delLocalRoles([username])

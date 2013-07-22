@@ -46,6 +46,9 @@ class SubmitSelection(BrowserView):
         if type(self.selectedSlots) != list:
             self.selectedSlots = [self.selectedSlots]
 
+        self.confirmation = bool(self.request.get('confirmation',
+                                                  None))
+
     def getMemberInfo(self):
         portal_membership = getToolByName(self, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
@@ -74,9 +77,9 @@ class SubmitSelection(BrowserView):
         return emptyRequiredFields
 
     def getSlotAndSignUserUpForIt(self, slotLabel):
-        success = False
+        status = 'error'
         waiting = True
-        error = ''
+        message = ''
 
         allowSignupForMultipleSlots = self.context.getAllowSignupForMultipleSlots()
 
@@ -87,13 +90,30 @@ class SubmitSelection(BrowserView):
         numberOfAvailableSpots = timeSlot.getNumberOfAvailableSpots()
 
         if (not allowSignupForMultipleSlots) \
+           and self.context.isCurrentUserSignedUpForAnySlot():
+            current_slot = self.context.getSlotsCurrentUserIsSignedUpFor()[0]
+
+            if not self.confirmation:
+                status = 'confirm'
+                message = current_slot.getLabel()
+
+            else:
+                user_id = self.context.getCurrentUsername()
+                timeSlot.manage_pasteObjects(
+                    current_slot.manage_cutObjects(user_id))
+                status = 'success'
+                waiting = False
+
+        elif (not allowSignupForMultipleSlots) \
            and self.context.isCurrentUserSignedUpOrWaitingForAnySlot():
-            success = False
-            error = 'You are already signed up for a slot in this signup sheet.'
+            status = 'error'
+            message = 'You are on at least one wait list, ' \
+                      'unsubscribe from all wait lists then ' \
+                      'try signing up again.'
 
         elif timeSlot.isCurrentUserSignedUpForThisSlot():
-            sucess = False
-            error = 'You are already signed up for this slot.'
+            status = 'error'
+            message = 'You are already signed up for this slot.'
 
         elif allowWaitingList or numberOfAvailableSpots > 0:
             person = self.createPersonObject(timeSlot)
@@ -104,17 +124,17 @@ class SubmitSelection(BrowserView):
             elif self.isEmailValid():
                 self.sendWaitingListConfirmationEmail(self.context, slotLabel)
 
-            success = True
+            status = 'success'
 
         else:
-            success = False
-            error = 'The slot you selected is already full. Please select a different one'
+            status = 'error'
+            message = 'The slot you selected is already full. Please select a different one'
 
         result = dict()
         result['slotLabel'] = slotLabel
-        result['success'] = success
+        result['status']  = status
         result['waiting'] = waiting
-        result['error'] = error
+        result['message'] = message
         self.results.append(result)
 
     def createPersonObject(self, container):
