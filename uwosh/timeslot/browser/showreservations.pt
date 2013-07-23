@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en"
-      metal:use-macro="here/main_template/macros/master"
+      metal:use-macro="context/main_template/macros/master"
       i18n:domain="uwosh.timeslot">
 
 <body>
@@ -15,6 +15,11 @@
 	i18n:name="cancel-slots-button-text"><span
 	i18n:translate="">Cancel Selected Slots</span></span>"
 	button.</p>
+	<p tal:condition="not:context/isCurrentUserSignedUpForAnySlot"
+	   i18n:translate="">You are not subscribed to any slot,
+	<a href=".."
+	   tal:attributes="href context/absolute_url">go and subscribe
+	to a slot</a>.</p>
 	<form method="post" tal:attributes="action string:${context/absolute_url}/@@cancel-reservation;">
 	  
 	  <table class="plain">
@@ -36,7 +41,7 @@
 		  i18n:translate="">None</td>
 	    </tr>
 	      
-	    <tr>
+	    <tal:condition tal:condition="context/anyTimeslotHasWaitingList"><tr>
 	      <th colspan="2"
 		  i18n:translate="">You are on a waiting list for the following slots:</th>
 	    </tr>
@@ -51,7 +56,7 @@
 	    <tr tal:condition="not:context/isCurrentUserWaitingForAnySlot">
               <td colspan="2"
 		  i18n:translate="">None</td>
-	    </tr>
+	    </tr></tal:condition>
 	    
 	  </table>
 	  <br />
