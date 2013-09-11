@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.5.5 - unreleased
+------------------
+
+- zope.component.hooks import fix for plone 4.3
+  [vangheem]
+
+
 1.5.4 - 2011-09-11
 ------------------
 
