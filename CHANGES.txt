@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.5.6 - 2015-02-04
+------------------
+
+- zope.container.interfaces import fix for Plone 4.3.4 (possibly for
+  Plone 4.3.3 as well)
+ [tkimnguyen]
+
+
 1.5.5 - 2013-09-12
 ------------------
 
